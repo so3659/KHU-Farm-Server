@@ -1,5 +1,7 @@
 package com.laicos.khufarm.domain.fruit.entity;
 
+import com.laicos.khufarm.domain.fruit.entity.category.FruitCategory;
+import com.laicos.khufarm.domain.fruit.entity.category.WholesaleRetailCategory;
 import com.laicos.khufarm.domain.user.entity.mapping.Seller;
 import com.laicos.khufarm.global.base.BaseEntity;
 import jakarta.persistence.*;
@@ -55,4 +57,14 @@ public class Fruit extends BaseEntity {
     @JoinColumn(name="seller_id", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Seller seller;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="fruitCategory_id", nullable = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    private FruitCategory fruitCategory;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="wholesaleRetailCategory_id", nullable = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    private WholesaleRetailCategory wholesaleRetailCategory;
 }
