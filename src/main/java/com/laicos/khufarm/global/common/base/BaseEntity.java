@@ -1,4 +1,4 @@
-package com.laicos.khufarm.global.base;
+package com.laicos.khufarm.global.common.base;
 
 import jakarta.persistence.EntityListeners;
 import jakarta.persistence.MappedSuperclass;

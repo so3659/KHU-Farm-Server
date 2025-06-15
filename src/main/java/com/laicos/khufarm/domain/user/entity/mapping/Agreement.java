@@ -1,7 +1,7 @@
 package com.laicos.khufarm.domain.user.entity.mapping;
 
 import com.laicos.khufarm.domain.user.entity.User;
-import com.laicos.khufarm.global.base.BaseEntity;
+import com.laicos.khufarm.global.common.base.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.DynamicInsert;

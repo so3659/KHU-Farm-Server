@@ -3,7 +3,7 @@ package com.laicos.khufarm.domain.order.entity;
 import com.laicos.khufarm.domain.order.enums.OrderStatus;
 import com.laicos.khufarm.domain.order.enums.converter.OrderStatusConverter;
 import com.laicos.khufarm.domain.user.entity.User;
-import com.laicos.khufarm.global.base.BaseEntity;
+import com.laicos.khufarm.global.common.base.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.OnDelete;
@@ -17,7 +17,7 @@ import java.util.List;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Builder
-@Table(name = "order")
+@Table(name = "orders")
 public class Order extends BaseEntity {
 
     @Id

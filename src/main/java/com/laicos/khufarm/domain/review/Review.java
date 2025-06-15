@@ -4,7 +4,7 @@ import com.laicos.khufarm.domain.fruit.entity.Fruit;
 import com.laicos.khufarm.domain.order.entity.Order;
 import com.laicos.khufarm.domain.user.entity.User;
 import com.laicos.khufarm.domain.user.entity.mapping.Seller;
-import com.laicos.khufarm.global.base.BaseEntity;
+import com.laicos.khufarm.global.common.base.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.OnDelete;

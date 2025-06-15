@@ -3,7 +3,7 @@ package com.laicos.khufarm.domain.point.entity;
 import com.laicos.khufarm.domain.point.enums.PointEventType;
 import com.laicos.khufarm.domain.point.enums.converter.PointEventTypeConverter;
 import com.laicos.khufarm.domain.user.entity.User;
-import com.laicos.khufarm.global.base.BaseEntity;
+import com.laicos.khufarm.global.common.base.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.DynamicInsert;

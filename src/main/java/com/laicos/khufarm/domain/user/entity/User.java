@@ -4,7 +4,7 @@ import com.laicos.khufarm.domain.user.enums.UserStatus;
 import com.laicos.khufarm.domain.user.enums.UserType;
 import com.laicos.khufarm.domain.user.enums.converter.UserStatusConverter;
 import com.laicos.khufarm.domain.user.enums.converter.UserTypeConverter;
-import com.laicos.khufarm.global.base.BaseEntity;
+import com.laicos.khufarm.global.common.base.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
