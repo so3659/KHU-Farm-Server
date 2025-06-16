@@ -1,10 +1,14 @@
 package com.laicos.khufarm.domain.user.entity.mapping;
 
+import com.laicos.khufarm.domain.fruit.entity.Fruit;
 import com.laicos.khufarm.domain.user.entity.User;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -29,6 +33,9 @@ public class Seller {
 
     @Column(nullable = false)
     private String imageUrl;
+
+    @OneToMany(mappedBy = "seller", cascade = CascadeType.ALL)
+    private List<Fruit> fruits = new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="user_id", nullable = false)

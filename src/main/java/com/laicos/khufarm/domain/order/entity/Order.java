@@ -17,7 +17,7 @@ import java.util.List;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Builder
-@Table(name = "orders")
+@Table(name = "`order`")
 public class Order extends BaseEntity {
 
     @Id

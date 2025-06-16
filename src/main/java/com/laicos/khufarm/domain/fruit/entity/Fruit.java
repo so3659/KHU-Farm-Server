@@ -55,7 +55,6 @@ public class Fruit extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="seller_id", nullable = false)
-    @OnDelete(action = OnDeleteAction.CASCADE)
     private Seller seller;
 
     @ManyToOne(fetch = FetchType.LAZY)
