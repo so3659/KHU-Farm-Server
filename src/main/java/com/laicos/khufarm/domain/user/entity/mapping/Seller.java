@@ -35,6 +35,7 @@ public class Seller {
     private String imageUrl;
 
     @OneToMany(mappedBy = "seller", cascade = CascadeType.ALL)
+    @Builder.Default
     private List<Fruit> fruits = new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.LAZY)

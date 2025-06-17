@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 @JsonPropertyOrder({"timestamp", "isSuccess", "code", "message", "result"})
 public class BaseResponse<T> {
 
-    private final LocalDateTime timestamp = LocalDateTime.now();
+    private final LocalDateTime timestamp;
     @JsonProperty("isSuccess")
     private final Boolean isSuccess;
     private final String code;
@@ -21,8 +21,19 @@ public class BaseResponse<T> {
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private T result;
 
-    // 실패한 경우 응답 생성
-    public static <T> BaseResponse<T> onFailure(String code, String message, T data){
+    private BaseResponse(Boolean isSuccess, String code, String message, T result) {
+        this.timestamp = LocalDateTime.now();
+        this.isSuccess = isSuccess;
+        this.code = code;
+        this.message = message;
+        this.result = result;
+    }
+
+    public static <T> BaseResponse<T> onSuccess(T result) {
+        return new BaseResponse<>(true, "COMMON200", "요청에 성공하였습니다.", result);
+    }
+
+    public static <T> BaseResponse<T> onFailure(String code, String message, T data) {
         return new BaseResponse<>(false, code, message, data);
     }
 }
