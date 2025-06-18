@@ -20,10 +20,13 @@ public enum GlobalErrorStatus implements BaseCodeInterface {
     _METHOD_ARGUMENT_ERROR(HttpStatus.BAD_REQUEST, "COMMON405", "Argument Type이 올바르지 않습니다."),
     _INTERNAL_PAGE_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "COMMON500", "페이지 에러, 0 이상의 페이지를 입력해주세요"),
     _ACCESS_DENIED(HttpStatus.FORBIDDEN, "COMMON403", "접근 권한이 없습니다."),
+
+    //페이지 관련 오류
+    NEGATIVE_PAGE_SIZE_REQUEST(HttpStatus.BAD_REQUEST, "PAGE4001", "잘못된 페이지 사이즈 요청입니다."),
     ;
 
     private final HttpStatus httpStatus;
-    private final boolean isSuccess = true;
+    private final boolean isSuccess = false;
     private final String code;
     private final String message;
 
