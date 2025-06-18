@@ -41,4 +41,19 @@ public class FruitController implements FruitApiSpecification {
 
         return BaseResponse.onSuccess(fruitResponses);
     }
+
+    @GetMapping("/search")
+    @Transactional(readOnly = true)
+    public BaseResponse<Slice<FruitResponse>> searchFruits(
+            @RequestParam(required = false) Long cursorId,
+            @ExistWholesaleRetailCategory @RequestParam Long wholesaleRetailCategoryId,
+            @ExistFruitCategory @RequestParam Long fruitCategoryId,
+            @RequestParam(required = false) String searchKeyword,
+            @RequestParam(defaultValue="5") int size) {
+
+        Pageable pageable = PageRequest.of(0, size);
+        Slice<FruitResponse> fruitResponses = fruitQueryService.getFruitList(cursorId, new FruitReadCondition(wholesaleRetailCategoryId, fruitCategoryId, searchKeyword), pageable);
+
+        return BaseResponse.onSuccess(fruitResponses);
+    }
 }

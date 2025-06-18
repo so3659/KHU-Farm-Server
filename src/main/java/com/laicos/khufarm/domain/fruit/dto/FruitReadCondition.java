@@ -1,12 +1,22 @@
 package com.laicos.khufarm.domain.fruit.dto;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 @Getter
-@AllArgsConstructor
 public class FruitReadCondition {
 
     private Long wholesaleRetailCategoryId;
     private Long fruitCategoryId;
+    private String searchKeyword;
+
+    public FruitReadCondition(Long wholesaleRetailCategoryId, Long fruitCategoryId){
+        this.wholesaleRetailCategoryId = wholesaleRetailCategoryId;
+        this.fruitCategoryId = fruitCategoryId;
+    }
+
+    public FruitReadCondition(Long wholesaleRetailCategoryId, Long fruitCategoryId, String searchKeyword) {
+        this.wholesaleRetailCategoryId = wholesaleRetailCategoryId;
+        this.fruitCategoryId = fruitCategoryId;
+        this.searchKeyword = searchKeyword;
+    }
 }
