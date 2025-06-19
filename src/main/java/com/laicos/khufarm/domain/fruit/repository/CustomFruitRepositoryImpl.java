@@ -54,6 +54,7 @@ public class CustomFruitRepositoryImpl implements CustomFruitRepository {
         return (cursorId == null) ? null : fruit.id.gt(cursorId);
     }
 
+
     private BooleanExpression eqWholesaleRetailCategory(Long wholesaleRetailCategoryId) {
         return (wholesaleRetailCategoryId == null) ? null : fruit.wholesaleRetailCategory.id.eq(wholesaleRetailCategoryId);
     }

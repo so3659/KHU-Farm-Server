@@ -4,11 +4,12 @@ import com.laicos.khufarm.domain.fruit.dto.response.FruitResponse;
 import lombok.*;
 import org.springframework.data.domain.Slice;
 
+
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Builder
-public class SellerResponse {
+public class SellerResponseWithFruit {
 
     private Long id;
     private String brandName;
