@@ -9,7 +9,7 @@ import lombok.*;
 public class SellerResponse {
 
     private Long id;
-    private String brand;
+    private String brandName;
     private String title;
     private String description;
     private String imageUrl;

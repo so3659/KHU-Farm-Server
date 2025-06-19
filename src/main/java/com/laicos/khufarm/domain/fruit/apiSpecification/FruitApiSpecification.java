@@ -1,4 +1,4 @@
-package com.laicos.khufarm.domain.fruit.apiSpecification.Fruit;
+package com.laicos.khufarm.domain.fruit.apiSpecification;
 
 import com.laicos.khufarm.domain.fruit.dto.response.FruitResponse;
 import com.laicos.khufarm.domain.fruit.validation.anootation.ExistFruitCategory;

@@ -1,6 +1,6 @@
 package com.laicos.khufarm.domain.fruit.contoller;
 
-import com.laicos.khufarm.domain.fruit.apiSpecification.Fruit.FruitApiSpecification;
+import com.laicos.khufarm.domain.fruit.apiSpecification.FruitApiSpecification;
 import com.laicos.khufarm.domain.fruit.dto.FruitReadCondition;
 import com.laicos.khufarm.domain.fruit.dto.response.FruitResponse;
 import com.laicos.khufarm.domain.fruit.service.FruitQueryService;
@@ -12,7 +12,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -29,7 +28,6 @@ public class FruitController implements FruitApiSpecification {
     private final FruitQueryService fruitQueryService;
 
     @GetMapping
-    @Transactional(readOnly = true)
     public BaseResponse<Slice<FruitResponse>> getFruits(
             @RequestParam(required = false) Long cursorId,
             @ExistWholesaleRetailCategory @RequestParam Long wholesaleRetailCategoryId,
@@ -43,7 +41,6 @@ public class FruitController implements FruitApiSpecification {
     }
 
     @GetMapping("/search")
-    @Transactional(readOnly = true)
     public BaseResponse<Slice<FruitResponse>> searchFruits(
             @RequestParam(required = false) Long cursorId,
             @ExistWholesaleRetailCategory @RequestParam Long wholesaleRetailCategoryId,
