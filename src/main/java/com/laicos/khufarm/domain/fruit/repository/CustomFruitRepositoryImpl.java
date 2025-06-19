@@ -33,9 +33,7 @@ public class CustomFruitRepositoryImpl implements CustomFruitRepository {
                         gtCursorId(cursorId), // 커서 조건
                         eqWholesaleRetailCategory(fruitReadCondition.getWholesaleRetailCategoryId()), // 도매/소매 카테고리 조건
                         eqFruitCategory(fruitReadCondition.getFruitCategoryId()), // 과일 카테고리 조건
-                        eqTitle(fruitReadCondition.getSearchKeyword()), // 제목에 검색어 포함
-                        eqDescription(fruitReadCondition.getSearchKeyword()) // 내용에 검색어 포함
-
+                        searchKeywordCondition(fruitReadCondition.getSearchKeyword())
                 )
                 .orderBy(fruit.id.asc())
                 .limit(pageable.getPageSize()+1)
@@ -64,14 +62,14 @@ public class CustomFruitRepositoryImpl implements CustomFruitRepository {
         return (fruitCategoryId == null) ? null : fruit.fruitCategory.id.eq(fruitCategoryId);
     }
 
-    // 제목에 searchKeyword 포함되어있는지 필터링
-    private BooleanExpression eqTitle(String searchKeyword) {
-        return (searchKeyword == null) ? null : fruit.title.contains(searchKeyword);
-    }
+    private BooleanExpression searchKeywordCondition(String searchKeyword) {
+        if (searchKeyword == null || searchKeyword.trim().isEmpty()) {
+            return null; // 검색어가 없으면 조건 없음
+        }
 
-    // 내용에 searchKeyword 포함되어있는지 필터링
-    private BooleanExpression eqDescription(String searchKeyword) {
-        return (searchKeyword == null) ? null : fruit.description.contains(searchKeyword);
+        return fruit.title.contains(searchKeyword)
+                .or(fruit.description.contains(searchKeyword))
+                .or(fruit.seller.brandName.contains(searchKeyword));
     }
 }
 

@@ -38,7 +38,7 @@ public interface FruitApiSpecification {
 
 
     @Operation(summary = "과일 검색 API",
-            description = "💡 키워드가 제목과 내용에 포함되어 있는 과일 목록을 검색합니다.")
+            description = "💡 키워드가 농가이름, 제목, 내용에 포함되어 있는 과일 목록을 검색합니다.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "과일 목록 조회 성공"),
             @ApiResponse(responseCode = "402", description = "카테고리 값 오류",
