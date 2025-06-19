@@ -23,7 +23,7 @@ public class Seller {
     private Long id;
 
     @Column(nullable = false)
-    private String brand;
+    private String brandName;
 
     @Column(nullable = false)
     private String title;

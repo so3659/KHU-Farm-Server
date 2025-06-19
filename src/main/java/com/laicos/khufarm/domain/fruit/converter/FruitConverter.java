@@ -23,6 +23,7 @@ public class FruitConverter {
                 .ratingCount(fruit.getRatingCount())
                 .description(fruit.getDescription())
                 .sellerId(fruit.getSeller().getId())
+                .brandName(fruit.getSeller().getBrandName())
                 .fruitCategoryId(fruit.getFruitCategory().getId())
                 .wholesaleRetailCategoryId(fruit.getWholesaleRetailCategory().getId())
                 .build();

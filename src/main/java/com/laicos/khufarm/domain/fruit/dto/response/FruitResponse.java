@@ -19,6 +19,7 @@ public class FruitResponse {
     private Integer ratingCount;
     private String description;
     private Long sellerId;
+    private String brandName;
     private Long fruitCategoryId;
     private Long wholesaleRetailCategoryId;
 
