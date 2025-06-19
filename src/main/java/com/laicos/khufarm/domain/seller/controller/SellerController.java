@@ -36,4 +36,16 @@ public class SellerController implements SellerApiSpecification {
         return BaseResponse.onSuccess(SellerResponses);
     }
 
+    @GetMapping("/search")
+    public BaseResponse<Slice<SellerResponse>> searchSellers(
+            @RequestParam(required = false) Long cursorId,
+            @RequestParam(required = false) String searchKeyword,
+            @RequestParam(defaultValue="5") int size) {
+
+        Pageable pageable = PageRequest.of(0, size);
+        Slice<SellerResponse> SellerResponses = sellerQueryService.getSellers(cursorId, new SellerReadCondition(searchKeyword), pageable);
+
+        return BaseResponse.onSuccess(SellerResponses);
+    }
+
 }

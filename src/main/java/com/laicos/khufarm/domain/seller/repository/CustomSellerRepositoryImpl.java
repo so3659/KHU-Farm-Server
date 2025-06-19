@@ -27,11 +27,8 @@ public class CustomSellerRepositoryImpl implements CustomSellerRepository{
 
         List<Seller> sellerList = jpaQueryFactory.selectFrom(seller)
                 .where(
-                        gtCursorId(cursorId), // 커서 조건
-                        eqBrandName(sellerReadCondition.getSearchKeyword()), // 농가 이름에 검색어 포함
-                        eqTitle(sellerReadCondition.getSearchKeyword()), // 제목에 검색어 포함
-                        eqDescription(sellerReadCondition.getSearchKeyword()) // 내용에 검색어 포함
-
+                        gtCursorId(cursorId),
+                        searchKeywordCondition(sellerReadCondition.getSearchKeyword())
                 )
                 .orderBy(seller.id.asc())
                 .limit(pageable.getPageSize()+1)
@@ -52,18 +49,13 @@ public class CustomSellerRepositoryImpl implements CustomSellerRepository{
         return (cursorId == null) ? null : seller.id.gt(cursorId);
     }
 
-    // 농가 이름에 searchKeyword 포함되어있는지 필터링
-    private BooleanExpression eqBrandName(String searchKeyword) {
-        return (searchKeyword == null) ? null : seller.brandName.contains(searchKeyword);
-    }
+    private BooleanExpression searchKeywordCondition(String searchKeyword) {
+        if (searchKeyword == null || searchKeyword.trim().isEmpty()) {
+            return null; // 검색어가 없으면 조건 없음
+        }
 
-    // 제목에 searchKeyword 포함되어있는지 필터링
-    private BooleanExpression eqTitle(String searchKeyword) {
-        return (searchKeyword == null) ? null : seller.title.contains(searchKeyword);
-    }
-
-    // 내용에 searchKeyword 포함되어있는지 필터링
-    private BooleanExpression eqDescription(String searchKeyword) {
-        return (searchKeyword == null) ? null : seller.description.contains(searchKeyword);
+        return seller.brandName.contains(searchKeyword)
+                .or(seller.title.contains(searchKeyword))
+                .or(seller.description.contains(searchKeyword));
     }
 }
