@@ -1,8 +1,8 @@
 package com.laicos.khufarm.domain.fruit.apiSpecification;
 
 import com.laicos.khufarm.domain.fruit.dto.response.FruitResponse;
-import com.laicos.khufarm.domain.fruit.validation.anootation.ExistFruitCategory;
-import com.laicos.khufarm.domain.fruit.validation.anootation.ExistWholesaleRetailCategory;
+import com.laicos.khufarm.domain.fruit.validation.annotation.ExistFruitCategory;
+import com.laicos.khufarm.domain.fruit.validation.annotation.ExistWholesaleRetailCategory;
 import com.laicos.khufarm.global.common.base.BaseResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;

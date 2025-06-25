@@ -1,6 +1,6 @@
-package com.laicos.khufarm.domain.user.enums.converter;
+package com.laicos.khufarm.domain.termsAgreement.enums.converter;
 
-import com.laicos.khufarm.domain.user.enums.TermsEssential;
+import com.laicos.khufarm.domain.termsAgreement.enums.TermsEssential;
 import jakarta.persistence.AttributeConverter;
 import jakarta.persistence.Converter;
 

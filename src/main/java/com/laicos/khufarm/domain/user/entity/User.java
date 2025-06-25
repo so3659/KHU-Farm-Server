@@ -16,7 +16,7 @@ import org.hibernate.annotations.DynamicInsert;
 @NoArgsConstructor(access=AccessLevel.PROTECTED)
 @AllArgsConstructor
 @DynamicInsert
-@Table(name = "user")
+@Table(name = "users")
 public class User extends BaseEntity {
 
     @Id
@@ -64,4 +64,8 @@ public class User extends BaseEntity {
     @Column(nullable = false)
     @ColumnDefault("0")
     private Integer totalWeight;
+
+    public void setEncodedPassword(String password) {
+        this.password = password;
+    }
 }

@@ -1,6 +1,6 @@
 package com.laicos.khufarm.domain.seller.controller;
 
-import com.laicos.khufarm.domain.fruit.validation.anootation.ExistWholesaleRetailCategory;
+import com.laicos.khufarm.domain.fruit.validation.annotation.ExistWholesaleRetailCategory;
 import com.laicos.khufarm.domain.seller.apiSpecification.SellerApiSpecification;
 import com.laicos.khufarm.domain.seller.dto.SellerReadCondition;
 import com.laicos.khufarm.domain.seller.dto.response.SellerResponse;

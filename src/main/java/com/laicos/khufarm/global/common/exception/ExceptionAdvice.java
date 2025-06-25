@@ -25,6 +25,18 @@ import java.util.stream.Collectors;
 @RestControllerAdvice(annotations = {RestController.class})
 public class ExceptionAdvice extends ResponseEntityExceptionHandler {
 
+
+    /*
+     * 직접 정의한 RestApiException 에러 클래스에 대한 예외 처리
+     */
+    // @ExceptionHandler는 Controller계층에서 발생하는 에러를 잡아서 메서드로 처리해주는 기능
+    @ExceptionHandler(value = RestApiException.class)
+    public ResponseEntity<BaseResponse<String>> handleRestApiException(RestApiException e) {
+        BaseCodeDTO errorCode = e.getErrorCode();
+        log.error("An error occurred: {}", e.getMessage(), e);
+        return handleExceptionInternal(errorCode);
+    }
+
     @ExceptionHandler
     public ResponseEntity<BaseResponse<String>> handleException(Exception e) {
         log.error("An error occurred: {}", e.getMessage(), e);
@@ -58,6 +70,12 @@ public class ExceptionAdvice extends ResponseEntityExceptionHandler {
 
         return handleExceptionInternalArgs(GlobalErrorStatus._VALIDATION_ERROR.getReason(), errors);
 
+    }
+
+    private ResponseEntity<BaseResponse<String>> handleExceptionInternal(BaseCodeDTO errorCode) {
+        return ResponseEntity
+                .status(errorCode.getHttpStatus().value())
+                .body(BaseResponse.onFailure(errorCode.getCode(), errorCode.getMessage(), null));
     }
 
     private ResponseEntity<BaseResponse<String>> handleExceptionInternalFalse(BaseCodeDTO errorCode, String errorPoint) {

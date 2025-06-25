@@ -9,10 +9,10 @@ import java.util.Arrays;
 @AllArgsConstructor
 public enum UserType {
 
-    INDIVIDUAL("개인","1"),
-    BUSINESS("기업","2"),
-    FARMER("농가 회원","3"),
-    ADMIN("관리자","4");
+    ROLE_INDIVIDUAL("개인","1"),
+    ROLE_BUSINESS("기업","2"),
+    ROLE_FARMER("농가 회원","3"),
+    ROLE_ADMIN("관리자","4");
 
     private final String description;
     private final String code;

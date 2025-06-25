@@ -1,4 +1,4 @@
-package com.laicos.khufarm.domain.user.entity.mapping;
+package com.laicos.khufarm.domain.termsAgreement.entitiy;
 
 import com.laicos.khufarm.domain.user.entity.User;
 import com.laicos.khufarm.global.common.base.BaseEntity;

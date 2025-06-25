@@ -1,6 +1,6 @@
 package com.laicos.khufarm.domain.seller.apiSpecification;
 
-import com.laicos.khufarm.domain.fruit.validation.anootation.ExistWholesaleRetailCategory;
+import com.laicos.khufarm.domain.fruit.validation.annotation.ExistWholesaleRetailCategory;
 import com.laicos.khufarm.domain.seller.dto.response.SellerResponse;
 import com.laicos.khufarm.domain.seller.dto.response.SellerResponseWithFruit;
 import com.laicos.khufarm.domain.seller.validation.annotation.ExistSeller;

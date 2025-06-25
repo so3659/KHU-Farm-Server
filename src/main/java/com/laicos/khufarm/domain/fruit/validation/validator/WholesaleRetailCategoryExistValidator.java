@@ -1,7 +1,7 @@
 package com.laicos.khufarm.domain.fruit.validation.validator;
 
 import com.laicos.khufarm.domain.fruit.repository.WholesaleRetailCategoryRepository;
-import com.laicos.khufarm.domain.fruit.validation.anootation.ExistWholesaleRetailCategory;
+import com.laicos.khufarm.domain.fruit.validation.annotation.ExistWholesaleRetailCategory;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 import lombok.RequiredArgsConstructor;

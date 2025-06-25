@@ -1,4 +1,4 @@
-package com.laicos.khufarm.domain.fruit.validation.anootation;
+package com.laicos.khufarm.domain.fruit.validation.annotation;
 
 import com.laicos.khufarm.domain.fruit.validation.validator.WholesaleRetailCategoryExistValidator;
 import jakarta.validation.Constraint;

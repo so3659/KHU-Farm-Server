@@ -1,5 +1,7 @@
-package com.laicos.khufarm.domain.user.enums;
+package com.laicos.khufarm.domain.termsAgreement.enums;
 
+import com.laicos.khufarm.global.common.exception.RestApiException;
+import com.laicos.khufarm.global.common.exception.code.status.TermsConditionsErrorStatus;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -19,6 +21,7 @@ public enum TermsEssential {
         return Arrays.stream(TermsEssential.values())
                 .filter(v -> v.getCode().equals(code))
                 .findAny()
-                .orElseThrow(() -> new IllegalArgumentException(String.format("존재하지 않는 필수 약관 코드입니다: %s", code)));
+                .orElseThrow(() -> new RestApiException(TermsConditionsErrorStatus.TERMS_CONDITIONS_NOT_FOUND)
+                );
     }
 }

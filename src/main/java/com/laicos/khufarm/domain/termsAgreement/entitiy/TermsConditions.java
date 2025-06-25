@@ -1,7 +1,7 @@
-package com.laicos.khufarm.domain.user.entity.mapping;
+package com.laicos.khufarm.domain.termsAgreement.entitiy;
 
-import com.laicos.khufarm.domain.user.enums.TermsEssential;
-import com.laicos.khufarm.domain.user.enums.converter.TermsEssentialConverter;
+import com.laicos.khufarm.domain.termsAgreement.enums.TermsEssential;
+import com.laicos.khufarm.domain.termsAgreement.enums.converter.TermsEssentialConverter;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.DynamicInsert;
