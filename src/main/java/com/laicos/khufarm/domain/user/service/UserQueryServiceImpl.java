@@ -3,7 +3,6 @@ package com.laicos.khufarm.domain.user.service;
 import com.laicos.khufarm.domain.user.entity.User;
 import com.laicos.khufarm.domain.user.repository.UserRepository;
 import com.laicos.khufarm.global.common.exception.RestApiException;
-import com.laicos.khufarm.global.common.exception.code.status.MemberErrorStatus;
 import com.laicos.khufarm.global.common.exception.code.status.UserErrorStatus;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -24,9 +23,9 @@ public class UserQueryServiceImpl implements UserQueryService{
     public Boolean checkExistId(String userId){
         Boolean exists = userRepository.existsByUserId(userId);
 
-        //이미 존재하는 회원인 경우 예외처리
+        //이미 존재하는 아이디인 경우 예외처리
         if (exists) {
-            throw new RestApiException(MemberErrorStatus.EMAIL_ALREADY_EXISTS);
+            throw new RestApiException(UserErrorStatus.ID_ALREADY_EXISTS);
         }
 
         return exists;

@@ -1,6 +1,6 @@
 package com.laicos.khufarm.global.common.exception;
 
-import com.laicos.khufarm.global.common.exception.code.BaseCodeDTO;
+import com.laicos.khufarm.global.common.exception.code.BaseCodeDto;
 import com.laicos.khufarm.global.common.exception.code.BaseCodeInterface;
 import lombok.AllArgsConstructor;
 
@@ -10,7 +10,7 @@ public class RestApiException extends RuntimeException {
     private final BaseCodeInterface errorCode; //추상화 시킨 인터페이스를 받아서 사용
 
     //추상화 시킨 ErrorCode의 getrCode()를 사용하여 ErrorCode를 반환
-    public BaseCodeDTO getErrorCode() {
+    public BaseCodeDto getErrorCode() {
         return this.errorCode.getReason();
     }
 }

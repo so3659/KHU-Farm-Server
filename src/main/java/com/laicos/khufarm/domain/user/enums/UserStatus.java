@@ -9,8 +9,10 @@ import java.util.Arrays;
 @AllArgsConstructor
 public enum UserStatus {
 
+    STAND_BY("대기중","0"),
     ACTIVE("활성화","1"),
-    DELETED("삭제","2");
+    DELETED("삭제","2"),
+    ;
 
     private final String description;
     private final String code;

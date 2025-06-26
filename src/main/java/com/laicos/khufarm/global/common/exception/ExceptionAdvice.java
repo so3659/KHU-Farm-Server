@@ -1,7 +1,7 @@
 package com.laicos.khufarm.global.common.exception;
 
 import com.laicos.khufarm.global.common.base.BaseResponse;
-import com.laicos.khufarm.global.common.exception.code.BaseCodeDTO;
+import com.laicos.khufarm.global.common.exception.code.BaseCodeDto;
 import com.laicos.khufarm.global.common.exception.code.status.GlobalErrorStatus;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
@@ -32,7 +32,7 @@ public class ExceptionAdvice extends ResponseEntityExceptionHandler {
     // @ExceptionHandler는 Controller계층에서 발생하는 에러를 잡아서 메서드로 처리해주는 기능
     @ExceptionHandler(value = RestApiException.class)
     public ResponseEntity<BaseResponse<String>> handleRestApiException(RestApiException e) {
-        BaseCodeDTO errorCode = e.getErrorCode();
+        BaseCodeDto errorCode = e.getErrorCode();
         log.error("An error occurred: {}", e.getMessage(), e);
         return handleExceptionInternal(errorCode);
     }
@@ -72,19 +72,19 @@ public class ExceptionAdvice extends ResponseEntityExceptionHandler {
 
     }
 
-    private ResponseEntity<BaseResponse<String>> handleExceptionInternal(BaseCodeDTO errorCode) {
+    private ResponseEntity<BaseResponse<String>> handleExceptionInternal(BaseCodeDto errorCode) {
         return ResponseEntity
                 .status(errorCode.getHttpStatus().value())
                 .body(BaseResponse.onFailure(errorCode.getCode(), errorCode.getMessage(), null));
     }
 
-    private ResponseEntity<BaseResponse<String>> handleExceptionInternalFalse(BaseCodeDTO errorCode, String errorPoint) {
+    private ResponseEntity<BaseResponse<String>> handleExceptionInternalFalse(BaseCodeDto errorCode, String errorPoint) {
         return ResponseEntity
                 .status(errorCode.getHttpStatus().value())
                 .body(BaseResponse.onFailure(errorCode.getCode(), errorCode.getMessage(), errorPoint));
     }
 
-    private ResponseEntity<Object> handleExceptionInternalArgs(BaseCodeDTO errorCode, Map<String, String> errorArgs) {
+    private ResponseEntity<Object> handleExceptionInternalArgs(BaseCodeDto errorCode, Map<String, String> errorArgs) {
         return ResponseEntity
                 .status(errorCode.getHttpStatus().value())
                 .body(BaseResponse.onFailure(errorCode.getCode(), errorCode.getMessage(), errorArgs));

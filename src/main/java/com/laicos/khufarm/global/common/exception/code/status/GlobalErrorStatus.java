@@ -1,7 +1,7 @@
 package com.laicos.khufarm.global.common.exception.code.status;
 
 import com.laicos.khufarm.global.common.exception.code.BaseCodeInterface;
-import com.laicos.khufarm.global.common.exception.code.BaseCodeDTO;
+import com.laicos.khufarm.global.common.exception.code.BaseCodeDto;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.springframework.http.HttpStatus;
@@ -31,8 +31,8 @@ public enum GlobalErrorStatus implements BaseCodeInterface {
     private final String message;
 
     @Override
-    public BaseCodeDTO getReason() {
-        return BaseCodeDTO.builder()
+    public BaseCodeDto getReason() {
+        return BaseCodeDto.builder()
                 .httpStatus(httpStatus)
                 .isSuccess(isSuccess)
                 .code(code)

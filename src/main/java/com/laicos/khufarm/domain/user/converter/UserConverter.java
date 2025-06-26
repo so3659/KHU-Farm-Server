@@ -1,34 +1,53 @@
 package com.laicos.khufarm.domain.user.converter;
 
-import com.laicos.khufarm.domain.user.dto.request.UserJoinRequest;
+import com.laicos.khufarm.domain.user.dto.request.BusinessUserJoinRequest;
+import com.laicos.khufarm.domain.user.dto.request.FarmerUserJoinRequest;
+import com.laicos.khufarm.domain.user.dto.request.IndividualUserJoinRequest;
 import com.laicos.khufarm.domain.user.entity.User;
 import com.laicos.khufarm.domain.user.enums.UserStatus;
 import com.laicos.khufarm.domain.user.enums.UserType;
-import com.laicos.khufarm.global.common.exception.RestApiException;
-import com.laicos.khufarm.global.common.exception.code.status.MemberErrorStatus;
 import org.springframework.stereotype.Component;
 
 
 @Component
 public class UserConverter {
 
-    public static User toUser(Integer userTypeId, UserJoinRequest userJoinRequest) {
+    public static User toIndividualUser(IndividualUserJoinRequest individualUserJoinRequest) {
 
-        UserType userType = switch (userTypeId) {
-            case 1 -> UserType.ROLE_INDIVIDUAL;
-            case 2 -> UserType.ROLE_BUSINESS;
-            case 3 -> UserType.ROLE_ADMIN;
-            default -> throw new RestApiException(MemberErrorStatus.USERTYPE_NOT_FOUND);
-        };
+            return User.builder()
+                    .name(individualUserJoinRequest.getName())
+                    .email(individualUserJoinRequest.getEmail())
+                    .phoneNumber(individualUserJoinRequest.getPhoneNumber())
+                    .userId(individualUserJoinRequest.getUserId())
+                    .userStatus(UserStatus.ACTIVE)
+                    .version(individualUserJoinRequest.getVersion())
+                    .userType(UserType.ROLE_INDIVIDUAL)
+                    .build();
+    }
 
-        return User.builder()
-                .name(userJoinRequest.getName())
-                .email(userJoinRequest.getEmail())
-                .phoneNumber(userJoinRequest.getPhoneNumber())
-                .userId(userJoinRequest.getUserId())
-                .userStatus(UserStatus.ACTIVE)
-                .version(userJoinRequest.getVersion())
-                .userType(userType)
-                .build();
+    public static User toBusinessUser(BusinessUserJoinRequest businessUserJoinRequest) {
+
+            return User.builder()
+                    .name(businessUserJoinRequest.getName())
+                    .email(businessUserJoinRequest.getEmail())
+                    .phoneNumber(businessUserJoinRequest.getPhoneNumber())
+                    .userId(businessUserJoinRequest.getUserId())
+                    .userStatus(UserStatus.ACTIVE)
+                    .version(businessUserJoinRequest.getVersion())
+                    .userType(UserType.ROLE_BUSINESS)
+                    .build();
+    }
+
+    public static User toFarmerUser(FarmerUserJoinRequest farmerUserJoinRequest) {
+
+            return User.builder()
+                    .name(farmerUserJoinRequest.getName())
+                    .email(farmerUserJoinRequest.getEmail())
+                    .phoneNumber(farmerUserJoinRequest.getPhoneNumber())
+                    .userId(farmerUserJoinRequest.getUserId())
+                    .userStatus(UserStatus.STAND_BY)
+                    .version(farmerUserJoinRequest.getVersion())
+                    .userType(UserType.ROLE_FARMER)
+                    .build();
     }
 }
