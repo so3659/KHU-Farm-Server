@@ -2,12 +2,13 @@ package com.laicos.khufarm.domain.auth.controller;
 
 import com.laicos.khufarm.domain.auth.dto.AccessTokenResponse;
 import com.laicos.khufarm.domain.auth.service.AuthCommandService;
+import com.laicos.khufarm.domain.user.dto.request.BusinessUserJoinRequest;
+import com.laicos.khufarm.domain.user.dto.request.FarmerUserJoinRequest;
 import com.laicos.khufarm.domain.user.dto.request.IndividualUserJoinRequest;
 import com.laicos.khufarm.domain.user.dto.request.UserLoginRequest;
 import com.laicos.khufarm.domain.user.dto.response.UserResponse;
 import com.laicos.khufarm.domain.user.service.UserCommandService;
 import com.laicos.khufarm.domain.user.service.UserQueryService;
-import com.laicos.khufarm.domain.user.validator.annotation.ExistUserType;
 import com.laicos.khufarm.global.common.base.BaseResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletResponse;
@@ -55,19 +56,19 @@ public class AuthController {
 
     @PostMapping("/business/signup")
     public BaseResponse<UserResponse> businessSignup(
-            @Valid @RequestBody IndividualUserJoinRequest individualUserJoinRequest,
+            @Valid @RequestBody BusinessUserJoinRequest businessUserJoinRequest,
             HttpServletResponse response) {
 
-        UserResponse userJoinResult = userCommandService.joinUser(individualUserJoinRequest, response);
+        UserResponse userJoinResult = userCommandService.joinBusinessUser(businessUserJoinRequest, response);
         return BaseResponse.onSuccess(userJoinResult);
     }
 
     @PostMapping("/farmer/signup")
     public BaseResponse<UserResponse> farmerSignup(
-            @Valid @RequestBody IndividualUserJoinRequest individualUserJoinRequest,
+            @Valid @RequestBody FarmerUserJoinRequest farmerUserJoinRequest,
             HttpServletResponse response) {
 
-        UserResponse userJoinResult = userCommandService.joinUser(individualUserJoinRequest, response);
+        UserResponse userJoinResult = userCommandService.joinFarmerUser(farmerUserJoinRequest, response);
         return BaseResponse.onSuccess(userJoinResult);
     }
 

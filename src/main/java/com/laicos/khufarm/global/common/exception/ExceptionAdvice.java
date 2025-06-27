@@ -3,10 +3,12 @@ package com.laicos.khufarm.global.common.exception;
 import com.laicos.khufarm.global.common.base.BaseResponse;
 import com.laicos.khufarm.global.common.exception.code.BaseCodeDto;
 import com.laicos.khufarm.global.common.exception.code.status.GlobalErrorStatus;
+import feign.FeignException;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -35,6 +37,23 @@ public class ExceptionAdvice extends ResponseEntityExceptionHandler {
         BaseCodeDto errorCode = e.getErrorCode();
         log.error("An error occurred: {}", e.getMessage(), e);
         return handleExceptionInternal(errorCode);
+    }
+
+    /**
+     * 기본 FeignException 처리
+     */
+    @ExceptionHandler(FeignException.class)
+    public ResponseEntity<BaseResponse<String>> handleFeignException(FeignException ex) {
+        log.error("Feign 클라이언트 오류: {}", ex.getMessage());
+
+        BaseCodeDto errorCode = BaseCodeDto.builder()
+                .httpStatus(HttpStatus.valueOf(ex.status()))
+                .isSuccess(false)
+                .code("FEIGN_ERROR")
+                .message(ex.getMessage())
+                .build();
+
+        return handleExceptionExternal(errorCode);
     }
 
     @ExceptionHandler
@@ -70,6 +89,12 @@ public class ExceptionAdvice extends ResponseEntityExceptionHandler {
 
         return handleExceptionInternalArgs(GlobalErrorStatus._VALIDATION_ERROR.getReason(), errors);
 
+    }
+
+    private ResponseEntity<BaseResponse<String>> handleExceptionExternal(BaseCodeDto errorCode) {
+        return ResponseEntity
+                .status(errorCode.getHttpStatus().value())
+                .body(BaseResponse.onFailure(errorCode.getCode(), errorCode.getMessage(), null));
     }
 
     private ResponseEntity<BaseResponse<String>> handleExceptionInternal(BaseCodeDto errorCode) {

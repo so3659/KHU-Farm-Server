@@ -1,6 +1,7 @@
 package com.laicos.khufarm.domain.user.service;
 
 import com.laicos.khufarm.domain.auth.service.AuthCommandService;
+import com.laicos.khufarm.domain.businessInfo.service.BusinessInfoCommandService;
 import com.laicos.khufarm.domain.termsAgreement.service.TermsAgreementService;
 import com.laicos.khufarm.domain.user.converter.UserConverter;
 import com.laicos.khufarm.domain.user.dto.request.BusinessUserJoinRequest;
@@ -28,6 +29,7 @@ public class UserCommandServiceImpl implements UserCommandService{
     private final PasswordEncoder passwordEncoder;
     private final AuthCommandService authCommandService;
     private final TermsAgreementService termsAgreementService;
+    private final BusinessInfoCommandService businessInfoCommandService;
 
     @Override
     public UserResponse joinIndividualUser(IndividualUserJoinRequest individualUserJoinRequest, HttpServletResponse response) {
@@ -80,12 +82,19 @@ public class UserCommandServiceImpl implements UserCommandService{
             throw new RestApiException(UserErrorStatus.INVALID_PASSWORD);
         }
 
-        User user = UserConverter.toUser(businessUserJoinRequest);
+        User user = UserConverter.toBusinessUser(businessUserJoinRequest);
 
-        user.setEncodedPassword(passwordEncoder.encode(individualUserJoinRequest.getPassword()));
+        // 비즈니스 정보 유효성 검사
+        businessInfoCommandService.validateBusinessInfo(businessUserJoinRequest.getBusinessInfoDto());
+
+        user.setEncodedPassword(passwordEncoder.encode(businessUserJoinRequest.getPassword()));
         userRepository.save(user);
 
-        termsAgreementService.createTermsAgreement(user, individualUserJoinRequest.getTermsAgreed());
+        // 약관 동의 정보 저장
+        termsAgreementService.createTermsAgreement(user, businessUserJoinRequest.getTermsAgreed());
+
+        // 비즈니스 정보 저장
+        businessInfoCommandService.saveBusinessInfo(businessUserJoinRequest.getBusinessInfoDto(), user);
 
         //자동 로그인 처리
         String newAccessToken = authCommandService.processLoginSuccess(user, response);
@@ -102,7 +111,7 @@ public class UserCommandServiceImpl implements UserCommandService{
     @Override
     public UserResponse joinFarmerUser(FarmerUserJoinRequest farmerUserJoinRequest, HttpServletResponse response) {
 
-        String email = individualUserJoinRequest.getEmail();
+        String email = farmerUserJoinRequest.getEmail();
         Boolean isExist = userRepository.existsByEmail(email);
 
         //이미 존재하는 이메일인 경우 예외처리
@@ -111,26 +120,30 @@ public class UserCommandServiceImpl implements UserCommandService{
         }
 
         // 비밀번호와 비밀번호 확인이 일치하지 않는 경우 예외처리
-        if (!individualUserJoinRequest.getPassword().equals(individualUserJoinRequest.getPasswordConfirm())) {
+        if (!farmerUserJoinRequest.getPassword().equals(farmerUserJoinRequest.getPasswordConfirm())) {
             throw new RestApiException(UserErrorStatus.INVALID_PASSWORD);
         }
 
-        User user = UserConverter.toUser(individualUserJoinRequest);
+        User user = UserConverter.toFarmerUser(farmerUserJoinRequest);
 
-        user.setEncodedPassword(passwordEncoder.encode(individualUserJoinRequest.getPassword()));
+        // 비즈니스 정보 유효성 검사
+        businessInfoCommandService.validateBusinessInfo(farmerUserJoinRequest.getBusinessInfoDto());
+
+        user.setEncodedPassword(passwordEncoder.encode(farmerUserJoinRequest.getPassword()));
         userRepository.save(user);
 
-        termsAgreementService.createTermsAgreement(user, individualUserJoinRequest.getTermsAgreed());
+        // 약관 동의 정보 저장
+        termsAgreementService.createTermsAgreement(user, farmerUserJoinRequest.getTermsAgreed());
 
-        //자동 로그인 처리
-        String newAccessToken = authCommandService.processLoginSuccess(user, response);
+        // 비즈니스 정보 저장
+        businessInfoCommandService.saveBusinessInfo(farmerUserJoinRequest.getBusinessInfoDto(), user);
 
         return UserResponse.builder()
                 .userId(user.getUserId())
                 .email(user.getEmail())
                 .phoneNumber(user.getPhoneNumber())
                 .userType(user.getUserType().toString())
-                .accessToken(newAccessToken)
+                .accessToken(null)
                 .build();
     }
 

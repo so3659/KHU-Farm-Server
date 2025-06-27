@@ -1,6 +1,6 @@
 plugins {
 	id 'java'
-	id 'org.springframework.boot' version '3.5.0'
+	id 'org.springframework.boot' version '3.5.3'
 	id 'io.spring.dependency-management' version '1.1.7'
 //	id "com.ewerk.gradle.plugins.querydsl" version "1.0.10"
 }
@@ -22,6 +22,10 @@ configurations {
 
 repositories {
 	mavenCentral()
+}
+
+ext {
+	set('springCloudVersion', "2025.0.0")
 }
 
 dependencies {
@@ -52,7 +56,18 @@ dependencies {
 	implementation 'io.jsonwebtoken:jjwt-api:0.12.6'
 	implementation 'io.jsonwebtoken:jjwt-impl:0.12.6'
 	implementation 'io.jsonwebtoken:jjwt-jackson:0.12.6'
+
+	// FEIGN
+	implementation 'org.springframework.cloud:spring-cloud-starter-openfeign:4.3.0'
+	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
+
+dependencyManagement {
+	imports {
+		mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+	}
+}
+
 
 tasks.named('test') {
 	useJUnitPlatform()
