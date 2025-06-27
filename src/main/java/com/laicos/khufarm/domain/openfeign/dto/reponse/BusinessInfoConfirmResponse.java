@@ -11,7 +11,7 @@ import java.util.List;
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
-public class BusinessInfoResponse {
+public class BusinessInfoConfirmResponse {
 
     @JsonProperty("status_code")
     private String statusCode;

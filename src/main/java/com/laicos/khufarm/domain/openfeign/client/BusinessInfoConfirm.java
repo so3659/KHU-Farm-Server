@@ -1,7 +1,7 @@
 package com.laicos.khufarm.domain.openfeign.client;
 
-import com.laicos.khufarm.domain.openfeign.dto.reponse.BusinessInfoResponse;
-import com.laicos.khufarm.domain.openfeign.dto.request.BusinessInfoRequest;
+import com.laicos.khufarm.domain.openfeign.dto.reponse.BusinessInfoConfirmResponse;
+import com.laicos.khufarm.domain.openfeign.dto.request.BusinessInfoConfirmRequest;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -10,6 +10,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 public interface BusinessInfoConfirm {
 
     @PostMapping("/validate?serviceKey=${serviceKey.businessInfoConfirm}")
-    BusinessInfoResponse confirmBusinessInfo(@RequestBody BusinessInfoRequest businessInfoRequest);
+    BusinessInfoConfirmResponse confirmBusinessInfo(@RequestBody BusinessInfoConfirmRequest businessInfoConfirmRequest);
 
 }

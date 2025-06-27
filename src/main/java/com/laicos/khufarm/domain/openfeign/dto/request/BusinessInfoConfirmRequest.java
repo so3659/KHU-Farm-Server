@@ -9,7 +9,7 @@ import java.util.List;
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
-public class BusinessInfoRequest {
+public class BusinessInfoConfirmRequest {
 
     @JsonProperty("businesses")
     private List<Business> businesses;

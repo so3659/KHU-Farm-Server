@@ -1,4 +1,4 @@
-package com.laicos.khufarm.domain.fruit.entity.mapping;
+package com.laicos.khufarm.domain.wishList.entity;
 
 import com.laicos.khufarm.domain.fruit.entity.Fruit;
 import com.laicos.khufarm.domain.user.entity.User;

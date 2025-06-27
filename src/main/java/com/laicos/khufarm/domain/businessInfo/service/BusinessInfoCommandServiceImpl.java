@@ -5,8 +5,8 @@ import com.laicos.khufarm.domain.businessInfo.dto.BusinessInfoDto;
 import com.laicos.khufarm.domain.businessInfo.entity.BusinessInfo;
 import com.laicos.khufarm.domain.businessInfo.repository.BusinessInfoRepository;
 import com.laicos.khufarm.domain.openfeign.client.BusinessInfoConfirm;
-import com.laicos.khufarm.domain.openfeign.dto.reponse.BusinessInfoResponse;
-import com.laicos.khufarm.domain.openfeign.dto.request.BusinessInfoRequest;
+import com.laicos.khufarm.domain.openfeign.dto.reponse.BusinessInfoConfirmResponse;
+import com.laicos.khufarm.domain.openfeign.dto.request.BusinessInfoConfirmRequest;
 import com.laicos.khufarm.domain.user.entity.User;
 import com.laicos.khufarm.global.common.exception.RestApiException;
 import com.laicos.khufarm.global.common.exception.code.status.BusinessInfoErrorStatus;
@@ -27,9 +27,9 @@ public class BusinessInfoCommandServiceImpl implements BusinessInfoCommandServic
     @Override
     public void validateBusinessInfo(BusinessInfoDto businessInfoDto){
 
-        BusinessInfoRequest request = BusinessInfoRequest.builder()
+        BusinessInfoConfirmRequest request = BusinessInfoConfirmRequest.builder()
                 .businesses(List.of(
-                        BusinessInfoRequest.Business.builder()
+                        BusinessInfoConfirmRequest.Business.builder()
                                 .bNo(businessInfoDto.getBusinessId())
                                 .startDt(businessInfoDto.getOpenDate())
                                 .pNm(businessInfoDto.getBusinessName())
@@ -37,10 +37,10 @@ public class BusinessInfoCommandServiceImpl implements BusinessInfoCommandServic
                 ))
                 .build();
 
-        BusinessInfoResponse businessInfoResponse = businessInfoConfirm.confirmBusinessInfo(request);
+        BusinessInfoConfirmResponse businessInfoConfirmResponse = businessInfoConfirm.confirmBusinessInfo(request);
 
         // 유효성 검사 결과가 유효하지 않은 경우 예외 처리
-        if(businessInfoResponse.getData().getFirst().getValid().equals("02")){
+        if(businessInfoConfirmResponse.getData().getFirst().getValid().equals("02")){
             throw new RestApiException(BusinessInfoErrorStatus.INVALID_BUSINESS_INFO);
         }
     }
