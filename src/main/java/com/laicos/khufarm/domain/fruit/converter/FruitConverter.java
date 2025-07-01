@@ -1,7 +1,12 @@
 package com.laicos.khufarm.domain.fruit.converter;
 
+import com.laicos.khufarm.domain.fruit.dto.request.FruitAddRequest;
 import com.laicos.khufarm.domain.fruit.dto.response.FruitResponse;
 import com.laicos.khufarm.domain.fruit.entity.Fruit;
+import com.laicos.khufarm.domain.fruit.entity.category.FruitCategory;
+import com.laicos.khufarm.domain.fruit.entity.category.WholesaleRetailCategory;
+import com.laicos.khufarm.domain.fruit.enums.FruitStatus;
+import com.laicos.khufarm.domain.seller.entity.Seller;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -14,7 +19,8 @@ public class FruitConverter {
         return FruitResponse.builder()
                 .id(fruit.getId())
                 .title(fruit.getTitle())
-                .imageUrl(fruit.getImageUrl())
+                .widthImageUrl(fruit.getWidthImageUrl())
+                .squareImageUrl(fruit.getSquareImageUrl())
                 .price(fruit.getPrice())
                 .weight(fruit.getWeight())
                 .deliveryCompany(fruit.getDeliveryCompany())
@@ -34,6 +40,23 @@ public class FruitConverter {
         return fruits.stream()
                 .map(FruitConverter::toDTO)
                 .collect(Collectors.toList());
+    }
+
+    public static Fruit toFruit(Seller seller, FruitCategory fruitCategory, WholesaleRetailCategory wholesaleRetailCategory, FruitAddRequest fruitAddRequest) {
+        return Fruit.builder()
+                .title(fruitAddRequest.getTitle())
+                .widthImageUrl(fruitAddRequest.getWidthImage())
+                .squareImageUrl(fruitAddRequest.getSquareImage())
+                .price(fruitAddRequest.getPrice())
+                .weight(fruitAddRequest.getWeight())
+                .deliveryCompany(fruitAddRequest.getDeliveryCompany())
+                .deliveryDay(fruitAddRequest.getDeliveryDay())
+                .description(fruitAddRequest.getDescription())
+                .fruitStatus(FruitStatus.STAND_BY)
+                .seller(seller)
+                .fruitCategory(fruitCategory)
+                .wholesaleRetailCategory(wholesaleRetailCategory)
+                .build();
     }
 
 //    public Fruit toEntity(FruitCreateDto createDto) {

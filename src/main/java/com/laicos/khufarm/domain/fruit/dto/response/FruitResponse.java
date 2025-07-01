@@ -10,7 +10,8 @@ public class FruitResponse {
 
     private Long id;
     private String title;
-    private String imageUrl;
+    private String widthImageUrl;
+    private String squareImageUrl;
     private Integer price;
     private Integer weight;
     private String deliveryCompany;

@@ -1,8 +1,11 @@
 package com.laicos.khufarm.domain.fruit.contoller;
 
+import com.laicos.khufarm.domain.auth.security.CustomUserDetails;
 import com.laicos.khufarm.domain.fruit.apiSpecification.FruitApiSpecification;
 import com.laicos.khufarm.domain.fruit.dto.FruitReadCondition;
+import com.laicos.khufarm.domain.fruit.dto.request.FruitAddRequest;
 import com.laicos.khufarm.domain.fruit.dto.response.FruitResponse;
+import com.laicos.khufarm.domain.fruit.service.FruitCommandService;
 import com.laicos.khufarm.domain.fruit.service.FruitQueryService;
 import com.laicos.khufarm.domain.fruit.validation.annotation.ExistFruitCategory;
 import com.laicos.khufarm.domain.fruit.validation.annotation.ExistWholesaleRetailCategory;
@@ -12,11 +15,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/fruits")
@@ -26,6 +27,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class FruitController implements FruitApiSpecification {
 
     private final FruitQueryService fruitQueryService;
+    private final FruitCommandService fruitCommandService;
 
     @GetMapping
     public BaseResponse<Slice<FruitResponse>> getFruits(
@@ -53,4 +55,15 @@ public class FruitController implements FruitApiSpecification {
 
         return BaseResponse.onSuccess(fruitResponses);
     }
+
+    @PostMapping("/add")
+    public BaseResponse<Void> addFruit(
+            @RequestBody FruitAddRequest fruitAddRequest,
+            @AuthenticationPrincipal CustomUserDetails customUserDetails
+    ) {
+        fruitCommandService.addFruit(customUserDetails.getUser(), fruitAddRequest);
+
+        return BaseResponse.onSuccess(null);
+    }
+
 }

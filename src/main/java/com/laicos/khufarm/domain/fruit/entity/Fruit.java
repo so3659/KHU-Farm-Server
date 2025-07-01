@@ -2,6 +2,8 @@ package com.laicos.khufarm.domain.fruit.entity;
 
 import com.laicos.khufarm.domain.fruit.entity.category.FruitCategory;
 import com.laicos.khufarm.domain.fruit.entity.category.WholesaleRetailCategory;
+import com.laicos.khufarm.domain.fruit.enums.FruitStatus;
+import com.laicos.khufarm.domain.fruit.enums.converter.FruitStatusConverter;
 import com.laicos.khufarm.domain.seller.entity.Seller;
 import com.laicos.khufarm.global.common.base.BaseEntity;
 import jakarta.persistence.*;
@@ -28,7 +30,10 @@ public class Fruit extends BaseEntity {
     private String title;
 
     @Column(nullable = false)
-    private String imageUrl;
+    private String widthImageUrl;
+
+    @Column(nullable = false)
+    String squareImageUrl;
 
     @Column(nullable = false)
     private Integer price;
@@ -52,6 +57,10 @@ public class Fruit extends BaseEntity {
 
     @Column(nullable = false)
     private String description;
+
+    @Convert(converter = FruitStatusConverter.class)
+    @Column(nullable = false)
+    private FruitStatus fruitStatus;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="seller_id", nullable = false)

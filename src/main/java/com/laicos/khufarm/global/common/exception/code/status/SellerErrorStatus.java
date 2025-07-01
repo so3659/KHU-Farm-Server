@@ -8,11 +8,9 @@ import org.springframework.http.HttpStatus;
 
 @Getter
 @AllArgsConstructor
-public enum FruitErrorStatus implements BaseCodeInterface {
+public enum SellerErrorStatus implements BaseCodeInterface {
 
-    FRUIT_NOT_FOUND(HttpStatus.NOT_FOUND, "FRUIT404", "해당 과일을 찾을 수 없습니다."),
-    FRUIT_CATEGORY_NOT_FOUND(HttpStatus.NOT_FOUND, "FRUIT_CATEGORY404", "존재하지 않는 과일 카테고리입니다."),
-    WHOLESALE_RETAIL_CATEGORY_NOT_FOUND(HttpStatus.NOT_FOUND, "WHOLESALE_RETAIL_CATEGORY404", "존재하지 않는 도매/소매 카테고리입니다."),
+    SELLER_NOT_FOUND(HttpStatus.NOT_FOUND, "SELLER404", "해당 판매자를 찾을 수 없습니다."),
     ;
 
     private final HttpStatus httpStatus;
