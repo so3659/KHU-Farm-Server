@@ -11,6 +11,7 @@ import com.laicos.khufarm.domain.fruit.validation.annotation.ExistFruitCategory;
 import com.laicos.khufarm.domain.fruit.validation.annotation.ExistWholesaleRetailCategory;
 import com.laicos.khufarm.global.common.base.BaseResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -58,7 +59,7 @@ public class FruitController implements FruitApiSpecification {
 
     @PostMapping("/add")
     public BaseResponse<Void> addFruit(
-            @RequestBody FruitAddRequest fruitAddRequest,
+            @Valid @RequestBody FruitAddRequest fruitAddRequest,
             @AuthenticationPrincipal CustomUserDetails customUserDetails
     ) {
         fruitCommandService.addFruit(customUserDetails.getUser(), fruitAddRequest);

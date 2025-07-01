@@ -33,7 +33,7 @@ public class Fruit extends BaseEntity {
     private String widthImageUrl;
 
     @Column(nullable = false)
-    String squareImageUrl;
+    private String squareImageUrl;
 
     @Column(nullable = false)
     private Integer price;
