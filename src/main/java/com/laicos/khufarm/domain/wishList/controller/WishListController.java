@@ -45,4 +45,13 @@ public class WishListController {
         return BaseResponse.onSuccess(wishListResponses);
     }
 
+    @DeleteMapping("/{wishListId}/delete")
+    public BaseResponse<Void> deleteWishList(
+            @AuthenticationPrincipal CustomUserDetails customUserDetails,
+            @PathVariable("wishListId") Long wishListId)
+    {
+        wishListCommandService.deleteWishList(customUserDetails.getUser(), wishListId);
+
+        return BaseResponse.onSuccess(null);
+    }
 }

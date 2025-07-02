@@ -8,6 +8,7 @@ import com.laicos.khufarm.domain.wishList.entity.WishList;
 import com.laicos.khufarm.domain.wishList.repository.WishListRepository;
 import com.laicos.khufarm.global.common.exception.RestApiException;
 import com.laicos.khufarm.global.common.exception.code.status.FruitErrorStatus;
+import com.laicos.khufarm.global.common.exception.code.status.WishListErrorStatus;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,5 +29,14 @@ public class WishListCommandServiceImpl implements WishListCommandService{
         WishList wishList = WishListConverter.toWishList(user, fruit);
 
         wishListRepository.save(wishList);
+    }
+
+    @Override
+    public void deleteWishList(User user, Long wishListId) {
+
+        WishList wishList = wishListRepository.findByUserAndId(user, wishListId)
+                .orElseThrow(() -> new RestApiException(WishListErrorStatus.WISHLIST_NOT_FOUND));
+
+        wishListRepository.delete(wishList);
     }
 }
