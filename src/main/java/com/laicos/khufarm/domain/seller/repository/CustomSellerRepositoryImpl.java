@@ -64,7 +64,7 @@ public class CustomSellerRepositoryImpl implements CustomSellerRepository{
                 .where(
                         gtCursorId(cursorId), // 커서 조건
                         eqWholesaleRetailCategory(wholesaleRetailCategoryId), // 도매/소매 카테고리 조건
-                        gtSellerId(sellerId) // 판매자 ID 조건
+                        eqSellerId(sellerId) // 판매자 ID 조건
                 )
                 .orderBy(fruit.id.asc())
                 .limit(pageable.getPageSize()+1)
@@ -88,7 +88,7 @@ public class CustomSellerRepositoryImpl implements CustomSellerRepository{
     }
 
 
-    private BooleanExpression gtSellerId(Long sellerId) {
+    private BooleanExpression eqSellerId(Long sellerId) {
         return (sellerId == null) ? null : fruit.seller.id.eq(sellerId);
     }
 

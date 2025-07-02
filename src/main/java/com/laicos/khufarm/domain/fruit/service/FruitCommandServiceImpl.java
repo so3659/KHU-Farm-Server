@@ -31,6 +31,7 @@ public class FruitCommandServiceImpl implements FruitCommandService{
     @Override
     public void addFruit(User user, FruitAddRequest fruitAddRequest){
 
+        // 농가 먼저 추가 필요
         Seller seller = sellerRepository.findByUser(user)
                 .orElseThrow(() -> new RestApiException(SellerErrorStatus.SELLER_NOT_FOUND));
 
