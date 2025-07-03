@@ -39,7 +39,7 @@ public class CustomFruitRepositoryImpl implements CustomFruitRepository {
                 .limit(pageable.getPageSize()+1)
                 .fetch();
 
-        List<FruitResponse> content = FruitConverter.toDTOList(fruitList);
+        List<FruitResponse> content = FruitConverter.toFruitDTOList(fruitList);
 
         boolean hasNext = false;
         if (content.size() > pageable.getPageSize()) {

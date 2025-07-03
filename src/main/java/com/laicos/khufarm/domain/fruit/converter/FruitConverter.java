@@ -2,6 +2,7 @@ package com.laicos.khufarm.domain.fruit.converter;
 
 import com.laicos.khufarm.domain.fruit.dto.request.FruitAddRequest;
 import com.laicos.khufarm.domain.fruit.dto.response.FruitResponse;
+import com.laicos.khufarm.domain.fruit.dto.response.FruitResponseWithCount;
 import com.laicos.khufarm.domain.fruit.entity.Fruit;
 import com.laicos.khufarm.domain.fruit.entity.category.FruitCategory;
 import com.laicos.khufarm.domain.fruit.entity.category.WholesaleRetailCategory;
@@ -11,11 +12,12 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 @Component
 public class FruitConverter {
 
-    public static FruitResponse toDTO(Fruit fruit) {
+    public static FruitResponse toFruitDTO(Fruit fruit) {
         return FruitResponse.builder()
                 .id(fruit.getId())
                 .title(fruit.getTitle())
@@ -36,9 +38,36 @@ public class FruitConverter {
     }
 
 
-    public static List<FruitResponse> toDTOList(List<Fruit> fruits) {
+    public static List<FruitResponse> toFruitDTOList(List<Fruit> fruits) {
         return fruits.stream()
-                .map(FruitConverter::toDTO)
+                .map(FruitConverter::toFruitDTO)
+                .collect(Collectors.toList());
+    }
+
+    public static FruitResponseWithCount toFruitDTOWithCount(Fruit fruit, Integer count) {
+        return FruitResponseWithCount.builder()
+                .id(fruit.getId())
+                .title(fruit.getTitle())
+                .widthImageUrl(fruit.getWidthImageUrl())
+                .squareImageUrl(fruit.getSquareImageUrl())
+                .price(fruit.getPrice())
+                .weight(fruit.getWeight())
+                .deliveryCompany(fruit.getDeliveryCompany())
+                .deliveryDay(fruit.getDeliveryDay())
+                .ratingSum(fruit.getRatingSum())
+                .ratingCount(fruit.getRatingCount())
+                .description(fruit.getDescription())
+                .sellerId(fruit.getSeller().getId())
+                .brandName(fruit.getSeller().getBrandName())
+                .fruitCategoryId(fruit.getFruitCategory().getId())
+                .wholesaleRetailCategoryId(fruit.getWholesaleRetailCategory().getId())
+                .countInCart(count)
+                .build();
+    }
+
+    public static List<FruitResponseWithCount> toFruitDTOListWithCount(List<Fruit> fruits, List<Integer> countList) {
+        return IntStream.range(0, fruits.size())
+                .mapToObj(i -> toFruitDTOWithCount(fruits.get(i), countList.get(i)))
                 .collect(Collectors.toList());
     }
 

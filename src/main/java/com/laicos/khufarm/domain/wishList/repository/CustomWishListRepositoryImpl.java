@@ -41,7 +41,7 @@ public class CustomWishListRepositoryImpl implements CustomWishListRepository{
                 .map(WishList::getFruit)
                 .toList();
 
-        List<FruitResponse> content = FruitConverter.toDTOList(fruitList);
+        List<FruitResponse> content = FruitConverter.toFruitDTOList(fruitList);
 
         boolean hasNext = false;
         if (content.size() > pageable.getPageSize()) {
