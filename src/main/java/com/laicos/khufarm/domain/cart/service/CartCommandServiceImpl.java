@@ -7,6 +7,7 @@ import com.laicos.khufarm.domain.fruit.entity.Fruit;
 import com.laicos.khufarm.domain.fruit.repository.FruitRepository;
 import com.laicos.khufarm.domain.user.entity.User;
 import com.laicos.khufarm.global.common.exception.RestApiException;
+import com.laicos.khufarm.global.common.exception.code.status.CartListErrorStatus;
 import com.laicos.khufarm.global.common.exception.code.status.FruitErrorStatus;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -29,5 +30,14 @@ public class CartCommandServiceImpl implements CartCommandService{
         Cart cart = CartConverter.toCart(user, fruit, count);
 
         cartRepository.save(cart);
+    }
+
+    @Override
+    public void deleteCart(User user, Long cartId){
+
+        Cart cart = cartRepository.findByUserAndId(user, cartId)
+                .orElseThrow(() -> new RestApiException(CartListErrorStatus.CART_NOT_FOUND));
+
+        cartRepository.delete(cart);
     }
 }

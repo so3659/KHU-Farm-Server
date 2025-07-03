@@ -48,4 +48,14 @@ public class CartController {
 
         return BaseResponse.onSuccess(cartResponses);
     }
+
+    @DeleteMapping("/{cartId}/delete")
+    public BaseResponse<Void> deleteWishList(
+            @AuthenticationPrincipal CustomUserDetails customUserDetails,
+            @PathVariable("cartId") Long cartId)
+    {
+        cartCommandService.deleteCart(customUserDetails.getUser(), cartId);
+
+        return BaseResponse.onSuccess(null);
+    }
 }
