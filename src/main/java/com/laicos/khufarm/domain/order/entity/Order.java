@@ -2,6 +2,7 @@ package com.laicos.khufarm.domain.order.entity;
 
 import com.laicos.khufarm.domain.order.enums.OrderStatus;
 import com.laicos.khufarm.domain.order.enums.converter.OrderStatusConverter;
+import com.laicos.khufarm.domain.payment.entity.Payment;
 import com.laicos.khufarm.domain.user.entity.User;
 import com.laicos.khufarm.global.common.base.BaseEntity;
 import jakarta.persistence.*;
@@ -23,6 +24,9 @@ public class Order extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(nullable = false)
+    private String merchantUid;
 
     @Column(nullable = false)
     private String ordererName;
@@ -48,7 +52,6 @@ public class Order extends BaseEntity {
     @Column(nullable = false)
     private String phoneNumber;
 
-    @Column(nullable = false)
     private String orderRequest;
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
@@ -59,8 +62,22 @@ public class Order extends BaseEntity {
     @Column(nullable = false)
     private OrderStatus orderStatus;
 
+    private String failReason;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="user_id", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     private User user;
+
+    @OneToOne(mappedBy = "order", cascade = CascadeType.ALL)
+    private Payment payment;
+
+    public void addOrderDetail(OrderDetail orderDetail) {
+        orderDetails.add(orderDetail);
+        orderDetail.setOrder(this);
+    }
+
+    public void updateOrderStatus(OrderStatus orderStatus) {
+        this.orderStatus = orderStatus;
+    }
 }

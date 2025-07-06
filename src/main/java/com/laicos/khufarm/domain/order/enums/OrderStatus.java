@@ -9,11 +9,14 @@ import java.util.Arrays;
 @AllArgsConstructor
 public enum OrderStatus {
 
-    PAYMENT_COMPLETED("결제 완료", "1"),
-    PREPARING_SHIPMENT("배송 준비중","2"),
-    SHIPPING("배송중", "3"),
-    SHIPMENT_COMPLETED("배송 완료", "4"),
-    ORDER_CANCELLED("주문 취소", "5");
+    PAYMENT_STANDBY("결제 대기", "1"),
+    ORDER_COMPLETED("주문 완료", "2"),
+    PREPARING_SHIPMENT("배송 준비중","3"),
+    SHIPPING("배송중", "4"),
+    SHIPMENT_COMPLETED("배송 완료", "5"),
+    ORDER_CANCELLED("주문 취소", "6"),
+    ORDER_FAILED("주문 실패", "7"),
+    ;
 
     private final String description;
     private final String code;

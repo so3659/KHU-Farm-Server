@@ -41,4 +41,7 @@ public class FruitAddRequest {
     private Integer deliveryDay;
 
     String description;
+
+    @NotNull(message = "재고 수량은 필수입니다.")
+    private Integer stock;
 }

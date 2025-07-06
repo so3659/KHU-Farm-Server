@@ -25,7 +25,7 @@ public class OrderDetail {
     private Integer count;
 
     @Column(nullable = false)
-    private String weight;
+    private Integer weight;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="order_id", nullable = false)
@@ -35,4 +35,8 @@ public class OrderDetail {
     @JoinColumn(name="fruit_id", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Fruit fruit;
+
+    protected void setOrder(Order order) {
+        this.order = order;
+    }
 }

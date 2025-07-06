@@ -30,6 +30,7 @@ public class FruitConverter {
                 .ratingSum(fruit.getRatingSum())
                 .ratingCount(fruit.getRatingCount())
                 .description(fruit.getDescription())
+                .stock(fruit.getStock())
                 .sellerId(fruit.getSeller().getId())
                 .brandName(fruit.getSeller().getBrandName())
                 .fruitCategoryId(fruit.getFruitCategory().getId())
@@ -57,11 +58,12 @@ public class FruitConverter {
                 .ratingSum(fruit.getRatingSum())
                 .ratingCount(fruit.getRatingCount())
                 .description(fruit.getDescription())
+                .stock(fruit.getStock())
                 .sellerId(fruit.getSeller().getId())
                 .brandName(fruit.getSeller().getBrandName())
                 .fruitCategoryId(fruit.getFruitCategory().getId())
                 .wholesaleRetailCategoryId(fruit.getWholesaleRetailCategory().getId())
-                .countInCart(count)
+                .count(count)
                 .build();
     }
 
@@ -81,6 +83,7 @@ public class FruitConverter {
                 .deliveryCompany(fruitAddRequest.getDeliveryCompany())
                 .deliveryDay(fruitAddRequest.getDeliveryDay())
                 .description(fruitAddRequest.getDescription())
+                .stock(fruitAddRequest.getStock())
                 .fruitStatus(FruitStatus.STAND_BY)
                 .seller(seller)
                 .fruitCategory(fruitCategory)

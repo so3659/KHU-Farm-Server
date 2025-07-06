@@ -29,7 +29,7 @@ public class CustomCartRepositoryImpl implements CustomCartRepository{
     @Override
     public CartResponse getCart(Long cursorId, User user, Pageable pageable){
 
-        List<Cart> CartList = jpaQueryFactory.selectFrom(cart)
+        List<Cart> cartList = jpaQueryFactory.selectFrom(cart)
                 .where(
                         eqUserId(user.getId()), //사용자 ID 조건
                         gtCursorId(cursorId) // 커서 조건
@@ -38,11 +38,11 @@ public class CustomCartRepositoryImpl implements CustomCartRepository{
                 .limit(pageable.getPageSize()+1)
                 .fetch();
 
-        List<Fruit> fruitList = CartList.stream()
+        List<Fruit> fruitList = cartList.stream()
                 .map(Cart::getFruit)
                 .toList();
 
-        List<Integer> countList = CartList.stream()
+        List<Integer> countList = cartList.stream()
                 .map(Cart::getCount)
                 .toList();
 

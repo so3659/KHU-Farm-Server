@@ -58,6 +58,9 @@ public class Fruit extends BaseEntity {
     @Column(nullable = false)
     private String description;
 
+    @Column(nullable = false)
+    private Integer stock;
+
     @Convert(converter = FruitStatusConverter.class)
     @Column(nullable = false)
     private FruitStatus fruitStatus;
