@@ -3,6 +3,8 @@ package com.laicos.khufarm.domain.payment.service;
 import com.laicos.khufarm.domain.cart.entity.Cart;
 import com.laicos.khufarm.domain.cart.repository.CartRepository;
 import com.laicos.khufarm.domain.fruit.entity.Fruit;
+import com.laicos.khufarm.domain.fruit.entity.FruitRegularPrice;
+import com.laicos.khufarm.domain.fruit.repository.FruitRegularPriceRepository;
 import com.laicos.khufarm.domain.fruit.repository.FruitRepository;
 import com.laicos.khufarm.domain.order.entity.Order;
 import com.laicos.khufarm.domain.order.entity.OrderDetail;
@@ -44,6 +46,7 @@ public class PaymentCommandServiceImpl implements PaymentCommandService{
     private final FruitRepository fruitRepository;
     private final UserRepository  userRepository;
     private final CartRepository cartRepository;
+    private final FruitRegularPriceRepository fruitRegularPriceRepository;
     private final PaymentFailureHandler paymentFailureHandler;
     private final IamportClient iamportClient;
 
@@ -155,7 +158,7 @@ public class PaymentCommandServiceImpl implements PaymentCommandService{
             // User 구매 금액 및 구매 무게 업데이트
             updateUserTotalWeight(order);
             updateUserTotalPrice(order);
-
+            updateDiscountedPrice(order);
     }
 
     @Override
@@ -193,6 +196,20 @@ public class PaymentCommandServiceImpl implements PaymentCommandService{
 
         for(OrderDetail orderDetail : orderDetailList) {
             user.updateTotalPrice(orderDetail.getPrice()* orderDetail.getCount());
+        }
+    }
+
+    private void updateDiscountedPrice(Order order) {
+
+        User user = userRepository.getUserById(order.getUser().getId());
+
+        List<OrderDetail> orderDetailList = order.getOrderDetails();
+
+        for(OrderDetail orderDetail : orderDetailList) {
+
+            FruitRegularPrice fruitRegularPrice = fruitRegularPriceRepository.findByFruitCategoryId(orderDetail.getFruit().getFruitCategory().getId());
+
+            user.updateDiscountedPrice((fruitRegularPrice.getPrice()-orderDetail.getPrice())* orderDetail.getCount());
         }
     }
 }

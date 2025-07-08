@@ -65,6 +65,10 @@ public class User extends BaseEntity {
     @ColumnDefault("0")
     private Integer totalWeight;
 
+    @Column(nullable = false)
+    @ColumnDefault("0")
+    private Integer discountedPrice;
+
     public void setEncodedPassword(String password) {
         this.password = password;
     }
@@ -75,5 +79,9 @@ public class User extends BaseEntity {
 
     public void updateTotalPrice(Integer price) {
         this.totalPrice += price;
+    }
+
+    public void updateDiscountedPrice(Integer price) {
+        this.discountedPrice += price;
     }
 }
