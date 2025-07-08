@@ -1,5 +1,7 @@
 package com.laicos.khufarm.domain.payment.service;
 
+import com.laicos.khufarm.domain.cart.entity.Cart;
+import com.laicos.khufarm.domain.cart.repository.CartRepository;
 import com.laicos.khufarm.domain.fruit.entity.Fruit;
 import com.laicos.khufarm.domain.fruit.repository.FruitRepository;
 import com.laicos.khufarm.domain.order.entity.Order;
@@ -14,6 +16,7 @@ import com.laicos.khufarm.domain.payment.handler.PaymentFailureHandler;
 import com.laicos.khufarm.domain.user.entity.User;
 import com.laicos.khufarm.domain.user.repository.UserRepository;
 import com.laicos.khufarm.global.common.exception.RestApiException;
+import com.laicos.khufarm.global.common.exception.code.status.CartListErrorStatus;
 import com.laicos.khufarm.global.common.exception.code.status.FruitErrorStatus;
 import com.laicos.khufarm.global.common.exception.code.status.OrderErrorStatus;
 import com.laicos.khufarm.global.common.exception.code.status.PaymentErrorStatus;
@@ -40,6 +43,7 @@ public class PaymentCommandServiceImpl implements PaymentCommandService{
     private final OrderRepository orderRepository;
     private final FruitRepository fruitRepository;
     private final UserRepository  userRepository;
+    private final CartRepository cartRepository;
     private final PaymentFailureHandler paymentFailureHandler;
     private final IamportClient iamportClient;
 
@@ -152,6 +156,18 @@ public class PaymentCommandServiceImpl implements PaymentCommandService{
             updateUserTotalWeight(order);
             updateUserTotalPrice(order);
 
+    }
+
+    @Override
+    public void deleteCartList(User user, List<Long> cartIdList){
+        if(!cartIdList.isEmpty()){
+            List<Cart> cartList = cartIdList.stream()
+                    .map(cartId -> cartRepository.findByUserAndId(user, cartId)
+                            .orElseThrow(() -> new RestApiException(CartListErrorStatus.CART_NOT_FOUND)))
+                    .toList();
+
+            cartRepository.deleteAll(cartList);
+        }
     }
 
     private CancelData cancelPayment(IamportResponse<Payment> response) {
