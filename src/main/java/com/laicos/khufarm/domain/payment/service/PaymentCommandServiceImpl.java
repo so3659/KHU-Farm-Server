@@ -152,9 +152,6 @@ public class PaymentCommandServiceImpl implements PaymentCommandService{
             updateUserTotalWeight(order);
             updateUserTotalPrice(order);
 
-
-
-
     }
 
     private CancelData cancelPayment(IamportResponse<Payment> response) {
