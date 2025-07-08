@@ -68,4 +68,12 @@ public class User extends BaseEntity {
     public void setEncodedPassword(String password) {
         this.password = password;
     }
+
+    public void updateTotalWeight(Integer weight) {
+        this.totalWeight += weight;
+    }
+
+    public void updateTotalPrice(Integer price) {
+        this.totalPrice += price;
+    }
 }

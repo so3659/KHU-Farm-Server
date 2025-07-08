@@ -78,4 +78,8 @@ public class Fruit extends BaseEntity {
     @JoinColumn(name="wholesaleRetailCategory_id", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     private WholesaleRetailCategory wholesaleRetailCategory;
+
+    public void decreaseFruitStock(Integer count) {
+        this.stock -= count;
+    }
 }

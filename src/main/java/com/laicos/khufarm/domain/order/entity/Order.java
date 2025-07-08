@@ -80,4 +80,13 @@ public class Order extends BaseEntity {
     public void updateOrderStatus(OrderStatus orderStatus) {
         this.orderStatus = orderStatus;
     }
+
+    public void updateFailReason(String failReason) {
+        this.failReason = failReason;
+    }
+
+    public void addPayment(Payment payment) {
+        this.payment = payment;
+        payment.setOrder(this);
+    }
 }

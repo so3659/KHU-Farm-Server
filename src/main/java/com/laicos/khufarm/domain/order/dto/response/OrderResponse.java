@@ -1,10 +1,6 @@
 package com.laicos.khufarm.domain.order.dto.response;
 
-import com.laicos.khufarm.domain.fruit.dto.response.FruitResponseWithCount;
-import com.laicos.khufarm.domain.order.dto.request.ShippingInfo;
 import lombok.*;
-
-import java.util.List;
 
 @Getter
 @Builder
@@ -12,10 +8,15 @@ import java.util.List;
 @AllArgsConstructor
 public class OrderResponse {
 
-    private Long orderId;
-
-    private List<FruitResponseWithCount> orderFruits;
-
-    private ShippingInfo shippingInfo;
+    private String merchantUid;
+    private String ordererName;
+    private Integer totalPrice;
+    private Integer orderCount;
+    private String portCode;
+    private String address;
+    private String detailAddress;
+    private String recipient;
+    private String phoneNumber;
+    private String orderRequest;
 
 }

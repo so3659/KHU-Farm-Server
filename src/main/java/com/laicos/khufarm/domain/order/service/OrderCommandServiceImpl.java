@@ -2,8 +2,6 @@ package com.laicos.khufarm.domain.order.service;
 
 import com.laicos.khufarm.domain.cart.entity.Cart;
 import com.laicos.khufarm.domain.cart.repository.CartRepository;
-import com.laicos.khufarm.domain.fruit.converter.FruitConverter;
-import com.laicos.khufarm.domain.fruit.dto.response.FruitResponseWithCount;
 import com.laicos.khufarm.domain.fruit.entity.Fruit;
 import com.laicos.khufarm.domain.fruit.repository.FruitRepository;
 import com.laicos.khufarm.domain.order.converter.OrderConverter;
@@ -78,13 +76,7 @@ public class OrderCommandServiceImpl implements OrderCommandService{
 
         orderRepository.save(order);
 
-        List<FruitResponseWithCount> fruitListWithCount = FruitConverter.toFruitDTOListWithCount(fruitList, countList);
-
-        return OrderConverter.toOrderResponse(
-                order.getId(),
-                request.getShippingInfo(),
-                fruitListWithCount
-        );
+        return OrderConverter.toOrderResponse(order);
     }
 
     @Override
@@ -113,13 +105,7 @@ public class OrderCommandServiceImpl implements OrderCommandService{
 
         orderRepository.save(order);
 
-        FruitResponseWithCount fruitResponseWithCount = FruitConverter.toFruitDTOWithCount(fruit, request.getOrderCount());
-
-        return OrderConverter.toOrderResponse(
-                order.getId(),
-                request.getShippingInfo(),
-                List.of(fruitResponseWithCount)
-        );
+        return OrderConverter.toOrderResponse(order);
     }
 
     // 주문번호 생성 메서드

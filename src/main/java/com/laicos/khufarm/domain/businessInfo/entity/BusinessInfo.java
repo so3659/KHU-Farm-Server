@@ -13,7 +13,7 @@ import org.hibernate.annotations.OnDeleteAction;
 @NoArgsConstructor(access= AccessLevel.PROTECTED)
 @AllArgsConstructor
 @DynamicInsert
-@Table(name = "buisinessInfo")
+@Table(name = "businessInfo")
 public class BusinessInfo {
 
     @Id

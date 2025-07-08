@@ -10,7 +10,7 @@ import lombok.*;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
-import java.time.LocalDateTime;
+import java.util.Date;
 
 @Entity
 @Getter
@@ -40,13 +40,12 @@ public class Payment extends BaseEntity {
     @Column(nullable = false)
     private PaymentStatus paymentStatus;
 
-    private LocalDateTime paidAt;
+    private Date paidAt;
 
-    private LocalDateTime cancelledAt;
+    private Date cancelledAt;
 
-    private LocalDateTime failedAt;
+    private Date failedAt;
 
-    @Column(nullable = false)
     private String failReason;
 
     @OneToOne(fetch = FetchType.LAZY)
@@ -57,4 +56,16 @@ public class Payment extends BaseEntity {
     @JoinColumn(name="user_id", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     private User user;
+
+    public void updatePaymentStatus(PaymentStatus paymentStatus) {
+        this.paymentStatus = paymentStatus;
+    }
+
+    public void updateFailReason(String failReason) {
+        this.failReason = failReason;
+    }
+
+    public void setOrder(Order order) {
+        this.order = order;
+    }
 }

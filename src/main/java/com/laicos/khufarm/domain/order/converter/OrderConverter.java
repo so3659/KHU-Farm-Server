@@ -1,14 +1,11 @@
 package com.laicos.khufarm.domain.order.converter;
 
-import com.laicos.khufarm.domain.fruit.dto.response.FruitResponseWithCount;
 import com.laicos.khufarm.domain.order.dto.request.ShippingInfo;
 import com.laicos.khufarm.domain.order.dto.response.OrderResponse;
 import com.laicos.khufarm.domain.order.entity.Order;
 import com.laicos.khufarm.domain.order.enums.OrderStatus;
 import com.laicos.khufarm.domain.user.entity.User;
 import org.springframework.stereotype.Component;
-
-import java.util.List;
 
 @Component
 public class OrderConverter {
@@ -30,11 +27,18 @@ public class OrderConverter {
                 .build();
     }
 
-    public static OrderResponse toOrderResponse(Long OrderId, ShippingInfo shippingInfo, List<FruitResponseWithCount> fruitResponseWithCounts){
+    public static OrderResponse toOrderResponse(Order order){
         return OrderResponse.builder()
-                .orderId(OrderId)
-                .shippingInfo(shippingInfo)
-                .orderFruits(fruitResponseWithCounts)
+                .merchantUid(order.getMerchantUid())
+                .ordererName(order.getOrdererName())
+                .totalPrice(order.getTotalPrice())
+                .orderCount(order.getOrderCount())
+                .portCode(order.getPortCode())
+                .address(order.getAddress())
+                .detailAddress(order.getDetailAddress())
+                .recipient(order.getRecipient())
+                .phoneNumber(order.getPhoneNumber())
+                .orderRequest(order.getOrderRequest())
                 .build();
     }
 }
