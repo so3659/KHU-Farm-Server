@@ -1,4 +1,4 @@
-package com.laicos.khufarm.domain.review;
+package com.laicos.khufarm.domain.review.entitiy;
 
 import com.laicos.khufarm.global.common.base.BaseEntity;
 import jakarta.persistence.*;

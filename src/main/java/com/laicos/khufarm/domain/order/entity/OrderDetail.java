@@ -27,6 +27,9 @@ public class OrderDetail {
     @Column(nullable = false)
     private Integer weight;
 
+    @Column(nullable = false)
+    private boolean isReviewed;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="order_id", nullable = false)
     private Order order;
@@ -38,5 +41,9 @@ public class OrderDetail {
 
     protected void setOrder(Order order) {
         this.order = order;
+    }
+
+    public void updateReviewStatus(boolean isReviewed) {
+        this.isReviewed = isReviewed;
     }
 }

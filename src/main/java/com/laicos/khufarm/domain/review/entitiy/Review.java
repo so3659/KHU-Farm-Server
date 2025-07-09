@@ -1,4 +1,4 @@
-package com.laicos.khufarm.domain.review;
+package com.laicos.khufarm.domain.review.entitiy;
 
 import com.laicos.khufarm.domain.fruit.entity.Fruit;
 import com.laicos.khufarm.domain.order.entity.Order;

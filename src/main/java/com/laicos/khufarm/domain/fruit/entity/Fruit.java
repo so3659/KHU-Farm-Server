@@ -82,4 +82,9 @@ public class Fruit extends BaseEntity {
     public void decreaseFruitStock(Integer count) {
         this.stock -= count;
     }
+
+    public void updateRating(Integer rating) {
+        this.ratingSum += rating;
+        this.ratingCount++;
+    }
 }

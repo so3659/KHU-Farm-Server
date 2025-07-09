@@ -14,6 +14,7 @@ public class OrderDetailConverter {
                 .price(fruit.getPrice())
                 .count(count)
                 .weight(fruit.getWeight())
+                .isReviewed(false)
                 .order(order)
                 .fruit(fruit)
                 .build();
@@ -24,6 +25,7 @@ public class OrderDetailConverter {
                 .price(cart.getFruit().getPrice())
                 .count(cart.getCount())
                 .weight(cart.getFruit().getWeight())
+                .isReviewed(false)
                 .order(order)
                 .fruit(cart.getFruit())
                 .build();
