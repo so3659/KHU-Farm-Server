@@ -3,8 +3,6 @@ package com.laicos.khufarm.domain.review.entitiy;
 import com.laicos.khufarm.global.common.base.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
 
 @Entity
 @Getter
@@ -21,8 +19,11 @@ public class ReviewReply extends BaseEntity {
     @Column(nullable = false)
     private String content;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="review_id", nullable = false)
-    @OnDelete(action = OnDeleteAction.CASCADE)
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "review_id", nullable = false)
     private Review review;
+
+    protected void setReview(Review review) {
+        this.review = review;
+    }
 }

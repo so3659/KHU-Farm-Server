@@ -45,7 +45,7 @@ public class SecurityConfig {
                         .requestMatchers("/payment/confirm", "/payment/webhook").permitAll()
                         .requestMatchers("/auth/individual/signup", "/auth/business/signup", "/auth/farmer/signup").permitAll()
                         .requestMatchers("/swagger-ui/**", "/v3/api-docs/**", "/swagger-ui.html").permitAll()
-                        .requestMatchers("/user/test").hasRole("USER")
+                        .requestMatchers("/review/{reviewId}/reply").hasRole("FARMER")
                         .anyRequest().authenticated())
                 .exceptionHandling(exceptions -> exceptions
                         .authenticationEntryPoint(customAuthenticationEntryPoint)

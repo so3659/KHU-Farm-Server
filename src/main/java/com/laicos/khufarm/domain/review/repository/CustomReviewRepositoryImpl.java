@@ -1,0 +1,127 @@
+package com.laicos.khufarm.domain.review.repository;
+
+import com.laicos.khufarm.domain.fruit.converter.FruitConverter;
+import com.laicos.khufarm.domain.fruit.dto.response.FruitResponse;
+import com.laicos.khufarm.domain.fruit.entity.Fruit;
+import com.laicos.khufarm.domain.review.converter.ReviewConverter;
+import com.laicos.khufarm.domain.review.converter.ReviewReplyConverter;
+import com.laicos.khufarm.domain.review.dto.response.MyReviewResponse;
+import com.laicos.khufarm.domain.review.dto.response.ReviewReplyResponse;
+import com.laicos.khufarm.domain.review.dto.response.ReviewResponse;
+import com.laicos.khufarm.domain.review.entitiy.Review;
+import com.laicos.khufarm.domain.review.entitiy.ReviewReply;
+import com.laicos.khufarm.domain.user.entity.User;
+import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.jpa.impl.JPAQueryFactory;
+import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
+import org.springframework.data.domain.SliceImpl;
+import org.springframework.stereotype.Repository;
+
+import java.util.List;
+
+import static com.laicos.khufarm.domain.review.entitiy.QReview.review;
+
+@Repository
+@RequiredArgsConstructor
+public class CustomReviewRepositoryImpl implements CustomReviewRepository{
+
+    private final JPAQueryFactory jpaQueryFactory;
+
+    @Override
+    public Slice<ReviewResponse> getAllReviews(Long cursorId, Long fruitId, Pageable pageable){
+
+        List<Review> reviewList = jpaQueryFactory.selectFrom(review)
+                .leftJoin(review.fruit).fetchJoin()
+                .leftJoin(review.seller).fetchJoin()
+                .leftJoin(review.reviewReply).fetchJoin()
+                .leftJoin(review.user).fetchJoin()
+                .leftJoin(review.orderDetail).fetchJoin()
+                .where(
+                        gtCursorId(cursorId),// 커서 조건
+                        eqFruitId(fruitId) // 과일 ID 조건
+                )
+                .orderBy(review.id.asc())
+                .limit(pageable.getPageSize() + 1)
+                .fetch();
+
+        List<ReviewReply> replies = reviewList.stream()
+                .map(Review::getReviewReply)
+                .toList();
+
+        List<ReviewReplyResponse> replyList = replies.stream()
+                .map(reply -> reply != null ? ReviewReplyConverter.toReviewReplyDTO(reply.getContent()) : null)
+                .toList();
+
+        List<ReviewResponse> content = ReviewConverter.toReviewDTOList(reviewList, replyList);
+
+        boolean hasNext = false;
+        if (content.size() > pageable.getPageSize()) {
+            content.remove(pageable.getPageSize());
+            hasNext = true;
+        }
+
+        return new SliceImpl<>(content, pageable, hasNext);
+    }
+
+    @Override
+    public Slice<MyReviewResponse> getMyReviews(User user, Long cursorId, Pageable pageable){
+
+        List<Review> reviewList = jpaQueryFactory.selectFrom(review)
+                .leftJoin(review.fruit).fetchJoin()
+                .leftJoin(review.seller).fetchJoin()
+                .leftJoin(review.reviewReply).fetchJoin()
+                .leftJoin(review.user).fetchJoin()
+                .leftJoin(review.orderDetail).fetchJoin()
+                .where(
+                        gtCursorId(cursorId),// 커서 조건
+                        eqUserId(user.getId()) // 사용자 ID 조건
+                )
+                .orderBy(review.id.asc())
+                .limit(pageable.getPageSize() + 1)
+                .fetch();
+
+        List<ReviewReply> replies = reviewList.stream()
+                .map(Review::getReviewReply)
+                .toList();
+
+        List<ReviewReplyResponse> replyList = replies.stream()
+                .map(reply -> reply != null ? ReviewReplyConverter.toReviewReplyDTO(reply.getContent()) : null)
+                .toList();
+
+        List<Fruit> fruitList = reviewList.stream()
+                .map(Review::getFruit)
+                .toList();
+
+        List<Integer> orderCountList = reviewList.stream()
+                .map(r -> r.getOrderDetail().getCount())
+                .toList();
+
+        List<ReviewResponse> reviewDTOList = ReviewConverter.toReviewDTOList(reviewList, replyList);
+
+        List<FruitResponse> fruitDTOList = FruitConverter.toFruitDTOList(fruitList);
+
+        List<MyReviewResponse> content = ReviewConverter.toMyReviewDTOList(fruitDTOList, orderCountList, reviewDTOList);
+
+        boolean hasNext = false;
+        if (content.size() > pageable.getPageSize()) {
+            content.remove(pageable.getPageSize());
+            hasNext = true;
+        }
+
+        return new SliceImpl<>(content, pageable, hasNext);
+    }
+
+    private BooleanExpression gtCursorId(Long cursorId) {
+        return (cursorId == null) ? null : review.id.gt(cursorId);
+    }
+
+    private BooleanExpression eqFruitId(Long fruitId) {
+        return (fruitId == null) ? null : review.fruit.id.eq(fruitId);
+    }
+
+    private BooleanExpression eqUserId(Long userId) {
+        return (userId == null) ? null : review.user.id.eq(userId);
+    }
+}

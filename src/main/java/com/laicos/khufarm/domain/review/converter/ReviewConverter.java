@@ -1,10 +1,17 @@
 package com.laicos.khufarm.domain.review.converter;
 
+import com.laicos.khufarm.domain.fruit.dto.response.FruitResponse;
 import com.laicos.khufarm.domain.order.entity.OrderDetail;
 import com.laicos.khufarm.domain.review.dto.request.ReviewRequest;
+import com.laicos.khufarm.domain.review.dto.response.MyReviewResponse;
+import com.laicos.khufarm.domain.review.dto.response.ReviewReplyResponse;
+import com.laicos.khufarm.domain.review.dto.response.ReviewResponse;
 import com.laicos.khufarm.domain.review.entitiy.Review;
 import com.laicos.khufarm.domain.user.entity.User;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
+import java.util.stream.IntStream;
 
 @Component
 public class ReviewConverter {
@@ -20,7 +27,39 @@ public class ReviewConverter {
                 .user(user)
                 .seller(orderDetail.getFruit().getSeller())
                 .fruit(orderDetail.getFruit())
-                .order(orderDetail.getOrder())
+                .orderDetail(orderDetail)
                 .build();
+    }
+
+    public static ReviewResponse toReviewDTO(Review review, ReviewReplyResponse reply) {
+        return ReviewResponse.builder()
+                .title(review.getTitle())
+                .userId(review.getUser().getId())
+                .content(review.getContent())
+                .imageUrl(review.getImageUrl())
+                .rating(review.getRating())
+                .createdAt(review.getCreatedAt())
+                .reply(reply)
+                .build();
+    }
+
+    public static List<ReviewResponse> toReviewDTOList(List<Review> reviews, List<ReviewReplyResponse> replyList) {
+        return IntStream.range(0, reviews.size())
+                .mapToObj(i -> toReviewDTO(reviews.get(i), replyList.get(i)))
+                .toList();
+    }
+
+    public static MyReviewResponse toMyReviewDTO(FruitResponse fruitResponse, Integer orderCount, ReviewResponse reviewResponse) {
+        return MyReviewResponse.builder()
+                .fruitResponse(fruitResponse)
+                .orderCount(orderCount)
+                .reviewResponse(reviewResponse)
+                .build();
+    }
+
+    public static List<MyReviewResponse> toMyReviewDTOList(List<FruitResponse> fruitDTOList, List<Integer> orderCountList, List<ReviewResponse> reviewDTOList){
+        return IntStream.range(0, fruitDTOList.size())
+                .mapToObj(i -> toMyReviewDTO(fruitDTOList.get(i), orderCountList.get(i), reviewDTOList.get(i)))
+                .toList();
     }
 }

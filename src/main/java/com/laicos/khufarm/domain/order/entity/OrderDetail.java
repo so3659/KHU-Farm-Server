@@ -1,6 +1,7 @@
 package com.laicos.khufarm.domain.order.entity;
 
 import com.laicos.khufarm.domain.fruit.entity.Fruit;
+import com.laicos.khufarm.domain.review.entitiy.Review;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.OnDelete;
@@ -39,11 +40,19 @@ public class OrderDetail {
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Fruit fruit;
 
+    @OneToOne(mappedBy = "orderDetail", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Review review;
+
     protected void setOrder(Order order) {
         this.order = order;
     }
 
     public void updateReviewStatus(boolean isReviewed) {
         this.isReviewed = isReviewed;
+    }
+
+    public void addReview(Review review) {
+        this.review = review;
+        review.setOrderDetail(this);
     }
 }

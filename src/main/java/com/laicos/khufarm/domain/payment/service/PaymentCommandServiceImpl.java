@@ -74,7 +74,7 @@ public class PaymentCommandServiceImpl implements PaymentCommandService{
                     });
 
             // 주문정보에 있는 상품아이디로 재고가 있는지 검사
-            if (fruit.getStock() <= 0) {
+            if ((fruit.getStock()-orderDetail.getCount()) < 0) {
 
                 paymentFailureHandler.handleOrderFailure(order, OrderErrorStatus.OUT_OF_STOCK.getMessage());
 

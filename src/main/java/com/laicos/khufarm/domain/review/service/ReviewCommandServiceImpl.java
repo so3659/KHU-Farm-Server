@@ -5,6 +5,8 @@ import com.laicos.khufarm.domain.fruit.repository.FruitRepository;
 import com.laicos.khufarm.domain.order.entity.OrderDetail;
 import com.laicos.khufarm.domain.order.repository.OrderDetailRepository;
 import com.laicos.khufarm.domain.review.converter.ReviewConverter;
+import com.laicos.khufarm.domain.review.converter.ReviewReplyConverter;
+import com.laicos.khufarm.domain.review.dto.request.ReviewReplyRequest;
 import com.laicos.khufarm.domain.review.dto.request.ReviewRequest;
 import com.laicos.khufarm.domain.review.entitiy.Review;
 import com.laicos.khufarm.domain.review.repository.ReviewRepository;
@@ -45,6 +47,17 @@ public class ReviewCommandServiceImpl implements ReviewCommandService{
 
         fruit.updateRating(reviewRequest.getRating());
 
+        orderDetail.addReview(review);
+
+        reviewRepository.save(review);
+    }
+
+    @Override
+    public void addReviewReply(User user, ReviewReplyRequest reviewReplyRequest, Long reviewId){
+        Review review = reviewRepository.findById(reviewId)
+                .orElseThrow(() -> new RestApiException(ReviewErrorStatus.REVIEW_NOT_FOUND));
+
+        review.addReviewReply(ReviewReplyConverter.toReviewReply(reviewReplyRequest.getContent(), review));
         reviewRepository.save(review);
     }
 }

@@ -1,9 +1,9 @@
 package com.laicos.khufarm.domain.review.entitiy;
 
 import com.laicos.khufarm.domain.fruit.entity.Fruit;
-import com.laicos.khufarm.domain.order.entity.Order;
-import com.laicos.khufarm.domain.user.entity.User;
+import com.laicos.khufarm.domain.order.entity.OrderDetail;
 import com.laicos.khufarm.domain.seller.entity.Seller;
+import com.laicos.khufarm.domain.user.entity.User;
 import com.laicos.khufarm.global.common.base.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
@@ -55,8 +55,19 @@ public class Review extends BaseEntity {
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Fruit fruit;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="order_id", nullable = false)
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    private Order order;
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "orderDetail_id", nullable = false, unique = true)
+    private OrderDetail orderDetail;
+
+    @OneToOne(mappedBy = "review", cascade = CascadeType.ALL, orphanRemoval = true)
+    private ReviewReply reviewReply;
+
+    public void addReviewReply(ReviewReply reviewReply) {
+        this.reviewReply = reviewReply;
+        reviewReply.setReview(this);
+    }
+
+    public void setOrderDetail(OrderDetail orderDetail){
+        this.orderDetail= orderDetail;
+    }
 }

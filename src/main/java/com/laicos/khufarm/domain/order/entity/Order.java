@@ -73,7 +73,7 @@ public class Order extends BaseEntity {
     private Payment payment;
 
     public void addOrderDetail(OrderDetail orderDetail) {
-        orderDetails.add(orderDetail);
+        this.orderDetails.add(orderDetail);
         orderDetail.setOrder(this);
     }
 

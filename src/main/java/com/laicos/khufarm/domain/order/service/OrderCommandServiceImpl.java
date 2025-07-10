@@ -53,7 +53,7 @@ public class OrderCommandServiceImpl implements OrderCommandService{
                 .toList();
 
         for(int i =0; i < fruitList.size(); i++){
-            if((fruitList.get(i).getStock()-countList.get(i)) <= 0){
+            if((fruitList.get(i).getStock()-countList.get(i)) < 0){
                 throw new RestApiException(OrderErrorStatus.OUT_OF_STOCK);
             }
         }
@@ -88,7 +88,7 @@ public class OrderCommandServiceImpl implements OrderCommandService{
         Fruit fruit = fruitRepository.findById(request.getFruitId())
                 .orElseThrow(() -> new RestApiException(FruitErrorStatus.FRUIT_NOT_FOUND));
 
-        if((fruit.getStock()-request.getOrderCount()) <= 0){
+        if((fruit.getStock()-request.getOrderCount()) < 0){
             throw new RestApiException(OrderErrorStatus.OUT_OF_STOCK);
         }
 

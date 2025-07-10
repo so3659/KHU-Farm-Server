@@ -7,4 +7,5 @@ import org.springframework.data.domain.Slice;
 
 public interface CustomFruitRepository {
     Slice<FruitResponse> getFruitByConditions(Long cursorId, FruitReadCondition fruitReadCondition, Pageable pageable);
+
 }

@@ -11,6 +11,7 @@ import org.springframework.http.HttpStatus;
 public enum ReviewErrorStatus implements BaseCodeInterface {
 
     ALREADY_REVIEWED(HttpStatus.BAD_REQUEST, "REVIEW400", "이미 리뷰를 작성하셨습니다"),
+    REVIEW_NOT_FOUND(HttpStatus.NOT_FOUND, "REVIEW404", "리뷰를 찾을 수 없습니다"),
     ;
 
     private final HttpStatus httpStatus;
