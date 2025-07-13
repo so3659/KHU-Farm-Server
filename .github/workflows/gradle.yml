@@ -22,9 +22,9 @@ jobs:
     - name: Setup Gradle
       uses: gradle/actions/setup-gradle@af1da67850ed9a4cedd57bfd976089dd991e2582
 
-    # 3. Gradle 빌드
-    - name: Build with Gradle Wrapper
-      run: ./gradlew build -x test
+#    # 3. Gradle 빌드
+#    - name: Build with Gradle Wrapper
+#      run: ./gradlew build -x test
 
     # 4. NCP Container Registry 로그인
     - name: Login to NCP Container Registry
@@ -63,9 +63,9 @@ jobs:
           
           # 새 컨테이너 실행 (추가된 환경변수 포함)
           docker run -d --name khufarm-app -p 8080:8080 \
-            -e DB_URL=${{ secrets.DB_URL }} \
-            -e DB_USERNAME=${{ secrets.DB_USERNAME }} \
-            -e DB_PASSWORD=${{ secrets.DB_PASSWORD }} \
+            -e SPRING_DATASOURCE_URL=${{ secrets.DB_URL }} \
+            -e SPRING_DATASOURCE_USERNAME=${{ secrets.DB_USERNAME }} \
+            -e SPRING_DATASOURCE_PASSWORD=${{ secrets.DB_PASSWORD }} \
             -e NCP_ACCESS_KEY=${{ secrets.NCP_ACCESS_KEY }} \
             -e NCP_SECRET_KEY=${{ secrets.NCP_SECRET_KEY }} \
             -e JWT_SECRET_KEY=${{ secrets.JWT_SECRET_KEY }} \

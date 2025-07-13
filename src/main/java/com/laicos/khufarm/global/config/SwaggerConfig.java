@@ -9,6 +9,8 @@ import io.swagger.v3.oas.models.servers.Server;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import java.util.Arrays;
+
 @Configuration
 public class SwaggerConfig {
 
@@ -30,9 +32,12 @@ public class SwaggerConfig {
                         .scheme("bearer")
                         .bearerFormat("JWT"));
 
+        Server deployServer = new Server().url("http://49.50.130.27:8080").description("쿠팜 배포 서버입니다.");
+        Server localServer = new Server().url("http://localhost:8080").description("쿠팜 local 서버입니다.");
+
         return new OpenAPI()
-                .addServersItem(new Server().url("/"))
                 .info(info)
+                .servers(Arrays.asList(deployServer, localServer))
                 .addSecurityItem(securityRequirement)
                 .components(components);
     }
