@@ -37,5 +37,9 @@ out/
 .vscode/
 
 application-dev.yml
+application-prod.yml
 
 test.html
+
+*.pem
+*.key
