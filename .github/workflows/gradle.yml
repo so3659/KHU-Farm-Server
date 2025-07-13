@@ -72,5 +72,8 @@ jobs:
             -e OPEN_DATA_KEY=${{ secrets.OPEN_DATA_KEY }} \
             -e PORT_ONE_API_KEY=${{ secrets.PORT_ONE_API_KEY }} \
             -e PORT_ONE_SECRET_KEY=${{ secrets.PORT_ONE_SECRET_KEY }} \
+            -e JWT_ACCESS_EXPIRATION=${{ secrets.JWT_ACCESS_EXPIRATION }} \
+            -e JWT_REFRESH_EXPIRATION=${{ secrets.JWT_REFRESH_EXPIRATION }} \
+            -e FILE_DIR=${{ secrets.FILE_DIR }} \
             ${{ secrets.NCP_CONTAINER_REGISTRY }}/khufarm:latest
 
