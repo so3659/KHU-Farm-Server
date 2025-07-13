@@ -50,10 +50,4 @@ jobs:
         username: ${{ secrets.NCP_SERVER_USER }}
         password: ${{ secrets.NCP_SERVER_SSH_KEY }}
         port: ${{ secrets.DEPLOYMENT_PORT }}
-        script: |
-          docker login -u ${{ secrets.NCP_ACCESS_KEY }} -p ${{ secrets.NCP_SECRET_KEY }} ${{ secrets.NCP_CONTAINER_REGISTRY }}
-          docker pull ${{ secrets.NCP_CONTAINER_REGISTRY }}/khufarm:latest
-          docker stop khufarm-app || true
-          docker rm khufarm-app || true
-          docker run -d --name khufarm-app -p 8080:8080 -e SPRING_DATASOURCE_URL=${{ secrets.DB_URL }} -e SPRING_DATASOURCE_USERNAME=${{ secrets.DB_USERNAME }} -e SPRING_DATASOURCE_PASSWORD=${{ secrets.DB_PASSWORD }} -e NCP_ACCESS_KEY=${{ secrets.NCP_ACCESS_KEY }} -e NCP_SECRET_KEY=${{ secrets.NCP_SECRET_KEY }} -e JWT_SECRET_KEY=${{ secrets.JWT_SECRET_KEY }} -e OPEN_DATA_KEY=${{ secrets.OPEN_DATA_KEY }} -e PORT_ONE_API_KEY=${{ secrets.PORT_ONE_API_KEY }} -e PORT_ONE_SECRET_KEY=${{ secrets.PORT_ONE_SECRET_KEY }} ${{ secrets.NCP_CONTAINER_REGISTRY }}/khufarm:latest
-        
+        script: docker login -u ${{ secrets.NCP_ACCESS_KEY }} -p ${{ secrets.NCP_SECRET_KEY }} ${{ secrets.NCP_CONTAINER_REGISTRY }}; docker pull ${{ secrets.NCP_CONTAINER_REGISTRY }}/khufarm:latest; docker stop khufarm-app || true; docker rm khufarm-app || true; docker run -d --name khufarm-app -p 8080:8080 -e SPRING_DATASOURCE_URL=${{ secrets.DB_URL }} -e SPRING_DATASOURCE_USERNAME=${{ secrets.DB_USERNAME }} -e SPRING_DATASOURCE_PASSWORD=${{ secrets.DB_PASSWORD }} -e NCP_ACCESS_KEY=${{ secrets.NCP_ACCESS_KEY }} -e NCP_SECRET_KEY=${{ secrets.NCP_SECRET_KEY }} -e JWT_SECRET_KEY=${{ secrets.JWT_SECRET_KEY }} -e OPEN_DATA_KEY=${{ secrets.OPEN_DATA_KEY }} -e PORT_ONE_API_KEY=${{ secrets.PORT_ONE_API_KEY }} -e PORT_ONE_SECRET_KEY=${{ secrets.PORT_ONE_SECRET_KEY }} ${{ secrets.NCP_CONTAINER_REGISTRY }}/khufarm:latest
