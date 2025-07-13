@@ -62,5 +62,15 @@ jobs:
           docker rm khufarm-app || true
           
           # 새 컨테이너 실행 (추가된 환경변수 포함)
-          docker run -d --name khufarm-app -p 8080:8080 -e SPRING_DATASOURCE_URL=${{ secrets.DB_URL }} -e SPRING_DATASOURCE_USERNAME=${{ secrets.DB_USERNAME }} -e SPRING_DATASOURCE_PASSWORD=${{ secrets.DB_PASSWORD }} -e NCP_ACCESS_KEY=${{ secrets.NCP_ACCESS_KEY }} -e NCP_SECRET_KEY=${{ secrets.NCP_SECRET_KEY }} -e JWT_SECRET_KEY=${{ secrets.JWT_SECRET_KEY }} -e OPEN_DATA_KEY=${{ secrets.OPEN_DATA_KEY }} -e PORT_ONE_API_KEY=${{ secrets.PORT_ONE_API_KEY }} -e PORT_ONE_SECRET_KEY=${{ secrets.PORT_ONE_SECRET_KEY }} ${{ secrets.NCP_CONTAINER_REGISTRY }}/khufarm:latest
-
+          docker run -d --name khufarm-app \
+            -p 8080:8080 \
+            -e SPRING_DATASOURCE_URL=${{ secrets.DB_URL }} \
+            -e SPRING_DATASOURCE_USERNAME=${{ secrets.DB_USERNAME }} \
+            -e SPRING_DATASOURCE_PASSWORD=${{ secrets.DB_PASSWORD }} \
+            -e NCP_ACCESS_KEY=${{ secrets.NCP_ACCESS_KEY }} \
+            -e NCP_SECRET_KEY=${{ secrets.NCP_SECRET_KEY }} \
+            -e JWT_SECRET_KEY=${{ secrets.JWT_SECRET_KEY }} \
+            -e OPEN_DATA_KEY=${{ secrets.OPEN_DATA_KEY }} \
+            -e PORT_ONE_API_KEY=${{ secrets.PORT_ONE_API_KEY }} \
+            -e PORT_ONE_SECRET_KEY=${{ secrets.PORT_ONE_SECRET_KEY }} \
+            ${{ secrets.NCP_CONTAINER_REGISTRY }}/khufarm:latest
