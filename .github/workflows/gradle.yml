@@ -68,7 +68,7 @@ jobs:
             -e SPRING_DATASOURCE_PASSWORD=${{ secrets.DB_PASSWORD }} \
             -e NCP_ACCESS_KEY=${{ secrets.NCP_ACCESS_KEY }} \
             -e NCP_SECRET_KEY=${{ secrets.NCP_SECRET_KEY }} \
-            -e JWT_SECRET_KEY=${{ secrets.JWT_SECRET_KEY }} \
+            -e JWT_SECRET=${{ secrets.JWT_SECRET_KEY }} \
             -e OPEN_DATA_KEY=${{ secrets.OPEN_DATA_KEY }} \
             -e PORT_ONE_API_KEY=${{ secrets.PORT_ONE_API_KEY }} \
             -e PORT_ONE_SECRET_KEY=${{ secrets.PORT_ONE_SECRET_KEY }} \
