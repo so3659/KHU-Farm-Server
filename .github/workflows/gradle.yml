@@ -74,6 +74,10 @@ jobs:
             -e portOne.secretKey=${{ secrets.PORT_ONE_SECRET_KEY }} \
             -e jwt.accessExpiration=${{ secrets.JWT_ACCESS_EXPIRATION }} \
             -e jwt.refreshExpiration=${{ secrets.JWT_REFRESH_EXPIRATION }} \
-            -e file.dir=${{ secrets.FILE_DIR }} \
+            -e cloud.ncp.credentials.accessKey=${{ secrets.NCP_ACCESS_KEY }} \
+            -e cloud.ncp.credentials.secretKey=${{ secrets.NCP_SECRET_KEY }} \
+            -e cloud.ncp.region=${{ secrets.NCP_OBJECT_REGION }} \
+            -e cloud.ncp.s3.endpoint=${{ secrets.NCP_OBJECT_END_POINT }} \
+            -e cloud.ncp.s3.bucket=${{ secrets.NCP_OBJECT_BUCKET }} \
             ${{ secrets.NCP_CONTAINER_REGISTRY }}/khufarm:latest
 

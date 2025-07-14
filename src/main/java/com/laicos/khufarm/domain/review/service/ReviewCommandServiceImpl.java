@@ -2,6 +2,9 @@ package com.laicos.khufarm.domain.review.service;
 
 import com.laicos.khufarm.domain.fruit.entity.Fruit;
 import com.laicos.khufarm.domain.fruit.repository.FruitRepository;
+import com.laicos.khufarm.domain.image.entity.Image;
+import com.laicos.khufarm.domain.image.enums.ImageStatus;
+import com.laicos.khufarm.domain.image.repository.ImageRepository;
 import com.laicos.khufarm.domain.order.entity.OrderDetail;
 import com.laicos.khufarm.domain.order.repository.OrderDetailRepository;
 import com.laicos.khufarm.domain.review.converter.ReviewConverter;
@@ -13,6 +16,7 @@ import com.laicos.khufarm.domain.review.repository.ReviewRepository;
 import com.laicos.khufarm.domain.user.entity.User;
 import com.laicos.khufarm.global.common.exception.RestApiException;
 import com.laicos.khufarm.global.common.exception.code.status.FruitErrorStatus;
+import com.laicos.khufarm.global.common.exception.code.status.ImageErrorStatus;
 import com.laicos.khufarm.global.common.exception.code.status.OrderErrorStatus;
 import com.laicos.khufarm.global.common.exception.code.status.ReviewErrorStatus;
 import lombok.RequiredArgsConstructor;
@@ -27,6 +31,7 @@ public class ReviewCommandServiceImpl implements ReviewCommandService{
     private final ReviewRepository reviewRepository;
     private final OrderDetailRepository orderDetailRepository;
     private final FruitRepository fruitRepository;
+    private final ImageRepository imageRepository;
 
     @Override
     public void addReview(User user, ReviewRequest reviewRequest, Long orderDetailId){
@@ -48,6 +53,11 @@ public class ReviewCommandServiceImpl implements ReviewCommandService{
         fruit.updateRating(reviewRequest.getRating());
 
         orderDetail.addReview(review);
+
+        Image image = imageRepository.findByImageUrl(reviewRequest.getImageUrl())
+                .orElseThrow(() -> new RestApiException(ImageErrorStatus.IMAGE_NOT_FOUND));
+
+        image.updateImageStatus(ImageStatus.USED);
 
         reviewRepository.save(review);
     }
