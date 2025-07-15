@@ -2,6 +2,7 @@ package com.laicos.khufarm.domain.image.scheduler;
 
 import com.amazonaws.services.s3.AmazonS3;
 import com.laicos.khufarm.domain.image.entity.Image;
+import com.laicos.khufarm.domain.image.enums.ImageStatus;
 import com.laicos.khufarm.domain.image.repository.ImageRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -26,7 +27,7 @@ public class CleanUpImage {
     @Scheduled(cron = "0 0 * * * *") // 매 시간마다
     public void cleanUpTempImages() {
         LocalDateTime expired = LocalDateTime.now().minusHours(24);
-        List<Image> tempImages = imageRepository.findByImageStatusAndCreatedAtBefore("TEMP", expired);
+        List<Image> tempImages = imageRepository.findByImageStatusAndCreatedAtBefore(ImageStatus.TEMP, expired);
         for (Image img : tempImages) {
             amazonS3.deleteObject(bucket, img.getImagePath());
             imageRepository.delete(img);

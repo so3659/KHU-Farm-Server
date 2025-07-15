@@ -1,6 +1,7 @@
 package com.laicos.khufarm.domain.image.repository;
 
 import com.laicos.khufarm.domain.image.entity.Image;
+import com.laicos.khufarm.domain.image.enums.ImageStatus;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -13,5 +14,5 @@ public interface ImageRepository extends JpaRepository<Image, Long> {
 
     Optional<Image> findByImageUrl(String imageUrl);
 
-    List<Image> findByImageStatusAndCreatedAtBefore(String status, LocalDateTime createdAt);
+    List<Image> findByImageStatusAndCreatedAtBefore(ImageStatus imageStatus, LocalDateTime createdAt);
 }
