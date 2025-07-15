@@ -55,7 +55,7 @@ public class FruitCommandServiceImpl implements FruitCommandService{
         updateImageStatusToUsed(fruitAddRequest.getWidthImage());
         updateImageStatusToUsed(fruitAddRequest.getSquareImage());
 
-        List<String> imageUrls = UrlExtractor.extractUrls(fruitAddRequest.getDescription());
+        List<String> imageUrls = UrlExtractor.extractUrlsFromDescription(fruitAddRequest.getDescription());
         imageUrls.forEach(this::updateImageStatusToUsed);
 
         fruitRepository.save(fruit);
