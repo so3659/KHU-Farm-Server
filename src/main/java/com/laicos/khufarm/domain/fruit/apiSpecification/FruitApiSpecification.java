@@ -30,7 +30,7 @@ public interface FruitApiSpecification {
                                     }
                                     """)))
     })
-    public BaseResponse<Slice<FruitResponse>> getFruits(
+    public BaseResponse<Slice<FruitResponse>> getSpecificFruits(
             @Parameter(description = "커서 ID") @RequestParam(required = false) Long cursorId,
             @Parameter(description = "도매/소매 카테고리 ID") @ExistWholesaleRetailCategory @RequestParam Long wholesaleRetailCategoryId,
             @Parameter(description = "과일 카테고리 ID") @ExistFruitCategory @RequestParam Long fruitCategoryId,
@@ -52,7 +52,7 @@ public interface FruitApiSpecification {
                                     }
                                     """)))
     })
-    public BaseResponse<Slice<FruitResponse>> searchFruits(
+    public BaseResponse<Slice<FruitResponse>> searchSpecificFruits(
             @Parameter(description = "커서 ID") @RequestParam(required = false) Long cursorId,
             @Parameter(description = "도매/소매 카테고리 ID") @ExistWholesaleRetailCategory @RequestParam Long wholesaleRetailCategoryId,
             @Parameter(description = "과일 카테고리 ID") @ExistFruitCategory @RequestParam Long fruitCategoryId,

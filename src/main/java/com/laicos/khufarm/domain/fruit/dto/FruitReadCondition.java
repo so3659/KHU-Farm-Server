@@ -9,6 +9,16 @@ public class FruitReadCondition {
     private Long fruitCategoryId;
     private String searchKeyword;
 
+    public FruitReadCondition(Long wholesaleRetailCategoryId){
+        this.wholesaleRetailCategoryId = wholesaleRetailCategoryId;
+    }
+
+    public FruitReadCondition(Long wholesaleRetailCategoryId, String searchKeyword) {
+        this.wholesaleRetailCategoryId = wholesaleRetailCategoryId;
+        this.searchKeyword = searchKeyword;
+    }
+
+
     public FruitReadCondition(Long wholesaleRetailCategoryId, Long fruitCategoryId){
         this.wholesaleRetailCategoryId = wholesaleRetailCategoryId;
         this.fruitCategoryId = fruitCategoryId;

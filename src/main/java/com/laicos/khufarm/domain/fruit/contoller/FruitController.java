@@ -30,11 +30,36 @@ public class FruitController implements FruitApiSpecification {
     private final FruitQueryService fruitQueryService;
     private final FruitCommandService fruitCommandService;
 
-    @GetMapping
+    @GetMapping("/get/{wholesaleRetailCategoryId}")
     public BaseResponse<Slice<FruitResponse>> getFruits(
             @RequestParam(required = false) Long cursorId,
-            @ExistWholesaleRetailCategory @RequestParam Long wholesaleRetailCategoryId,
-            @ExistFruitCategory @RequestParam Long fruitCategoryId,
+            @ExistWholesaleRetailCategory @PathVariable Long wholesaleRetailCategoryId,
+            @RequestParam(defaultValue="5") int size) {
+
+        Pageable pageable = PageRequest.of(0, size);
+        Slice<FruitResponse> fruitResponses = fruitQueryService.getFruitList(cursorId, new FruitReadCondition(wholesaleRetailCategoryId), pageable);
+
+        return BaseResponse.onSuccess(fruitResponses);
+    }
+
+    @GetMapping("/search/{wholesaleRetailCategoryId}")
+    public BaseResponse<Slice<FruitResponse>> searchFruits(
+            @RequestParam(required = false) Long cursorId,
+            @ExistWholesaleRetailCategory @PathVariable Long wholesaleRetailCategoryId,
+            @RequestParam(required = false) String searchKeyword,
+            @RequestParam(defaultValue="5") int size) {
+
+        Pageable pageable = PageRequest.of(0, size);
+        Slice<FruitResponse> fruitResponses = fruitQueryService.getFruitList(cursorId, new FruitReadCondition(wholesaleRetailCategoryId, searchKeyword), pageable);
+
+        return BaseResponse.onSuccess(fruitResponses);
+    }
+
+    @GetMapping("/get/{wholesaleRetailCategoryId}/{fruitCategoryId}")
+    public BaseResponse<Slice<FruitResponse>> getSpecificFruits(
+            @RequestParam(required = false) Long cursorId,
+            @ExistWholesaleRetailCategory @PathVariable Long wholesaleRetailCategoryId,
+            @ExistFruitCategory @PathVariable Long fruitCategoryId,
             @RequestParam(defaultValue="5") int size) {
 
         Pageable pageable = PageRequest.of(0, size);
@@ -43,11 +68,11 @@ public class FruitController implements FruitApiSpecification {
         return BaseResponse.onSuccess(fruitResponses);
     }
 
-    @GetMapping("/search")
-    public BaseResponse<Slice<FruitResponse>> searchFruits(
+    @GetMapping("/search/{wholesaleRetailCategoryId}/{fruitCategoryId}")
+    public BaseResponse<Slice<FruitResponse>> searchSpecificFruits(
             @RequestParam(required = false) Long cursorId,
-            @ExistWholesaleRetailCategory @RequestParam Long wholesaleRetailCategoryId,
-            @ExistFruitCategory @RequestParam Long fruitCategoryId,
+            @ExistWholesaleRetailCategory @PathVariable Long wholesaleRetailCategoryId,
+            @ExistFruitCategory @PathVariable Long fruitCategoryId,
             @RequestParam(required = false) String searchKeyword,
             @RequestParam(defaultValue="5") int size) {
 
