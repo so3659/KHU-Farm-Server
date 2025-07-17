@@ -10,4 +10,5 @@ public interface ReviewQueryService {
 
     Slice<ReviewResponse> getAllReviews(Long cursorId, Long fruitId, Pageable pageable);
     Slice<MyReviewResponse> getMyReviews(User user, Long cursorId, Pageable pageable);
+    ReviewResponse getMyReview(Long reviewId);
 }

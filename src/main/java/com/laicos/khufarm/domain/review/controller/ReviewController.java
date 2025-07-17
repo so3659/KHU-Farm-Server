@@ -75,4 +75,13 @@ public class ReviewController {
 
         return BaseResponse.onSuccess(myReviewResponses);
     }
+
+    @GetMapping("/retrieve/my/{reviewId}")
+    public BaseResponse<ReviewResponse> getMyReview(
+            @PathVariable Long reviewId)
+    {
+        ReviewResponse reviewResponse = reviewQueryService.getMyReview(reviewId);
+
+        return BaseResponse.onSuccess(reviewResponse);
+    }
 }
