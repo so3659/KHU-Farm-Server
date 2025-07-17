@@ -11,5 +11,6 @@ import java.time.LocalDateTime;
 public class InquiryResponse {
     private String content;
     private LocalDateTime createdAt;
+    private boolean isPrivate;
     private InquiryReplyResponse reply;
 }

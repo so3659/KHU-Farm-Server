@@ -31,6 +31,7 @@ public class InquiryConverter {
         return InquiryResponse.builder()
                 .content(inquiry.getContent())
                 .createdAt(inquiry.getCreatedAt())
+                .isPrivate(inquiry.isPrivate())
                 .reply(reply)
                 .build();
     }
