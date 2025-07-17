@@ -52,7 +52,6 @@ public class ReviewController {
 
     @GetMapping("/{fruitId}/retrieve/all")
     public BaseResponse<Slice<ReviewResponse>> getAllReviews(
-            @AuthenticationPrincipal CustomUserDetails customUserDetails,
             @RequestParam(required = false) Long cursorId,
             @RequestParam(defaultValue="5") int size,
             @PathVariable Long fruitId)

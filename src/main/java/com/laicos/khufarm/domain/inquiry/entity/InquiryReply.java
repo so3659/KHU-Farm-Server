@@ -3,8 +3,6 @@ package com.laicos.khufarm.domain.inquiry.entity;
 import com.laicos.khufarm.global.common.base.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
 
 @Entity
 @Getter
@@ -21,8 +19,11 @@ public class InquiryReply extends BaseEntity {
     @Column(nullable = false)
     private String content;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="inquiry_id", nullable = false)
-    @OnDelete(action = OnDeleteAction.CASCADE)
     private Inquiry inquiry;
+
+    protected void setInquiry(Inquiry inquiry) {
+        this.inquiry = inquiry;
+    }
 }

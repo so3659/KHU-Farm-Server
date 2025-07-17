@@ -2,8 +2,8 @@ package com.laicos.khufarm.domain.inquiry.entity;
 
 
 import com.laicos.khufarm.domain.fruit.entity.Fruit;
-import com.laicos.khufarm.domain.user.entity.User;
 import com.laicos.khufarm.domain.seller.entity.Seller;
+import com.laicos.khufarm.domain.user.entity.User;
 import com.laicos.khufarm.global.common.base.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
@@ -45,4 +45,12 @@ public class Inquiry extends BaseEntity {
     @JoinColumn(name="fruit_id", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Fruit fruit;
+
+    @OneToOne(mappedBy = "inquiry", cascade = CascadeType.ALL, orphanRemoval = true)
+    private InquiryReply inquiryReply;
+
+    public void addInquiryReply(InquiryReply inquiryReply) {
+        this.inquiryReply = inquiryReply;
+        inquiryReply.setInquiry(this);
+    }
 }
