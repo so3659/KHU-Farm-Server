@@ -2,6 +2,7 @@ package com.laicos.khufarm.domain.review.service;
 
 import com.laicos.khufarm.domain.review.converter.ReviewConverter;
 import com.laicos.khufarm.domain.review.converter.ReviewReplyConverter;
+import com.laicos.khufarm.domain.review.dto.ReviewReadCondition;
 import com.laicos.khufarm.domain.review.dto.response.MyReviewResponse;
 import com.laicos.khufarm.domain.review.dto.response.ReviewReplyResponse;
 import com.laicos.khufarm.domain.review.dto.response.ReviewResponse;
@@ -24,9 +25,9 @@ public class ReviewQueryServiceImpl implements ReviewQueryService{
     private final ReviewRepository reviewRepository;
 
     @Override
-    public Slice<ReviewResponse> getAllReviews(Long cursorId, Long fruitId, Pageable pageable){
+    public Slice<ReviewResponse> getAllReviews(Long cursorId, ReviewReadCondition reviewReadCondition, Pageable pageable){
 
-        return reviewRepository.getAllReviews(cursorId, fruitId, pageable);
+        return reviewRepository.getAllReviews(cursorId, reviewReadCondition, pageable);
     }
 
     @Override

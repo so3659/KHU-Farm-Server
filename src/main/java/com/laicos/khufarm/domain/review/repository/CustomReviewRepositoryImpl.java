@@ -5,6 +5,7 @@ import com.laicos.khufarm.domain.fruit.dto.response.FruitResponse;
 import com.laicos.khufarm.domain.fruit.entity.Fruit;
 import com.laicos.khufarm.domain.review.converter.ReviewConverter;
 import com.laicos.khufarm.domain.review.converter.ReviewReplyConverter;
+import com.laicos.khufarm.domain.review.dto.ReviewReadCondition;
 import com.laicos.khufarm.domain.review.dto.response.MyReviewResponse;
 import com.laicos.khufarm.domain.review.dto.response.ReviewReplyResponse;
 import com.laicos.khufarm.domain.review.dto.response.ReviewResponse;
@@ -21,6 +22,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+import static com.laicos.khufarm.domain.inquiry.entity.QInquiry.inquiry;
 import static com.laicos.khufarm.domain.review.entitiy.QReview.review;
 
 @Repository
@@ -30,7 +32,7 @@ public class CustomReviewRepositoryImpl implements CustomReviewRepository{
     private final JPAQueryFactory jpaQueryFactory;
 
     @Override
-    public Slice<ReviewResponse> getAllReviews(Long cursorId, Long fruitId, Pageable pageable){
+    public Slice<ReviewResponse> getAllReviews(Long cursorId, ReviewReadCondition reviewReadCondition, Pageable pageable){
 
         List<Review> reviewList = jpaQueryFactory.selectFrom(review)
                 .leftJoin(review.fruit).fetchJoin()
@@ -40,7 +42,8 @@ public class CustomReviewRepositoryImpl implements CustomReviewRepository{
                 .leftJoin(review.orderDetail).fetchJoin()
                 .where(
                         gtCursorId(cursorId),// 커서 조건
-                        eqFruitId(fruitId) // 과일 ID 조건
+                        eqFruitId(reviewReadCondition.getFruitId()), // 과일 ID 조건
+                        eqUserId(reviewReadCondition.getUser()) // 사용자 ID 조건
                 )
                 .orderBy(review.id.asc())
                 .limit(pageable.getPageSize() + 1)
@@ -123,5 +126,9 @@ public class CustomReviewRepositoryImpl implements CustomReviewRepository{
 
     private BooleanExpression eqUserId(Long userId) {
         return (userId == null) ? null : review.user.id.eq(userId);
+    }
+
+    private BooleanExpression eqUserId(User user) {
+        return (user == null) ? null : inquiry.user.id.eq(user.getId());
     }
 }

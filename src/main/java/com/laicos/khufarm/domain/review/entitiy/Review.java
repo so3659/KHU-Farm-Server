@@ -70,4 +70,8 @@ public class Review extends BaseEntity {
     public void setOrderDetail(OrderDetail orderDetail){
         this.orderDetail= orderDetail;
     }
+
+    public void setIsPointed(boolean isPointed) {
+        this.isPointed = isPointed;
+    }
 }

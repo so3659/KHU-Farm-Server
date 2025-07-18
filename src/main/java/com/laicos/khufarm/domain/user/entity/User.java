@@ -84,4 +84,8 @@ public class User extends BaseEntity {
     public void updateDiscountedPrice(Integer price) {
         this.discountedPrice += price;
     }
+
+    public void updateTotalPoint(Integer point) {
+        this.totalPoint += point;
+    }
 }

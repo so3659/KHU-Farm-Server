@@ -1,6 +1,7 @@
 package com.laicos.khufarm.domain.review.controller;
 
 import com.laicos.khufarm.domain.auth.security.CustomUserDetails;
+import com.laicos.khufarm.domain.review.dto.ReviewReadCondition;
 import com.laicos.khufarm.domain.review.dto.request.ReviewReplyRequest;
 import com.laicos.khufarm.domain.review.dto.request.ReviewRequest;
 import com.laicos.khufarm.domain.review.dto.response.MyReviewResponse;
@@ -58,7 +59,7 @@ public class ReviewController {
     {
         Pageable pageable = PageRequest.of(0, size);
 
-        Slice<ReviewResponse> reviewResponses = reviewQueryService.getAllReviews(cursorId, fruitId, pageable);
+        Slice<ReviewResponse> reviewResponses = reviewQueryService.getAllReviews(cursorId, new ReviewReadCondition(fruitId), pageable);
 
         return BaseResponse.onSuccess(reviewResponses);
     }

@@ -15,6 +15,7 @@ public class ReviewResponse {
     private String content;
     private String imageUrl;
     private Integer rating;
+    private Boolean isAnswered;
     private LocalDateTime createdAt;
     private ReviewReplyResponse reply;
 }

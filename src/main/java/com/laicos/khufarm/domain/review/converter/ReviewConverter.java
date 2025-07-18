@@ -40,6 +40,7 @@ public class ReviewConverter {
                 .rating(review.getRating())
                 .createdAt(review.getCreatedAt())
                 .reply(reply)
+                .isAnswered(review.isAnswered())
                 .build();
     }
 
