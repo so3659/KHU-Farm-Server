@@ -68,6 +68,7 @@ public class ReviewCommandServiceImpl implements ReviewCommandService{
                 .orElseThrow(() -> new RestApiException(ReviewErrorStatus.REVIEW_NOT_FOUND));
 
         review.addReviewReply(ReviewReplyConverter.toReviewReply(reviewReplyRequest.getContent(), review));
+        review.setIsAnswered(true);
         reviewRepository.save(review);
     }
 }

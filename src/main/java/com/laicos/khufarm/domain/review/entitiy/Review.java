@@ -74,4 +74,8 @@ public class Review extends BaseEntity {
     public void setIsPointed(boolean isPointed) {
         this.isPointed = isPointed;
     }
+
+    public void setIsAnswered(boolean isAnswered) {
+        this.isAnswered = isAnswered;
+    }
 }
