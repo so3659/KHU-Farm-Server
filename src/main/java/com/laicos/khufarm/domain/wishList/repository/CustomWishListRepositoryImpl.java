@@ -29,6 +29,8 @@ public class CustomWishListRepositoryImpl implements CustomWishListRepository{
     public WishListResponse getWishList(Long cursorId, User user, Pageable pageable){
 
         List<WishList> wishListList = jpaQueryFactory.selectFrom(wishList)
+                .leftJoin(wishList.fruit).fetchJoin() // WishList와 Fruit을 조인
+                .leftJoin(wishList.user).fetchJoin() // Fruit과 User 조인
                 .where(
                         eqUserId(user.getId()), //사용자 ID 조건
                         gtCursorId(cursorId) // 커서 조건

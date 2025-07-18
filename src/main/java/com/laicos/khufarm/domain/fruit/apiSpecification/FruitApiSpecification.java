@@ -1,6 +1,7 @@
 package com.laicos.khufarm.domain.fruit.apiSpecification;
 
-import com.laicos.khufarm.domain.fruit.dto.response.FruitResponse;
+import com.laicos.khufarm.domain.auth.security.CustomUserDetails;
+import com.laicos.khufarm.domain.fruit.dto.response.FruitResponseIsWish;
 import com.laicos.khufarm.domain.fruit.validation.annotation.ExistFruitCategory;
 import com.laicos.khufarm.domain.fruit.validation.annotation.ExistWholesaleRetailCategory;
 import com.laicos.khufarm.global.common.base.BaseResponse;
@@ -11,6 +12,7 @@ import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.data.domain.Slice;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.RequestParam;
 
 public interface FruitApiSpecification {
@@ -30,7 +32,8 @@ public interface FruitApiSpecification {
                                     }
                                     """)))
     })
-    public BaseResponse<Slice<FruitResponse>> getSpecificFruits(
+    public BaseResponse<Slice<FruitResponseIsWish>> getSpecificFruits(
+            @AuthenticationPrincipal CustomUserDetails customUserDetails,
             @Parameter(description = "커서 ID") @RequestParam(required = false) Long cursorId,
             @Parameter(description = "도매/소매 카테고리 ID") @ExistWholesaleRetailCategory @RequestParam Long wholesaleRetailCategoryId,
             @Parameter(description = "과일 카테고리 ID") @ExistFruitCategory @RequestParam Long fruitCategoryId,
@@ -52,7 +55,8 @@ public interface FruitApiSpecification {
                                     }
                                     """)))
     })
-    public BaseResponse<Slice<FruitResponse>> searchSpecificFruits(
+    public BaseResponse<Slice<FruitResponseIsWish>> searchSpecificFruits(
+            @AuthenticationPrincipal CustomUserDetails customUserDetails,
             @Parameter(description = "커서 ID") @RequestParam(required = false) Long cursorId,
             @Parameter(description = "도매/소매 카테고리 ID") @ExistWholesaleRetailCategory @RequestParam Long wholesaleRetailCategoryId,
             @Parameter(description = "과일 카테고리 ID") @ExistFruitCategory @RequestParam Long fruitCategoryId,

@@ -6,7 +6,7 @@ import lombok.*;
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
-public class FruitResponse {
+public class FruitResponseIsWish {
 
     private Long id;
     private String title;
@@ -24,4 +24,5 @@ public class FruitResponse {
     private String brandName;
     private Long fruitCategoryId;
     private Long wholesaleRetailCategoryId;
+    private Boolean isWishList; // 찜 여부
 }

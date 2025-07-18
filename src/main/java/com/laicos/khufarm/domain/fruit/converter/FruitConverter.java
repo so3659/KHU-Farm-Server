@@ -2,6 +2,7 @@ package com.laicos.khufarm.domain.fruit.converter;
 
 import com.laicos.khufarm.domain.fruit.dto.request.FruitAddRequest;
 import com.laicos.khufarm.domain.fruit.dto.response.FruitResponse;
+import com.laicos.khufarm.domain.fruit.dto.response.FruitResponseIsWish;
 import com.laicos.khufarm.domain.fruit.dto.response.FruitResponseWithCount;
 import com.laicos.khufarm.domain.fruit.dto.response.FruitResponseWithWishListId;
 import com.laicos.khufarm.domain.fruit.entity.Fruit;
@@ -13,6 +14,7 @@ import com.laicos.khufarm.domain.wishList.entity.WishList;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -44,6 +46,35 @@ public class FruitConverter {
     public static List<FruitResponse> toFruitDTOList(List<Fruit> fruits) {
         return fruits.stream()
                 .map(FruitConverter::toFruitDTO)
+                .collect(Collectors.toList());
+    }
+
+    public static FruitResponseIsWish toFruitIsWishDTO(Fruit fruit, Boolean isWishList) {
+        return FruitResponseIsWish.builder()
+                .id(fruit.getId())
+                .title(fruit.getTitle())
+                .widthImageUrl(fruit.getWidthImageUrl())
+                .squareImageUrl(fruit.getSquareImageUrl())
+                .price(fruit.getPrice())
+                .weight(fruit.getWeight())
+                .deliveryCompany(fruit.getDeliveryCompany())
+                .deliveryDay(fruit.getDeliveryDay())
+                .ratingSum(fruit.getRatingSum())
+                .ratingCount(fruit.getRatingCount())
+                .description(fruit.getDescription())
+                .stock(fruit.getStock())
+                .sellerId(fruit.getSeller().getId())
+                .brandName(fruit.getSeller().getBrandName())
+                .fruitCategoryId(fruit.getFruitCategory().getId())
+                .wholesaleRetailCategoryId(fruit.getWholesaleRetailCategory().getId())
+                .isWishList(isWishList)
+                .build();
+    }
+
+
+    public static List<FruitResponseIsWish> toFruitIsWishDTOList(List<Fruit> fruits, Set<Long> wishFruitIds) {
+        return fruits.stream()
+                .map(fruit -> toFruitIsWishDTO(fruit, wishFruitIds.contains(fruit.getId())))
                 .collect(Collectors.toList());
     }
 

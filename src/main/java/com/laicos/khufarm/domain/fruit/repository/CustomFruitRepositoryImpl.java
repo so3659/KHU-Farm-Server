@@ -2,8 +2,10 @@ package com.laicos.khufarm.domain.fruit.repository;
 
 import com.laicos.khufarm.domain.fruit.converter.FruitConverter;
 import com.laicos.khufarm.domain.fruit.dto.FruitReadCondition;
-import com.laicos.khufarm.domain.fruit.dto.response.FruitResponse;
+import com.laicos.khufarm.domain.fruit.dto.response.FruitResponseIsWish;
 import com.laicos.khufarm.domain.fruit.entity.Fruit;
+import com.laicos.khufarm.domain.user.entity.User;
+import com.laicos.khufarm.domain.wishList.entity.WishList;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
@@ -13,8 +15,11 @@ import org.springframework.data.domain.SliceImpl;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import static com.laicos.khufarm.domain.fruit.entity.QFruit.fruit;
+import static com.laicos.khufarm.domain.wishList.entity.QWishList.wishList;
 
 @Repository
 @RequiredArgsConstructor
@@ -23,7 +28,7 @@ public class CustomFruitRepositoryImpl implements CustomFruitRepository {
     private final JPAQueryFactory jpaQueryFactory;
 
     @Override
-    public Slice<FruitResponse> getFruitByConditions(Long cursorId, FruitReadCondition fruitReadCondition, Pageable pageable){
+    public Slice<FruitResponseIsWish> getFruitByConditions(User user, Long cursorId, FruitReadCondition fruitReadCondition, Pageable pageable){
 
         List<Fruit> fruitList = jpaQueryFactory.selectFrom(fruit)
                 .leftJoin(fruit.seller).fetchJoin()
@@ -39,7 +44,20 @@ public class CustomFruitRepositoryImpl implements CustomFruitRepository {
                 .limit(pageable.getPageSize()+1)
                 .fetch();
 
-        List<FruitResponse> content = FruitConverter.toFruitDTOList(fruitList);
+        List<WishList> wishListList = jpaQueryFactory.selectFrom(wishList)
+                .leftJoin(wishList.fruit).fetchJoin() // WishList와 Fruit을 조인
+                .leftJoin(wishList.user).fetchJoin() // Fruit과 User 조인
+                .where(
+                        eqUserId(user.getId()) //사용자 ID 조건
+                )
+                .orderBy(wishList.id.asc())
+                .fetch();
+
+        Set<Long> wishFruitIds = wishListList.stream()
+                .map(wish -> wish.getFruit().getId()) // WishList가 가진 Fruit의 ID 추출
+                .collect(Collectors.toSet());
+
+        List<FruitResponseIsWish> content = FruitConverter.toFruitIsWishDTOList(fruitList, wishFruitIds);
 
         boolean hasNext = false;
         if (content.size() > pageable.getPageSize()) {
@@ -48,6 +66,10 @@ public class CustomFruitRepositoryImpl implements CustomFruitRepository {
         }
 
         return new SliceImpl<>(content, pageable, hasNext);
+    }
+
+    private BooleanExpression eqUserId(Long userId) {
+        return (userId == null) ? null : wishList.user.id.eq(userId);
     }
 
     private BooleanExpression gtCursorId(Long cursorId) {

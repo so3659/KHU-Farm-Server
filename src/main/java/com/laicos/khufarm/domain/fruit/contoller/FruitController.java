@@ -4,7 +4,7 @@ import com.laicos.khufarm.domain.auth.security.CustomUserDetails;
 import com.laicos.khufarm.domain.fruit.apiSpecification.FruitApiSpecification;
 import com.laicos.khufarm.domain.fruit.dto.FruitReadCondition;
 import com.laicos.khufarm.domain.fruit.dto.request.FruitAddRequest;
-import com.laicos.khufarm.domain.fruit.dto.response.FruitResponse;
+import com.laicos.khufarm.domain.fruit.dto.response.FruitResponseIsWish;
 import com.laicos.khufarm.domain.fruit.service.FruitCommandService;
 import com.laicos.khufarm.domain.fruit.service.FruitQueryService;
 import com.laicos.khufarm.domain.fruit.validation.annotation.ExistFruitCategory;
@@ -31,45 +31,49 @@ public class FruitController implements FruitApiSpecification {
     private final FruitCommandService fruitCommandService;
 
     @GetMapping("/get/{wholesaleRetailCategoryId}")
-    public BaseResponse<Slice<FruitResponse>> getFruits(
+    public BaseResponse<Slice<FruitResponseIsWish>> getFruits(
+            @AuthenticationPrincipal CustomUserDetails customUserDetails,
             @RequestParam(required = false) Long cursorId,
             @ExistWholesaleRetailCategory @PathVariable Long wholesaleRetailCategoryId,
             @RequestParam(defaultValue="5") int size) {
 
         Pageable pageable = PageRequest.of(0, size);
-        Slice<FruitResponse> fruitResponses = fruitQueryService.getFruitList(cursorId, new FruitReadCondition(wholesaleRetailCategoryId), pageable);
+        Slice<FruitResponseIsWish> fruitResponses = fruitQueryService.getFruitList(customUserDetails.getUser(), cursorId, new FruitReadCondition(wholesaleRetailCategoryId), pageable);
 
         return BaseResponse.onSuccess(fruitResponses);
     }
 
     @GetMapping("/search/{wholesaleRetailCategoryId}")
-    public BaseResponse<Slice<FruitResponse>> searchFruits(
+    public BaseResponse<Slice<FruitResponseIsWish>> searchFruits(
+            @AuthenticationPrincipal CustomUserDetails customUserDetails,
             @RequestParam(required = false) Long cursorId,
             @ExistWholesaleRetailCategory @PathVariable Long wholesaleRetailCategoryId,
             @RequestParam(required = false) String searchKeyword,
             @RequestParam(defaultValue="5") int size) {
 
         Pageable pageable = PageRequest.of(0, size);
-        Slice<FruitResponse> fruitResponses = fruitQueryService.getFruitList(cursorId, new FruitReadCondition(wholesaleRetailCategoryId, searchKeyword), pageable);
+        Slice<FruitResponseIsWish> fruitResponses = fruitQueryService.getFruitList(customUserDetails.getUser(),cursorId, new FruitReadCondition(wholesaleRetailCategoryId, searchKeyword), pageable);
 
         return BaseResponse.onSuccess(fruitResponses);
     }
 
     @GetMapping("/get/{wholesaleRetailCategoryId}/{fruitCategoryId}")
-    public BaseResponse<Slice<FruitResponse>> getSpecificFruits(
+    public BaseResponse<Slice<FruitResponseIsWish>> getSpecificFruits(
+            @AuthenticationPrincipal CustomUserDetails customUserDetails,
             @RequestParam(required = false) Long cursorId,
             @ExistWholesaleRetailCategory @PathVariable Long wholesaleRetailCategoryId,
             @ExistFruitCategory @PathVariable Long fruitCategoryId,
             @RequestParam(defaultValue="5") int size) {
 
         Pageable pageable = PageRequest.of(0, size);
-        Slice<FruitResponse> fruitResponses = fruitQueryService.getFruitList(cursorId, new FruitReadCondition(wholesaleRetailCategoryId, fruitCategoryId), pageable);
+        Slice<FruitResponseIsWish> fruitResponses = fruitQueryService.getFruitList(customUserDetails.getUser(),cursorId, new FruitReadCondition(wholesaleRetailCategoryId, fruitCategoryId), pageable);
 
         return BaseResponse.onSuccess(fruitResponses);
     }
 
     @GetMapping("/search/{wholesaleRetailCategoryId}/{fruitCategoryId}")
-    public BaseResponse<Slice<FruitResponse>> searchSpecificFruits(
+    public BaseResponse<Slice<FruitResponseIsWish>> searchSpecificFruits(
+            @AuthenticationPrincipal CustomUserDetails customUserDetails,
             @RequestParam(required = false) Long cursorId,
             @ExistWholesaleRetailCategory @PathVariable Long wholesaleRetailCategoryId,
             @ExistFruitCategory @PathVariable Long fruitCategoryId,
@@ -77,7 +81,7 @@ public class FruitController implements FruitApiSpecification {
             @RequestParam(defaultValue="5") int size) {
 
         Pageable pageable = PageRequest.of(0, size);
-        Slice<FruitResponse> fruitResponses = fruitQueryService.getFruitList(cursorId, new FruitReadCondition(wholesaleRetailCategoryId, fruitCategoryId, searchKeyword), pageable);
+        Slice<FruitResponseIsWish> fruitResponses = fruitQueryService.getFruitList(customUserDetails.getUser(),cursorId, new FruitReadCondition(wholesaleRetailCategoryId, fruitCategoryId, searchKeyword), pageable);
 
         return BaseResponse.onSuccess(fruitResponses);
     }
