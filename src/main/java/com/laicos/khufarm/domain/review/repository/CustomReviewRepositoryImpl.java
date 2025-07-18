@@ -22,7 +22,6 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-import static com.laicos.khufarm.domain.inquiry.entity.QInquiry.inquiry;
 import static com.laicos.khufarm.domain.review.entitiy.QReview.review;
 
 @Repository
@@ -129,6 +128,6 @@ public class CustomReviewRepositoryImpl implements CustomReviewRepository{
     }
 
     private BooleanExpression eqUserId(User user) {
-        return (user == null) ? null : inquiry.user.id.eq(user.getId());
+        return (user == null) ? null : review.user.id.eq(user.getId());
     }
 }
