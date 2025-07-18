@@ -1,6 +1,6 @@
 package com.laicos.khufarm.domain.wishList.converter;
 
-import com.laicos.khufarm.domain.fruit.dto.response.FruitResponse;
+import com.laicos.khufarm.domain.fruit.dto.response.FruitResponseWithWishListId;
 import com.laicos.khufarm.domain.fruit.entity.Fruit;
 import com.laicos.khufarm.domain.user.entity.User;
 import com.laicos.khufarm.domain.wishList.dto.response.WishListResponse;
@@ -18,11 +18,11 @@ public class WishListConverter {
                 .build();
     }
 
-    public static WishListResponse toDTOList(User user, Slice<FruitResponse> fruitList){
+    public static WishListResponse toDTOList(User user, Slice<FruitResponseWithWishListId> fruitList){
 
         return WishListResponse.builder()
                 .userId(user.getId())
-                .fruits(fruitList)
+                .fruitWithWishList(fruitList)
                 .build();
     }
 }

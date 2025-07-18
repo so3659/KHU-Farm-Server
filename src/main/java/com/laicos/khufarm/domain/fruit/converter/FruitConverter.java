@@ -3,11 +3,13 @@ package com.laicos.khufarm.domain.fruit.converter;
 import com.laicos.khufarm.domain.fruit.dto.request.FruitAddRequest;
 import com.laicos.khufarm.domain.fruit.dto.response.FruitResponse;
 import com.laicos.khufarm.domain.fruit.dto.response.FruitResponseWithCount;
+import com.laicos.khufarm.domain.fruit.dto.response.FruitResponseWithWishListId;
 import com.laicos.khufarm.domain.fruit.entity.Fruit;
 import com.laicos.khufarm.domain.fruit.entity.category.FruitCategory;
 import com.laicos.khufarm.domain.fruit.entity.category.WholesaleRetailCategory;
 import com.laicos.khufarm.domain.fruit.enums.FruitStatus;
 import com.laicos.khufarm.domain.seller.entity.Seller;
+import com.laicos.khufarm.domain.wishList.entity.WishList;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -72,6 +74,35 @@ public class FruitConverter {
                 .mapToObj(i -> toFruitDTOWithCount(fruits.get(i), countList.get(i)))
                 .collect(Collectors.toList());
     }
+
+    public static FruitResponseWithWishListId toFruitDTOWithWishList(Fruit fruit, WishList wishList) {
+        return FruitResponseWithWishListId.builder()
+                .id(fruit.getId())
+                .title(fruit.getTitle())
+                .widthImageUrl(fruit.getWidthImageUrl())
+                .squareImageUrl(fruit.getSquareImageUrl())
+                .price(fruit.getPrice())
+                .weight(fruit.getWeight())
+                .deliveryCompany(fruit.getDeliveryCompany())
+                .deliveryDay(fruit.getDeliveryDay())
+                .ratingSum(fruit.getRatingSum())
+                .ratingCount(fruit.getRatingCount())
+                .description(fruit.getDescription())
+                .stock(fruit.getStock())
+                .sellerId(fruit.getSeller().getId())
+                .brandName(fruit.getSeller().getBrandName())
+                .fruitCategoryId(fruit.getFruitCategory().getId())
+                .wholesaleRetailCategoryId(fruit.getWholesaleRetailCategory().getId())
+                .wishListId(wishList.getId())
+                .build();
+    }
+
+    public static List<FruitResponseWithWishListId> toFruitDTOListWithCWishList(List<Fruit> fruits, List<WishList> wishListList) {
+        return IntStream.range(0, fruits.size())
+                .mapToObj(i -> toFruitDTOWithWishList(fruits.get(i), wishListList.get(i)))
+                .collect(Collectors.toList());
+    }
+
 
     public static Fruit toFruit(Seller seller, FruitCategory fruitCategory, WholesaleRetailCategory wholesaleRetailCategory, FruitAddRequest fruitAddRequest) {
         return Fruit.builder()

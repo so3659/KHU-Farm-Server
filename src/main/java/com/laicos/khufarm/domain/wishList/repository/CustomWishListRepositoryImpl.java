@@ -1,7 +1,7 @@
 package com.laicos.khufarm.domain.wishList.repository;
 
 import com.laicos.khufarm.domain.fruit.converter.FruitConverter;
-import com.laicos.khufarm.domain.fruit.dto.response.FruitResponse;
+import com.laicos.khufarm.domain.fruit.dto.response.FruitResponseWithWishListId;
 import com.laicos.khufarm.domain.fruit.entity.Fruit;
 import com.laicos.khufarm.domain.user.entity.User;
 import com.laicos.khufarm.domain.wishList.converter.WishListConverter;
@@ -28,7 +28,7 @@ public class CustomWishListRepositoryImpl implements CustomWishListRepository{
     @Override
     public WishListResponse getWishList(Long cursorId, User user, Pageable pageable){
 
-        List<WishList> WishListList = jpaQueryFactory.selectFrom(wishList)
+        List<WishList> wishListList = jpaQueryFactory.selectFrom(wishList)
                 .where(
                         eqUserId(user.getId()), //사용자 ID 조건
                         gtCursorId(cursorId) // 커서 조건
@@ -37,11 +37,11 @@ public class CustomWishListRepositoryImpl implements CustomWishListRepository{
                 .limit(pageable.getPageSize()+1)
                 .fetch();
 
-        List<Fruit> fruitList = WishListList.stream()
+        List<Fruit> fruitList = wishListList.stream()
                 .map(WishList::getFruit)
                 .toList();
 
-        List<FruitResponse> content = FruitConverter.toFruitDTOList(fruitList);
+        List<FruitResponseWithWishListId> content = FruitConverter.toFruitDTOListWithCWishList(fruitList, wishListList);
 
         boolean hasNext = false;
         if (content.size() > pageable.getPageSize()) {
@@ -49,7 +49,7 @@ public class CustomWishListRepositoryImpl implements CustomWishListRepository{
             hasNext = true;
         }
 
-        Slice<FruitResponse> fruits = new SliceImpl<>(content, pageable, hasNext);
+        Slice<FruitResponseWithWishListId> fruits = new SliceImpl<>(content, pageable, hasNext);
 
         return WishListConverter.toDTOList(user, fruits);
     }

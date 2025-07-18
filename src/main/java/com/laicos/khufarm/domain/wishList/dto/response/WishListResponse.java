@@ -1,6 +1,6 @@
 package com.laicos.khufarm.domain.wishList.dto.response;
 
-import com.laicos.khufarm.domain.fruit.dto.response.FruitResponse;
+import com.laicos.khufarm.domain.fruit.dto.response.FruitResponseWithWishListId;
 import lombok.*;
 import org.springframework.data.domain.Slice;
 
@@ -11,5 +11,5 @@ import org.springframework.data.domain.Slice;
 public class WishListResponse {
 
     private Long userId;
-    private Slice<FruitResponse> fruits;
+    private Slice<FruitResponseWithWishListId> fruitWithWishList;
 }
