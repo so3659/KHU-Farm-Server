@@ -14,7 +14,7 @@ import com.laicos.khufarm.domain.wishList.entity.WishList;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
-import java.util.Set;
+import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -49,7 +49,7 @@ public class FruitConverter {
                 .collect(Collectors.toList());
     }
 
-    public static FruitResponseIsWish toFruitIsWishDTO(Fruit fruit, Boolean isWishList) {
+    public static FruitResponseIsWish toFruitIsWishDTO(Fruit fruit, WishList wishList) {
         return FruitResponseIsWish.builder()
                 .id(fruit.getId())
                 .title(fruit.getTitle())
@@ -67,16 +67,22 @@ public class FruitConverter {
                 .brandName(fruit.getSeller().getBrandName())
                 .fruitCategoryId(fruit.getFruitCategory().getId())
                 .wholesaleRetailCategoryId(fruit.getWholesaleRetailCategory().getId())
-                .isWishList(isWishList)
+                .isWishList(wishList != null)
+                .wishListId(wishList != null ? wishList.getId() : null)
                 .build();
     }
 
 
-    public static List<FruitResponseIsWish> toFruitIsWishDTOList(List<Fruit> fruits, Set<Long> wishFruitIds) {
+
+    public static List<FruitResponseIsWish> toFruitIsWishDTOList(List<Fruit> fruits, Map<Long, WishList> wishListMap) {
         return fruits.stream()
-                .map(fruit -> toFruitIsWishDTO(fruit, wishFruitIds.contains(fruit.getId())))
+                .map(fruit -> {
+                    WishList wishList = wishListMap.get(fruit.getId());
+                    return toFruitIsWishDTO(fruit, wishList);
+                })
                 .collect(Collectors.toList());
     }
+
 
     public static FruitResponseWithCount toFruitDTOWithCount(Fruit fruit, Integer count) {
         return FruitResponseWithCount.builder()

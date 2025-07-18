@@ -25,4 +25,5 @@ public class FruitResponseIsWish {
     private Long fruitCategoryId;
     private Long wholesaleRetailCategoryId;
     private Boolean isWishList; // 찜 여부
+    private Long wishListId; // 찜 목록 ID (찜한 경우에만 값이 있음)
 }

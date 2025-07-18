@@ -15,7 +15,7 @@ import org.springframework.data.domain.SliceImpl;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-import java.util.Set;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import static com.laicos.khufarm.domain.fruit.entity.QFruit.fruit;
@@ -53,11 +53,13 @@ public class CustomFruitRepositoryImpl implements CustomFruitRepository {
                 .orderBy(wishList.id.asc())
                 .fetch();
 
-        Set<Long> wishFruitIds = wishListList.stream()
-                .map(wish -> wish.getFruit().getId()) // WishList가 가진 Fruit의 ID 추출
-                .collect(Collectors.toSet());
+        Map<Long, WishList> wishFruitMap = wishListList.stream()
+                .collect(Collectors.toMap(
+                        wish -> wish.getFruit().getId(),
+                        wish -> wish
+                ));
 
-        List<FruitResponseIsWish> content = FruitConverter.toFruitIsWishDTOList(fruitList, wishFruitIds);
+        List<FruitResponseIsWish> content = FruitConverter.toFruitIsWishDTOList(fruitList, wishFruitMap);
 
         boolean hasNext = false;
         if (content.size() > pageable.getPageSize()) {
