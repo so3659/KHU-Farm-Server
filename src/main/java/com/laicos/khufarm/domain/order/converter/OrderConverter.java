@@ -1,11 +1,16 @@
 package com.laicos.khufarm.domain.order.converter;
 
+import com.laicos.khufarm.domain.address.dto.response.AddressResponse;
+import com.laicos.khufarm.domain.fruit.dto.response.FruitResponseWithCount;
 import com.laicos.khufarm.domain.order.dto.request.ShippingInfo;
 import com.laicos.khufarm.domain.order.dto.response.OrderResponse;
+import com.laicos.khufarm.domain.order.dto.response.PrePareOrderResponse;
 import com.laicos.khufarm.domain.order.entity.Order;
 import com.laicos.khufarm.domain.order.enums.OrderStatus;
 import com.laicos.khufarm.domain.user.entity.User;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
 
 @Component
 public class OrderConverter {
@@ -39,6 +44,13 @@ public class OrderConverter {
                 .recipient(order.getRecipient())
                 .phoneNumber(order.getPhoneNumber())
                 .orderRequest(order.getOrderRequest())
+                .build();
+    }
+
+    public static PrePareOrderResponse toPrePareOrderResponse(AddressResponse addressResponse, List<FruitResponseWithCount> fruitResponseWithCount) {
+        return PrePareOrderResponse.builder()
+                .addressResponse(addressResponse)
+                .fruitResponseWithCount(fruitResponseWithCount)
                 .build();
     }
 }

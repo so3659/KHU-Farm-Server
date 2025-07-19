@@ -84,6 +84,29 @@ public class FruitConverter {
                 .collect(Collectors.toList());
     }
 
+    public static FruitResponseWithCount toFruitDTOOnlyCount(Fruit fruit, Integer count) {
+        return FruitResponseWithCount.builder()
+                .id(fruit.getId())
+                .title(fruit.getTitle())
+                .widthImageUrl(fruit.getWidthImageUrl())
+                .squareImageUrl(fruit.getSquareImageUrl())
+                .price(fruit.getPrice())
+                .weight(fruit.getWeight())
+                .deliveryCompany(fruit.getDeliveryCompany())
+                .deliveryDay(fruit.getDeliveryDay())
+                .ratingSum(fruit.getRatingSum())
+                .ratingCount(fruit.getRatingCount())
+                .description(fruit.getDescription())
+                .stock(fruit.getStock())
+                .sellerId(fruit.getSeller().getId())
+                .brandName(fruit.getSeller().getBrandName())
+                .fruitCategoryId(fruit.getFruitCategory().getId())
+                .wholesaleRetailCategoryId(fruit.getWholesaleRetailCategory().getId())
+                .count(count)
+                .cartId(null)
+                .build();
+    }
+
 
     public static FruitResponseWithCount toFruitDTOWithCount(Fruit fruit, Cart cart) {
         return FruitResponseWithCount.builder()
