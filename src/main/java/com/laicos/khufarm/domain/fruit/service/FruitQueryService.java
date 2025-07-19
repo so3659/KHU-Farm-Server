@@ -9,4 +9,5 @@ import org.springframework.data.domain.Slice;
 public interface FruitQueryService {
 
     Slice<FruitResponseIsWish> getFruitList(User user, Long cursorId, FruitReadCondition fruitReadCondition, Pageable pageable);
+    FruitResponseIsWish getFruit(User user, Long fruitId);
 }

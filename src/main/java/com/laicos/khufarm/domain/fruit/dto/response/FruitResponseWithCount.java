@@ -25,4 +25,5 @@ public class FruitResponseWithCount {
     private Long fruitCategoryId;
     private Long wholesaleRetailCategoryId;
     private Integer count;
+    private Long cartId;
 }

@@ -42,11 +42,7 @@ public class CustomCartRepositoryImpl implements CustomCartRepository{
                 .map(Cart::getFruit)
                 .toList();
 
-        List<Integer> countList = cartList.stream()
-                .map(Cart::getCount)
-                .toList();
-
-        List<FruitResponseWithCount> content = FruitConverter.toFruitDTOListWithCount(fruitList, countList);
+        List<FruitResponseWithCount> content = FruitConverter.toFruitDTOListWithCount(fruitList, cartList);
 
         boolean hasNext = false;
         if (content.size() > pageable.getPageSize()) {

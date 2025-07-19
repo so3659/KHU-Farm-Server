@@ -71,6 +71,16 @@ public class FruitController implements FruitApiSpecification {
         return BaseResponse.onSuccess(fruitResponses);
     }
 
+    @GetMapping("/{fruitId}")
+    public BaseResponse<FruitResponseIsWish> getSpecificFruit(
+            @AuthenticationPrincipal CustomUserDetails customUserDetails,
+            @ExistFruitCategory @PathVariable Long fruitId) {
+
+        FruitResponseIsWish fruitResponse = fruitQueryService.getFruit(customUserDetails.getUser(), fruitId);
+
+        return BaseResponse.onSuccess(fruitResponse);
+    }
+
     @GetMapping("/search/{wholesaleRetailCategoryId}/{fruitCategoryId}")
     public BaseResponse<Slice<FruitResponseIsWish>> searchSpecificFruits(
             @AuthenticationPrincipal CustomUserDetails customUserDetails,

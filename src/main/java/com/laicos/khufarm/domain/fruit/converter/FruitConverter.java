@@ -1,5 +1,6 @@
 package com.laicos.khufarm.domain.fruit.converter;
 
+import com.laicos.khufarm.domain.cart.entity.Cart;
 import com.laicos.khufarm.domain.fruit.dto.request.FruitAddRequest;
 import com.laicos.khufarm.domain.fruit.dto.response.FruitResponse;
 import com.laicos.khufarm.domain.fruit.dto.response.FruitResponseIsWish;
@@ -84,7 +85,7 @@ public class FruitConverter {
     }
 
 
-    public static FruitResponseWithCount toFruitDTOWithCount(Fruit fruit, Integer count) {
+    public static FruitResponseWithCount toFruitDTOWithCount(Fruit fruit, Cart cart) {
         return FruitResponseWithCount.builder()
                 .id(fruit.getId())
                 .title(fruit.getTitle())
@@ -102,13 +103,14 @@ public class FruitConverter {
                 .brandName(fruit.getSeller().getBrandName())
                 .fruitCategoryId(fruit.getFruitCategory().getId())
                 .wholesaleRetailCategoryId(fruit.getWholesaleRetailCategory().getId())
-                .count(count)
+                .count(cart.getCount())
+                .cartId(cart.getId())
                 .build();
     }
 
-    public static List<FruitResponseWithCount> toFruitDTOListWithCount(List<Fruit> fruits, List<Integer> countList) {
+    public static List<FruitResponseWithCount> toFruitDTOListWithCount(List<Fruit> fruits, List<Cart> cartList) {
         return IntStream.range(0, fruits.size())
-                .mapToObj(i -> toFruitDTOWithCount(fruits.get(i), countList.get(i)))
+                .mapToObj(i -> toFruitDTOWithCount(fruits.get(i), cartList.get(i)))
                 .collect(Collectors.toList());
     }
 
