@@ -3,6 +3,7 @@ package com.laicos.khufarm.domain.user.converter;
 import com.laicos.khufarm.domain.user.dto.request.BusinessUserJoinRequest;
 import com.laicos.khufarm.domain.user.dto.request.FarmerUserJoinRequest;
 import com.laicos.khufarm.domain.user.dto.request.IndividualUserJoinRequest;
+import com.laicos.khufarm.domain.user.dto.response.UserValueResponse;
 import com.laicos.khufarm.domain.user.entity.User;
 import com.laicos.khufarm.domain.user.enums.UserStatus;
 import com.laicos.khufarm.domain.user.enums.UserType;
@@ -49,5 +50,17 @@ public class UserConverter {
                     .version(farmerUserJoinRequest.getVersion())
                     .userType(UserType.ROLE_FARMER)
                     .build();
+    }
+
+    public static UserValueResponse toUserValueResponse(User user) {
+        return UserValueResponse.builder()
+                .userId(user.getId())
+                .userName(user.getName())
+                .totalPoint(user.getTotalPoint())
+                .totalDonation(user.getTotalDonation())
+                .totalPurchasePrice(user.getTotalPrice())
+                .totalPurchaseWeight(user.getTotalWeight())
+                .totalDiscountPrice(user.getDiscountedPrice())
+                .build();
     }
 }

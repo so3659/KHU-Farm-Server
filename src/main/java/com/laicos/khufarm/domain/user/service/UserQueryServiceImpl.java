@@ -1,5 +1,7 @@
 package com.laicos.khufarm.domain.user.service;
 
+import com.laicos.khufarm.domain.user.converter.UserConverter;
+import com.laicos.khufarm.domain.user.dto.response.UserValueResponse;
 import com.laicos.khufarm.domain.user.entity.User;
 import com.laicos.khufarm.domain.user.repository.UserRepository;
 import com.laicos.khufarm.global.common.exception.RestApiException;
@@ -29,5 +31,11 @@ public class UserQueryServiceImpl implements UserQueryService{
         }
 
         return exists;
+    }
+
+    @Override
+    public UserValueResponse getUserValue(User user){
+
+        return UserConverter.toUserValueResponse(user);
     }
 }
