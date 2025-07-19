@@ -47,7 +47,7 @@ public class InquiryController {
             @RequestParam(defaultValue="5") int size) {
 
         Pageable pageable = PageRequest.of(0, size);
-        Slice<InquiryResponse> inquiries = inquiryQueryService.getAllInquiry(cursorId, new InquiryReadCondition(customUserDetails.getUser().getId()), pageable);
+        Slice<InquiryResponse> inquiries = inquiryQueryService.getAllInquiry(cursorId, new InquiryReadCondition(customUserDetails.getUser()), pageable);
         return BaseResponse.onSuccess(inquiries);
     }
 

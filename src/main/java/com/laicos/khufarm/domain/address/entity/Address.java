@@ -46,4 +46,8 @@ public class Address extends BaseEntity {
     @JoinColumn(name="user_id", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     private User user;
+
+    public void setDefault(boolean isDefault) {
+        this.isDefault = isDefault;
+    }
 }
