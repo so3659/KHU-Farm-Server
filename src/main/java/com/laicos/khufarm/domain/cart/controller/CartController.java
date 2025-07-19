@@ -58,4 +58,24 @@ public class CartController {
 
         return BaseResponse.onSuccess(null);
     }
+
+    @PatchMapping("/{cartId}/increase")
+    public BaseResponse<Void> increaseCartCount(
+            @AuthenticationPrincipal CustomUserDetails customUserDetails,
+            @PathVariable("cartId") Long cartId)
+    {
+        cartCommandService.increaseCartCount(customUserDetails.getUser(), cartId);
+
+        return BaseResponse.onSuccess(null);
+    }
+
+    @PatchMapping("/{cartId}/decrease")
+    public BaseResponse<Void> decreaseCartCount(
+            @AuthenticationPrincipal CustomUserDetails customUserDetails,
+            @PathVariable("cartId") Long cartId)
+    {
+        cartCommandService.decreaseCartCount(customUserDetails.getUser(), cartId);
+
+        return BaseResponse.onSuccess(null);
+    }
 }

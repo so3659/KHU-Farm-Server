@@ -31,4 +31,14 @@ public class Cart {
     @JoinColumn(name="fruit_id", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Fruit fruit;
+
+    public void increaseCount() {
+        this.count += 1;
+    }
+
+    public void decreaseCount() {
+        if (this.count > 0) {
+            this.count -= 1;
+        }
+    }
 }

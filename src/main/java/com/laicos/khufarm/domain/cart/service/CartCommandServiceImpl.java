@@ -40,4 +40,20 @@ public class CartCommandServiceImpl implements CartCommandService{
 
         cartRepository.delete(cart);
     }
+
+    @Override
+    public void increaseCartCount(User user, Long cartId){
+        Cart cart = cartRepository.findByUserAndId(user, cartId)
+                .orElseThrow(() -> new RestApiException(CartListErrorStatus.CART_NOT_FOUND));
+
+        cart.increaseCount();
+    }
+
+    @Override
+    public void decreaseCartCount(User user, Long cartId){
+        Cart cart = cartRepository.findByUserAndId(user, cartId)
+                .orElseThrow(() -> new RestApiException(CartListErrorStatus.CART_NOT_FOUND));
+
+        cart.decreaseCount();
+    }
 }
