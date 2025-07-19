@@ -1,7 +1,9 @@
 package com.laicos.khufarm.domain.point.controller;
 
 import com.laicos.khufarm.domain.auth.security.CustomUserDetails;
+import com.laicos.khufarm.domain.point.dto.response.AttendanceResponse;
 import com.laicos.khufarm.domain.point.service.PointCommandService;
+import com.laicos.khufarm.domain.point.service.PointQueryService;
 import com.laicos.khufarm.domain.review.dto.ReviewReadCondition;
 import com.laicos.khufarm.domain.review.dto.response.ReviewResponse;
 import com.laicos.khufarm.domain.review.service.ReviewQueryService;
@@ -24,6 +26,7 @@ public class PointController {
 
     private final ReviewQueryService reviewQueryService;
     private final PointCommandService pointCommandService;
+    private final PointQueryService pointQueryService;
 
     @GetMapping("/retrieve/my")
     public BaseResponse<Slice<ReviewResponse>> getMyReviews(
@@ -43,6 +46,22 @@ public class PointController {
             @AuthenticationPrincipal CustomUserDetails customUserDetails,
             @PathVariable Long reviewId) {
         pointCommandService.getReviewPoint(customUserDetails.getUser(), reviewId);
+        return BaseResponse.onSuccess(null);
+    }
+
+    @GetMapping("/attend/{year}/{month}")
+    public BaseResponse<AttendanceResponse> getAttendanceHistory(
+            @AuthenticationPrincipal CustomUserDetails customUserDetails,
+            @PathVariable Integer year,
+            @PathVariable Integer month) {
+        AttendanceResponse attendanceResponse = pointQueryService.getAttendanceHistory(customUserDetails.getUser(), year, month);
+        return BaseResponse.onSuccess(attendanceResponse);
+    }
+
+    @PostMapping("/attend")
+    public BaseResponse<Void> attendPoint(
+            @AuthenticationPrincipal CustomUserDetails customUserDetails) {
+        pointCommandService.getAttendancePoint(customUserDetails.getUser());
         return BaseResponse.onSuccess(null);
     }
 }

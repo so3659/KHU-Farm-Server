@@ -1,4 +1,4 @@
-package com.laicos.khufarm.domain.point.Repository;
+package com.laicos.khufarm.domain.point.repository;
 
 import com.laicos.khufarm.domain.point.entity.PointHistory;
 import org.springframework.data.jpa.repository.JpaRepository;

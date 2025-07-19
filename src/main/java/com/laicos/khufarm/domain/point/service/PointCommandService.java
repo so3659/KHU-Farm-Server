@@ -5,4 +5,5 @@ import com.laicos.khufarm.domain.user.entity.User;
 public interface PointCommandService {
 
     void getReviewPoint(User user, Long reviewId);
+    void getAttendancePoint(User user);
 }
