@@ -1,13 +1,18 @@
 package com.laicos.khufarm.domain.payment.controller;
 
 import com.laicos.khufarm.domain.auth.security.CustomUserDetails;
+import com.laicos.khufarm.domain.fruit.dto.response.FruitResponseWithOrder;
 import com.laicos.khufarm.domain.payment.dto.PortoneConfirmDto;
 import com.laicos.khufarm.domain.payment.dto.PortoneWebhookDto;
 import com.laicos.khufarm.domain.payment.service.PaymentCommandService;
+import com.laicos.khufarm.domain.payment.service.PaymentQueryService;
 import com.laicos.khufarm.global.common.base.BaseResponse;
 import com.siot.IamportRestClient.exception.IamportResponseException;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -27,6 +32,7 @@ public class PaymentController {
     // confirm으로 재고 확인 후 웹훅으로 값 검증하고 콜백 함수를 통해 주문한 카트 내용 삭제
 
     private final PaymentCommandService paymentCommandService;
+    private final PaymentQueryService paymentQueryService;
 
     @PostMapping("/confirm")
     public ResponseEntity<BaseResponse<String>> confirm(@RequestBody PortoneConfirmDto portoneConfirmDto) {
@@ -57,5 +63,17 @@ public class PaymentController {
         paymentCommandService.deleteCartList(customUserDetails.getUser(), cartIdList);
 
         return BaseResponse.onSuccess(null);
+    }
+
+    @GetMapping
+    public BaseResponse<Slice<FruitResponseWithOrder>> getPaidFruit(
+            @AuthenticationPrincipal CustomUserDetails customUserDetails,
+            @RequestParam(required = false) Long cursorId,
+            @RequestParam(defaultValue="5") int size) {
+
+        Pageable pageable = PageRequest.of(0, size);
+        Slice<FruitResponseWithOrder> response = paymentQueryService.getPaidFruit(customUserDetails.getUser(), cursorId, pageable);
+
+        return BaseResponse.onSuccess(response);
     }
 }
