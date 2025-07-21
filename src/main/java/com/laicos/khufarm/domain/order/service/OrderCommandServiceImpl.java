@@ -76,6 +76,8 @@ public class OrderCommandServiceImpl implements OrderCommandService{
 
         orderRepository.save(order);
 
+        order.updateCartIdList(request.getCartId());
+
         return OrderConverter.toOrderResponse(order);
     }
 

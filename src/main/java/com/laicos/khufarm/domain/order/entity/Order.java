@@ -56,6 +56,8 @@ public class Order extends BaseEntity {
 
     private String orderRequest;
 
+    private List<Long> cartIdList;
+
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
     @Builder.Default
     private List<OrderDetail> orderDetails = new ArrayList<>();
@@ -100,5 +102,9 @@ public class Order extends BaseEntity {
     public void updateDeliveryInfo(DeliveryCompany deliveryCompany, String deliveryNumber) {
         this.deliveryCompany = deliveryCompany;
         this.deliveryNumber = deliveryNumber;
+    }
+
+    public void updateCartIdList(List<Long> cartIdList) {
+        this.cartIdList = cartIdList;
     }
 }

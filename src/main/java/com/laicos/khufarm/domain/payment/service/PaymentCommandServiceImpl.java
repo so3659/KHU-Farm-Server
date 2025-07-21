@@ -159,6 +159,12 @@ public class PaymentCommandServiceImpl implements PaymentCommandService{
             updateUserTotalWeight(order);
             updateUserTotalPrice(order);
             updateDiscountedPrice(order);
+
+            // 장바구니 삭제
+            List<Long> cartIdList = order.getCartIdList();
+            if(cartIdList != null && !cartIdList.isEmpty()) {
+                deleteCartList(order.getUser(), cartIdList);
+            }
     }
 
     @Override
