@@ -153,7 +153,7 @@ public class PaymentCommandServiceImpl implements PaymentCommandService{
             }
 
             order.addPayment(payment);
-            order.updateOrderStatus(OrderStatus.ORDER_COMPLETED);
+            order.updateOrderStatus(OrderStatus.PREPARING_SHIPMENT);
 
             // User 구매 금액 및 구매 무게 업데이트
             updateUserTotalWeight(order);

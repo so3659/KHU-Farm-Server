@@ -1,6 +1,7 @@
 package com.laicos.khufarm.domain.fruit.converter;
 
 import com.laicos.khufarm.domain.cart.entity.Cart;
+import com.laicos.khufarm.domain.delivery.enums.DeliveryCompany;
 import com.laicos.khufarm.domain.fruit.dto.request.FruitAddRequest;
 import com.laicos.khufarm.domain.fruit.dto.response.FruitResponse;
 import com.laicos.khufarm.domain.fruit.dto.response.FruitResponseIsWish;
@@ -173,7 +174,7 @@ public class FruitConverter {
                 .squareImageUrl(fruitAddRequest.getSquareImage())
                 .price(fruitAddRequest.getPrice())
                 .weight(fruitAddRequest.getWeight())
-                .deliveryCompany(fruitAddRequest.getDeliveryCompany())
+                .deliveryCompany(DeliveryCompany.fromName(fruitAddRequest.getDeliveryCompany()))
                 .deliveryDay(fruitAddRequest.getDeliveryDay())
                 .description(fruitAddRequest.getDescription())
                 .stock(fruitAddRequest.getStock())

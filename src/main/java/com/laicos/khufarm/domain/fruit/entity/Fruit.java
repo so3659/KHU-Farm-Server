@@ -1,5 +1,7 @@
 package com.laicos.khufarm.domain.fruit.entity;
 
+import com.laicos.khufarm.domain.delivery.enums.DeliveryCompany;
+import com.laicos.khufarm.domain.delivery.enums.converter.DeliveryCompanyConverter;
 import com.laicos.khufarm.domain.fruit.entity.category.FruitCategory;
 import com.laicos.khufarm.domain.fruit.entity.category.WholesaleRetailCategory;
 import com.laicos.khufarm.domain.fruit.enums.FruitStatus;
@@ -42,7 +44,8 @@ public class Fruit extends BaseEntity {
     private Integer weight;
 
     @Column(nullable = false)
-    private String deliveryCompany;
+    @Convert(converter = DeliveryCompanyConverter.class)
+    private DeliveryCompany deliveryCompany;
 
     @Column(nullable = false)
     private Integer deliveryDay;

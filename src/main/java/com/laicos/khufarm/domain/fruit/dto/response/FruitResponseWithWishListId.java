@@ -1,5 +1,6 @@
 package com.laicos.khufarm.domain.fruit.dto.response;
 
+import com.laicos.khufarm.domain.delivery.enums.DeliveryCompany;
 import lombok.*;
 
 @Getter
@@ -15,7 +16,7 @@ public class FruitResponseWithWishListId {
     private String squareImageUrl;
     private Integer price;
     private Integer weight;
-    private String deliveryCompany;
+    private DeliveryCompany deliveryCompany;
     private Integer deliveryDay;
     private Integer ratingSum;
     private Integer ratingCount;
