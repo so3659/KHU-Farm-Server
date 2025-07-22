@@ -63,6 +63,8 @@ jobs:
           
           # 새 컨테이너 실행 (추가된 환경변수 포함)
           docker run -d --name khufarm-app -p 8080:8080 \
+            -e SPRING_SERVLET_MULTIPART_MAX_FILE_SIZE=20MB \
+            -e SPRING_SERVLET_MULTIPART_MAX_REQUEST_SIZE=60MB \
             -e SPRING_DATASOURCE_URL="${{ secrets.DB_URL }}" \
             -e SPRING_DATASOURCE_USERNAME=${{ secrets.DB_USERNAME }} \
             -e SPRING_DATASOURCE_PASSWORD=${{ secrets.DB_PASSWORD }} \
