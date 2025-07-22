@@ -16,6 +16,7 @@ public enum OrderStatus {
     SHIPMENT_COMPLETED("배송 완료", "5"),
     ORDER_CANCELLED("주문 취소", "6"),
     ORDER_FAILED("주문 실패", "7"),
+    REFUND_REQUESTED("환불 대기", "8"),
     ;
 
     private final String description;
