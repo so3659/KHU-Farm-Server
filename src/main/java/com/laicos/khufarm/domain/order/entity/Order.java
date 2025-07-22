@@ -1,7 +1,5 @@
 package com.laicos.khufarm.domain.order.entity;
 
-import com.laicos.khufarm.domain.delivery.enums.DeliveryCompany;
-import com.laicos.khufarm.domain.delivery.enums.converter.DeliveryCompanyConverter;
 import com.laicos.khufarm.domain.order.enums.OrderStatus;
 import com.laicos.khufarm.domain.order.enums.converter.OrderStatusConverter;
 import com.laicos.khufarm.domain.payment.entity.Payment;
@@ -68,11 +66,6 @@ public class Order extends BaseEntity {
 
     private String failReason;
 
-    @Convert(converter = DeliveryCompanyConverter.class)
-    private DeliveryCompany deliveryCompany;
-
-    private String deliveryNumber;
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="user_id", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
@@ -97,11 +90,6 @@ public class Order extends BaseEntity {
     public void addPayment(Payment payment) {
         this.payment = payment;
         payment.setOrder(this);
-    }
-
-    public void updateDeliveryInfo(DeliveryCompany deliveryCompany, String deliveryNumber) {
-        this.deliveryCompany = deliveryCompany;
-        this.deliveryNumber = deliveryNumber;
     }
 
     public void updateCartIdList(List<Long> cartIdList) {

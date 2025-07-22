@@ -10,6 +10,7 @@ import com.laicos.khufarm.domain.order.dto.request.OrderRequest;
 import com.laicos.khufarm.domain.order.dto.response.OrderResponse;
 import com.laicos.khufarm.domain.order.entity.Order;
 import com.laicos.khufarm.domain.order.entity.OrderDetail;
+import com.laicos.khufarm.domain.order.enums.OrderStatus;
 import com.laicos.khufarm.domain.order.repository.OrderRepository;
 import com.laicos.khufarm.domain.user.entity.User;
 import com.laicos.khufarm.global.common.exception.RestApiException;
@@ -72,6 +73,7 @@ public class OrderCommandServiceImpl implements OrderCommandService{
 
         for(OrderDetail orderDetail : orderDetailList) {
             order.addOrderDetail(orderDetail);
+            orderDetail.updateOrderStatus(OrderStatus.PAYMENT_STANDBY);
         }
 
         orderRepository.save(order);
@@ -104,6 +106,7 @@ public class OrderCommandServiceImpl implements OrderCommandService{
 
         OrderDetail orderDetail = OrderDetailConverter.toOrderDetail(fruit, order, request.getOrderCount());
         order.addOrderDetail(orderDetail);
+        orderDetail.updateOrderStatus(OrderStatus.PAYMENT_STANDBY);
 
         orderRepository.save(order);
 

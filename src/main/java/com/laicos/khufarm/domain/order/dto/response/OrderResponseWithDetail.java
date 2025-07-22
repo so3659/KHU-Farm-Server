@@ -11,6 +11,7 @@ import java.time.LocalDateTime;
 public class OrderResponseWithDetail {
 
     private Long orderId;
+    private Long orderDetailId;
     private String merchantUid;
     private String ordererName;
     private Integer totalPrice;

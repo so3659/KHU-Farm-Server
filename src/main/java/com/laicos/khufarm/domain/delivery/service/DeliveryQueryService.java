@@ -5,5 +5,5 @@ import com.laicos.khufarm.domain.user.entity.User;
 
 public interface DeliveryQueryService {
 
-    DeliveryInfoConfirmResponse getDeliveryInfo(User user, Long orderId);
+    DeliveryInfoConfirmResponse getDeliveryInfo(User user, Long orderDetailId);
 }

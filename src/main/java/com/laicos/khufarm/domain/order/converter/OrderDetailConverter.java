@@ -2,6 +2,7 @@ package com.laicos.khufarm.domain.order.converter;
 
 import com.laicos.khufarm.domain.cart.entity.Cart;
 import com.laicos.khufarm.domain.fruit.entity.Fruit;
+import com.laicos.khufarm.domain.order.dto.response.OrderResponse;
 import com.laicos.khufarm.domain.order.dto.response.OrderResponseWithDetail;
 import com.laicos.khufarm.domain.order.entity.Order;
 import com.laicos.khufarm.domain.order.entity.OrderDetail;
@@ -38,6 +39,7 @@ public class OrderDetailConverter {
     public static OrderResponseWithDetail toOrderResponseWithDetail(OrderDetail orderDetail) {
         return OrderResponseWithDetail.builder()
                 .orderId(orderDetail.getOrder().getId())
+                .orderDetailId(orderDetail.getId())
                 .merchantUid(orderDetail.getOrder().getMerchantUid())
                 .ordererName(orderDetail.getOrder().getOrdererName())
                 .totalPrice(orderDetail.getOrder().getTotalPrice())
@@ -48,10 +50,10 @@ public class OrderDetailConverter {
                 .detailAddress(orderDetail.getOrder().getDetailAddress())
                 .recipient(orderDetail.getOrder().getRecipient())
                 .phoneNumber(orderDetail.getOrder().getPhoneNumber())
-                .deliveryCompany(orderDetail.getOrder().getDeliveryCompany() != null ? orderDetail.getOrder().getDeliveryCompany().getName() : null)
-                .deliveryNumber(orderDetail.getOrder().getDeliveryNumber())
+                .deliveryCompany(orderDetail.getDeliveryCompany() != null ? orderDetail.getDeliveryCompany().getName() : null)
+                .deliveryNumber(orderDetail.getDeliveryNumber())
                 .orderRequest(orderDetail.getOrder().getOrderRequest())
-                .deliveryStatus(orderDetail.getOrder().getOrderStatus().getDescription())
+                .deliveryStatus(orderDetail.getOrderStatus().getDescription())
                 .createdAt(orderDetail.getOrder().getCreatedAt())
                 .build();
     }
@@ -60,5 +62,20 @@ public class OrderDetailConverter {
         return orderDetails.stream()
                 .map(OrderDetailConverter::toOrderResponseWithDetail)
                 .collect(Collectors.toList());
+    }
+
+    public static OrderResponse toOrderResponse(OrderDetail orderDetail) {
+        return OrderResponse.builder()
+                .merchantUid(orderDetail.getOrder().getMerchantUid())
+                .ordererName(orderDetail.getOrder().getOrdererName())
+                .totalPrice(orderDetail.getOrder().getTotalPrice())
+                .orderCount(orderDetail.getOrder().getOrderCount())
+                .portCode(orderDetail.getOrder().getPortCode())
+                .address(orderDetail.getOrder().getAddress())
+                .detailAddress(orderDetail.getOrder().getDetailAddress())
+                .recipient(orderDetail.getOrder().getRecipient())
+                .phoneNumber(orderDetail.getOrder().getPhoneNumber())
+                .orderRequest(orderDetail.getOrder().getOrderRequest())
+                .build();
     }
 }

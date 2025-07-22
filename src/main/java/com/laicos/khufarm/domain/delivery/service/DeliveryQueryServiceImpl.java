@@ -7,10 +7,10 @@ import com.laicos.khufarm.domain.delivery.dto.response.DeliveryErrorResponse;
 import com.laicos.khufarm.domain.delivery.dto.response.DeliveryInfoConfirmResponse;
 import com.laicos.khufarm.domain.delivery.dto.response.DeliveryStatus;
 import com.laicos.khufarm.domain.openfeign.client.DeliveryInfoConfirm;
-import com.laicos.khufarm.domain.order.converter.OrderConverter;
+import com.laicos.khufarm.domain.order.converter.OrderDetailConverter;
 import com.laicos.khufarm.domain.order.dto.response.OrderResponse;
-import com.laicos.khufarm.domain.order.entity.Order;
-import com.laicos.khufarm.domain.order.repository.OrderRepository;
+import com.laicos.khufarm.domain.order.entity.OrderDetail;
+import com.laicos.khufarm.domain.order.repository.OrderDetailRepository;
 import com.laicos.khufarm.domain.user.entity.User;
 import com.laicos.khufarm.global.common.exception.RestApiException;
 import com.laicos.khufarm.global.common.exception.code.status.OrderErrorStatus;
@@ -24,17 +24,17 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class DeliveryQueryServiceImpl implements DeliveryQueryService{
 
-    private final OrderRepository orderRepository;
+    private final OrderDetailRepository orderDetailRepository;
     private final DeliveryInfoConfirm deliveryInfoConfirm;
 
     @Override
-    public DeliveryInfoConfirmResponse getDeliveryInfo(User user, Long orderId){
-        Order order = orderRepository.findById(orderId)
-                .orElseThrow(() -> new RestApiException(OrderErrorStatus.ORDER_NOT_FOUND));
+    public DeliveryInfoConfirmResponse getDeliveryInfo(User user, Long orderDetailId){
+        OrderDetail orderDetail = orderDetailRepository.findById(orderDetailId)
+                .orElseThrow(() -> new RestApiException(OrderErrorStatus.ORDER_DETAIL_NOT_FOUND));
 
-        OrderResponse orderResponse = OrderConverter.toOrderResponse(order);
+        OrderResponse orderResponse = OrderDetailConverter.toOrderResponse(orderDetail);
 
-        ResponseEntity<String> response = deliveryInfoConfirm.confirmDeliveryInfo(order.getDeliveryCompany().getId(), order.getDeliveryNumber());
+        ResponseEntity<String> response = deliveryInfoConfirm.confirmDeliveryInfo(orderDetail.getDeliveryCompany().getId(), orderDetail.getDeliveryNumber());
 
         String responseBody = response.getBody();
 

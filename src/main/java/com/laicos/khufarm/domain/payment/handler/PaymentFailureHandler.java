@@ -1,6 +1,7 @@
 package com.laicos.khufarm.domain.payment.handler;
 
 import com.laicos.khufarm.domain.order.entity.Order;
+import com.laicos.khufarm.domain.order.entity.OrderDetail;
 import com.laicos.khufarm.domain.order.enums.OrderStatus;
 import com.laicos.khufarm.domain.order.repository.OrderRepository;
 import com.laicos.khufarm.domain.payment.entity.Payment;
@@ -9,6 +10,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -20,6 +23,10 @@ public class PaymentFailureHandler {
     public void handleOrderFailure(Order order, String failReason) {
         order.updateOrderStatus(OrderStatus.ORDER_FAILED);
         order.updateFailReason(failReason);
+        List<OrderDetail> orderDetailList = order.getOrderDetails();
+        for (OrderDetail orderDetail : orderDetailList) {
+            orderDetail.updateOrderStatus(OrderStatus.ORDER_FAILED);
+        }
         orderRepository.save(order);
     }
 
@@ -27,6 +34,11 @@ public class PaymentFailureHandler {
     public void handlePaymentFailure(Order order, Payment payment, String failReason, PaymentStatus paymentStatus) {
         order.updateOrderStatus(OrderStatus.ORDER_FAILED);
         order.updateFailReason(failReason);
+
+        List<OrderDetail> orderDetailList = order.getOrderDetails();
+        for (OrderDetail orderDetail : orderDetailList) {
+            orderDetail.updateOrderStatus(OrderStatus.ORDER_FAILED);
+        }
 
         // 이 주문에 이미 연결된 Payment 정보가 있는지 확인
         Payment paymentToProcess = order.getPayment();

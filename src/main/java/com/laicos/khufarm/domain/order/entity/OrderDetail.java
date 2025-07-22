@@ -1,6 +1,10 @@
 package com.laicos.khufarm.domain.order.entity;
 
+import com.laicos.khufarm.domain.delivery.enums.DeliveryCompany;
+import com.laicos.khufarm.domain.delivery.enums.converter.DeliveryCompanyConverter;
 import com.laicos.khufarm.domain.fruit.entity.Fruit;
+import com.laicos.khufarm.domain.order.enums.OrderStatus;
+import com.laicos.khufarm.domain.order.enums.converter.OrderStatusConverter;
 import com.laicos.khufarm.domain.review.entitiy.Review;
 import jakarta.persistence.*;
 import lombok.*;
@@ -31,6 +35,15 @@ public class OrderDetail {
     @Column(nullable = false)
     private boolean isReviewed;
 
+    @Convert(converter = OrderStatusConverter.class)
+    @Column(nullable = false)
+    private OrderStatus orderStatus;
+
+    @Convert(converter = DeliveryCompanyConverter.class)
+    private DeliveryCompany deliveryCompany;
+
+    private String deliveryNumber;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="order_id", nullable = false)
     private Order order;
@@ -54,5 +67,14 @@ public class OrderDetail {
     public void addReview(Review review) {
         this.review = review;
         review.setOrderDetail(this);
+    }
+
+    public void updateDeliveryInfo(DeliveryCompany deliveryCompany, String deliveryNumber) {
+        this.deliveryCompany = deliveryCompany;
+        this.deliveryNumber = deliveryNumber;
+    }
+
+    public void updateOrderStatus(OrderStatus orderStatus) {
+        this.orderStatus = orderStatus;
     }
 }

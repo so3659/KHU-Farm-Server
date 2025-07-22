@@ -25,28 +25,28 @@ public class DeliveryController {
     private final DeliveryQueryService deliveryQueryService;
     private final DeliveryInfoConfirm deliveryInfoConfirm;
 
-    @PatchMapping("/{orderId}")
+    @PatchMapping("/{orderDetailId}")
     public BaseResponse<Void> updateDeliveryStatus(
             @AuthenticationPrincipal CustomUserDetails customUserDetails,
             @Valid @RequestBody DeliveryInfoRequest deliveryInfoRequest,
-            @PathVariable Long orderId) {
+            @PathVariable Long orderDetailId) {
 
         deliveryCommandService.updateDeliveryStatus(
                 customUserDetails.getUser(),
-                orderId,
+                orderDetailId,
                 deliveryInfoRequest);
 
         return BaseResponse.onSuccess(null);
     }
 
-    @GetMapping("/{orderId}/tracking")
+    @GetMapping("/{orderDetailId}/tracking")
     public BaseResponse<DeliveryInfoConfirmResponse> getDeliveryInfo(
             @AuthenticationPrincipal CustomUserDetails customUserDetails,
-            @PathVariable Long orderId
+            @PathVariable Long orderDetailId
     ) {
         DeliveryInfoConfirmResponse deliveryInfoConfirmResponse = deliveryQueryService.getDeliveryInfo(
                 customUserDetails.getUser(),
-                orderId);
+                orderDetailId);
 
         return BaseResponse.onSuccess(deliveryInfoConfirmResponse);
     }

@@ -5,5 +5,5 @@ import com.laicos.khufarm.domain.user.entity.User;
 
 public interface DeliveryCommandService {
 
-    void updateDeliveryStatus(User user, Long orderId, DeliveryInfoRequest deliveryInfoRequest);
+    void updateDeliveryStatus(User user, Long orderDetailId, DeliveryInfoRequest deliveryInfoRequest);
 }
