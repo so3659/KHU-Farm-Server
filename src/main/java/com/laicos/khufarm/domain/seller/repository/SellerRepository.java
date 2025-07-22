@@ -13,4 +13,6 @@ public interface SellerRepository extends JpaRepository<Seller, Long>, CustomSel
     boolean existsById(Long id);
 
     Optional<Seller> findByUser(User user);
+
+    Optional<Seller> findByUserAndId(User user, Long id);
 }

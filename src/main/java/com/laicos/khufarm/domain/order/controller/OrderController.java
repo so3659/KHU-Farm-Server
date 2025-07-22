@@ -3,6 +3,7 @@ package com.laicos.khufarm.domain.order.controller;
 import com.laicos.khufarm.domain.auth.security.CustomUserDetails;
 import com.laicos.khufarm.domain.order.dto.request.OrderRequest;
 import com.laicos.khufarm.domain.order.dto.response.OrderResponse;
+import com.laicos.khufarm.domain.order.dto.response.OrderResponseWithDetail;
 import com.laicos.khufarm.domain.order.dto.response.PrePareOrderResponse;
 import com.laicos.khufarm.domain.order.service.OrderCommandService;
 import com.laicos.khufarm.domain.order.service.OrderQueryService;
@@ -10,6 +11,9 @@ import com.laicos.khufarm.global.common.base.BaseResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -69,5 +73,18 @@ public class OrderController {
         OrderResponse orderResponse = orderCommandService.orderByDirect(customUserDetails.getUser(), request);
 
         return BaseResponse.onSuccess(orderResponse);
+    }
+
+    @GetMapping("/seller/orders")
+    public BaseResponse<Slice<OrderResponseWithDetail>> getOrdersBySeller(
+            @AuthenticationPrincipal CustomUserDetails customUserDetails,
+            @RequestParam(required = false) Long cursorId,
+            @RequestParam(defaultValue="5") int size) {
+
+        Pageable pageable = PageRequest.of(0, size);
+
+        Slice<OrderResponseWithDetail> orderResponses = orderQueryService.getOrderBySeller(customUserDetails.getUser(), cursorId, pageable);
+
+        return BaseResponse.onSuccess(orderResponses);
     }
 }

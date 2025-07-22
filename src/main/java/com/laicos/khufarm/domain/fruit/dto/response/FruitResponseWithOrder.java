@@ -4,6 +4,8 @@ package com.laicos.khufarm.domain.fruit.dto.response;
 import com.laicos.khufarm.domain.delivery.enums.DeliveryCompany;
 import lombok.*;
 
+import java.time.LocalDateTime;
+
 @Getter
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -27,6 +29,7 @@ public class FruitResponseWithOrder {
     private Long fruitCategoryId;
     private Long wholesaleRetailCategoryId;
     private Integer orderCount;
+    private LocalDateTime createdAt;
     private Long orderId;
     private Long orderDetailId;
 }

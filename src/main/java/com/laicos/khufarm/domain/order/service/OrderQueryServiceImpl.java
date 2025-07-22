@@ -11,12 +11,16 @@ import com.laicos.khufarm.domain.fruit.dto.response.FruitResponseWithCount;
 import com.laicos.khufarm.domain.fruit.entity.Fruit;
 import com.laicos.khufarm.domain.fruit.repository.FruitRepository;
 import com.laicos.khufarm.domain.order.converter.OrderConverter;
+import com.laicos.khufarm.domain.order.dto.response.OrderResponseWithDetail;
 import com.laicos.khufarm.domain.order.dto.response.PrePareOrderResponse;
+import com.laicos.khufarm.domain.order.repository.OrderRepository;
 import com.laicos.khufarm.domain.user.entity.User;
 import com.laicos.khufarm.global.common.exception.RestApiException;
 import com.laicos.khufarm.global.common.exception.code.status.CartListErrorStatus;
 import com.laicos.khufarm.global.common.exception.code.status.FruitErrorStatus;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -30,6 +34,7 @@ public class OrderQueryServiceImpl implements OrderQueryService {
     private final CartRepository cartRepository;
     private final AddressRepository addressRepository;
     private final FruitRepository fruitRepository;
+    private final OrderRepository orderRepository;
 
     @Override
     public PrePareOrderResponse getPrepareCartOrder(User user, List<Long> cartIds){
@@ -75,5 +80,10 @@ public class OrderQueryServiceImpl implements OrderQueryService {
             AddressResponse addressResponse = AddressConverter.toAddressResponse(address);
             return OrderConverter.toPrePareOrderResponse(addressResponse, fruitResponses);
         }
+    }
+
+    @Override
+    public Slice<OrderResponseWithDetail> getOrderBySeller(User user, Long cursorId, Pageable pageable){
+        return orderRepository.getOrderBySeller(user, cursorId, pageable);
     }
 }

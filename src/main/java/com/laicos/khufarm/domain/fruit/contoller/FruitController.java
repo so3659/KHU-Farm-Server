@@ -105,5 +105,4 @@ public class FruitController implements FruitApiSpecification {
 
         return BaseResponse.onSuccess(null);
     }
-
 }
