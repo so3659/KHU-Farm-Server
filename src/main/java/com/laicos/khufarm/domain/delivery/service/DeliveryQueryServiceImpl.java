@@ -29,7 +29,7 @@ public class DeliveryQueryServiceImpl implements DeliveryQueryService{
 
     @Override
     public DeliveryInfoConfirmResponse getDeliveryInfo(User user, Long orderId){
-        Order order = orderRepository.findByUserAndId(user, orderId)
+        Order order = orderRepository.findById(orderId)
                 .orElseThrow(() -> new RestApiException(OrderErrorStatus.ORDER_NOT_FOUND));
 
         OrderResponse orderResponse = OrderConverter.toOrderResponse(order);
