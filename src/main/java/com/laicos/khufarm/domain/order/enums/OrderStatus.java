@@ -17,6 +17,7 @@ public enum OrderStatus {
     ORDER_CANCELLED("주문 취소", "6"),
     ORDER_FAILED("주문 실패", "7"),
     REFUND_REQUESTED("환불 대기", "8"),
+    PAYMENT_PARTIALLY_REFUNDED("부분 환불", "9"),
     ;
 
     private final String description;

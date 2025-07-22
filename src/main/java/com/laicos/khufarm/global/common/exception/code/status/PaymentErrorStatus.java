@@ -12,6 +12,7 @@ public enum PaymentErrorStatus implements BaseCodeInterface {
 
     PRICE_NOT_MATCH(HttpStatus.OK, "PAYMENT400", "가격이 일치하지 않습니다"),
     PAYMENT_FAILED(HttpStatus.OK, "PAYMENT401", "결제에 실패하였습니다"),
+    PAYMENT_CANCEL_FAILED(HttpStatus.OK, "PAYMENT402", "결제 취소에 실패하였습니다"),
     ;
 
     private final HttpStatus httpStatus;

@@ -9,19 +9,19 @@ import com.laicos.khufarm.domain.fruit.repository.FruitRepository;
 import com.laicos.khufarm.domain.order.entity.Order;
 import com.laicos.khufarm.domain.order.entity.OrderDetail;
 import com.laicos.khufarm.domain.order.enums.OrderStatus;
+import com.laicos.khufarm.domain.order.repository.OrderDetailRepository;
 import com.laicos.khufarm.domain.order.repository.OrderRepository;
 import com.laicos.khufarm.domain.payment.converter.PaymentConverter;
 import com.laicos.khufarm.domain.payment.dto.PortoneConfirmDto;
 import com.laicos.khufarm.domain.payment.dto.PortoneWebhookDto;
 import com.laicos.khufarm.domain.payment.enums.PaymentStatus;
 import com.laicos.khufarm.domain.payment.handler.PaymentFailureHandler;
+import com.laicos.khufarm.domain.seller.entity.Seller;
+import com.laicos.khufarm.domain.seller.repository.SellerRepository;
 import com.laicos.khufarm.domain.user.entity.User;
 import com.laicos.khufarm.domain.user.repository.UserRepository;
 import com.laicos.khufarm.global.common.exception.RestApiException;
-import com.laicos.khufarm.global.common.exception.code.status.CartListErrorStatus;
-import com.laicos.khufarm.global.common.exception.code.status.FruitErrorStatus;
-import com.laicos.khufarm.global.common.exception.code.status.OrderErrorStatus;
-import com.laicos.khufarm.global.common.exception.code.status.PaymentErrorStatus;
+import com.laicos.khufarm.global.common.exception.code.status.*;
 import com.siot.IamportRestClient.IamportClient;
 import com.siot.IamportRestClient.exception.IamportResponseException;
 import com.siot.IamportRestClient.request.CancelData;
@@ -34,6 +34,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.List;
 
 @Service
@@ -43,12 +44,14 @@ import java.util.List;
 public class PaymentCommandServiceImpl implements PaymentCommandService{
 
     private final OrderRepository orderRepository;
+    private final OrderDetailRepository orderDetailRepository;
     private final FruitRepository fruitRepository;
     private final UserRepository  userRepository;
     private final CartRepository cartRepository;
     private final FruitRegularPriceRepository fruitRegularPriceRepository;
     private final PaymentFailureHandler paymentFailureHandler;
     private final IamportClient iamportClient;
+    private final SellerRepository sellerRepository;
 
     @Override
     public void confirmPayment(PortoneConfirmDto portoneConfirmDto){
@@ -171,6 +174,48 @@ public class PaymentCommandServiceImpl implements PaymentCommandService{
             if(cartIdList != null && !cartIdList.isEmpty()) {
                 deleteCartList(order.getUser(), cartIdList);
             }
+    }
+
+    @Override
+    public void refundPayment(User user, Long orderDetailId) throws IamportResponseException, IOException{
+        OrderDetail orderDetail = orderDetailRepository.findOrderDetailById(orderDetailId)
+                .orElseThrow(() -> new RestApiException(OrderErrorStatus.ORDER_DETAIL_NOT_FOUND));
+
+        Order order = orderDetail.getOrder();
+
+        if(order.getPayment() == null) {
+            throw new RestApiException(PaymentErrorStatus.PAYMENT_FAILED, HttpStatus.OK);
+        }
+        com.laicos.khufarm.domain.payment.entity.Payment payment = order.getPayment();
+
+        Seller seller = sellerRepository.findByUser(user)
+                .orElseThrow(() -> new RestApiException(SellerErrorStatus.SELLER_NOT_FOUND));
+
+        if(orderDetail.getFruit().getSeller()!=seller){
+            throw new RestApiException(SellerErrorStatus.SELLER_NOT_MATCH);
+        }
+
+        BigDecimal priceAsBigDecimal = BigDecimal.valueOf((long) orderDetail.getPrice() * orderDetail.getCount());
+
+        CancelData cancelData = new CancelData(payment.getImpUid(), true, priceAsBigDecimal);
+        IamportResponse<com.siot.IamportRestClient.response.Payment> cancelResponse = iamportClient.cancelPaymentByImpUid(cancelData);
+        if (cancelResponse.getResponse() != null) {
+
+            if(orderDetail.getPrice() * orderDetail.getCount()!=order.getTotalPrice()){
+                orderDetail.updateOrderStatus(OrderStatus.ORDER_CANCELLED);
+                order.updateOrderStatus(OrderStatus.PAYMENT_PARTIALLY_REFUNDED);
+                payment.updatePaymentStatus(PaymentStatus.PAYMENT_PARTIALLY_REFUNDED);
+            }
+            else {
+                orderDetail.updateOrderStatus(OrderStatus.ORDER_CANCELLED);
+                order.updateOrderStatus(OrderStatus.ORDER_CANCELLED);
+                payment.updatePaymentStatus(PaymentStatus.PAYMENT_CANCELLED);
+            }
+        } else {
+            throw new RestApiException(PaymentErrorStatus.PAYMENT_CANCEL_FAILED);
+        }
+
+
     }
 
     @Override

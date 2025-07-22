@@ -76,4 +76,14 @@ public class PaymentController {
 
         return BaseResponse.onSuccess(response);
     }
+
+    @PostMapping("/refund/{orderDetailId}")
+    public BaseResponse<Void> refundPayment(
+            @AuthenticationPrincipal CustomUserDetails customUserDetails,
+            @RequestParam Long orderDetailId) throws IamportResponseException, IOException {
+
+        paymentCommandService.refundPayment(customUserDetails.getUser(), orderDetailId);
+
+        return BaseResponse.onSuccess(null);
+    }
 }
