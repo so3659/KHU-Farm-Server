@@ -37,6 +37,7 @@ public class OrderDetailConverter {
 
     public static OrderResponseWithDetail toOrderResponseWithDetail(OrderDetail orderDetail) {
         return OrderResponseWithDetail.builder()
+                .orderId(orderDetail.getOrder().getId())
                 .merchantUid(orderDetail.getOrder().getMerchantUid())
                 .ordererName(orderDetail.getOrder().getOrdererName())
                 .totalPrice(orderDetail.getOrder().getTotalPrice())

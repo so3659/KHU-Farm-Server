@@ -10,6 +10,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class OrderResponseWithDetail {
 
+    private Long orderId;
     private String merchantUid;
     private String ordererName;
     private Integer totalPrice;
