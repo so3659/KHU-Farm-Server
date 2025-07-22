@@ -23,6 +23,7 @@ public class OrderResponseWithDetail {
     private String deliveryCompany;
     private String deliveryNumber;
     private String orderRequest;
+    private String deliveryStatus;
     private LocalDateTime createdAt;
 
 }

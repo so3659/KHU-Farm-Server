@@ -50,6 +50,7 @@ public class OrderDetailConverter {
                 .deliveryCompany(orderDetail.getOrder().getDeliveryCompany() != null ? orderDetail.getOrder().getDeliveryCompany().getName() : null)
                 .deliveryNumber(orderDetail.getOrder().getDeliveryNumber())
                 .orderRequest(orderDetail.getOrder().getOrderRequest())
+                .deliveryStatus(orderDetail.getOrder().getOrderStatus().getDescription())
                 .createdAt(orderDetail.getOrder().getCreatedAt())
                 .build();
     }
