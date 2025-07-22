@@ -22,7 +22,7 @@ public class TermsConditions {
     @Column(nullable = false, length = 50)
     private String name;
 
-    @Column(nullable = false, length = 1000)
+    @Column(nullable = false, columnDefinition = "TEXT")
     private String content;
 
     @Convert(converter = TermsEssentialConverter.class)
