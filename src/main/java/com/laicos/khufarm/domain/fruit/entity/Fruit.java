@@ -2,6 +2,7 @@ package com.laicos.khufarm.domain.fruit.entity;
 
 import com.laicos.khufarm.domain.delivery.enums.DeliveryCompany;
 import com.laicos.khufarm.domain.delivery.enums.converter.DeliveryCompanyConverter;
+import com.laicos.khufarm.domain.fruit.dto.request.FruitAddRequest;
 import com.laicos.khufarm.domain.fruit.entity.category.FruitCategory;
 import com.laicos.khufarm.domain.fruit.entity.category.WholesaleRetailCategory;
 import com.laicos.khufarm.domain.fruit.enums.FruitStatus;
@@ -89,5 +90,19 @@ public class Fruit extends BaseEntity {
     public void updateRating(Integer rating) {
         this.ratingSum += rating;
         this.ratingCount++;
+    }
+
+    public void updateFruit(FruitCategory fruitCategory, WholesaleRetailCategory wholesaleRetailCategory, FruitAddRequest fruitAddRequest) {
+        this.fruitCategory = fruitCategory;
+        this.wholesaleRetailCategory = wholesaleRetailCategory;
+        this.title = fruitAddRequest.getTitle();
+        this.widthImageUrl = fruitAddRequest.getWidthImage();
+        this.squareImageUrl = fruitAddRequest.getSquareImage();
+        this.price = fruitAddRequest.getPrice();
+        this.weight = fruitAddRequest.getWeight();
+        this.deliveryCompany = DeliveryCompany.fromName(fruitAddRequest.getDeliveryCompany());
+        this.deliveryDay = fruitAddRequest.getDeliveryDay();
+        this.description = fruitAddRequest.getDescription();
+        this.stock = fruitAddRequest.getStock();
     }
 }

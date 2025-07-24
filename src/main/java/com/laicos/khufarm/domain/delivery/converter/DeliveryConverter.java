@@ -10,10 +10,12 @@ public class DeliveryConverter {
 
     public static DeliveryInfoConfirmResponse toDeliveryInfoConfirmResponse(
             OrderResponse orderResponse,
-            DeliveryStatus deliveryStatus) {
+            DeliveryStatus deliveryStatus,
+            String deliveryNumber) {
         return DeliveryInfoConfirmResponse.builder()
                 .orderResponse(orderResponse)
                 .deliveryStatus(deliveryStatus)
+                .deliveryNumber(deliveryNumber)
                 .build();
     }
 }

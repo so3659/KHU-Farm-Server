@@ -75,7 +75,7 @@ public class FruitController implements FruitApiSpecification {
     @GetMapping("/{fruitId}")
     public BaseResponse<FruitResponseIsWish> getSpecificFruit(
             @AuthenticationPrincipal CustomUserDetails customUserDetails,
-            @ExistFruitCategory @PathVariable Long fruitId) {
+            @PathVariable Long fruitId) {
 
         FruitResponseIsWish fruitResponse = fruitQueryService.getFruit(customUserDetails.getUser(), fruitId);
 
@@ -126,6 +126,17 @@ public class FruitController implements FruitApiSpecification {
             @PathVariable Long fruitId) {
 
         fruitCommandService.deleteFruit(customUserDetails.getUser(), fruitId);
+
+        return BaseResponse.onSuccess(null);
+    }
+
+    @PatchMapping("/seller/{fruitId}")
+    public BaseResponse<Void> updateFruit(
+            @AuthenticationPrincipal CustomUserDetails customUserDetails,
+            @PathVariable Long fruitId,
+            @Valid @RequestBody FruitAddRequest fruitAddRequest) {
+
+        fruitCommandService.updateFruit(customUserDetails.getUser(), fruitId, fruitAddRequest);
 
         return BaseResponse.onSuccess(null);
     }

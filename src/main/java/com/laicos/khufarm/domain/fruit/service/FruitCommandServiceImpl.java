@@ -78,6 +78,29 @@ public class FruitCommandServiceImpl implements FruitCommandService{
         fruitRepository.delete(fruit);
     }
 
+    @Override
+    public void updateFruit(User user, Long fruitId, FruitAddRequest fruitAddRequest){
+        Seller seller = sellerRepository.findByUser(user)
+                .orElseThrow(() -> new RestApiException(SellerErrorStatus.SELLER_NOT_FOUND));
+
+        Fruit fruit = fruitRepository.findByIdAndSeller(fruitId, seller)
+                .orElseThrow(() -> new RestApiException(FruitErrorStatus.FRUIT_NOT_FOUND));
+
+        FruitCategory fruitCategory = fruitCategoryRepository.findById(fruitAddRequest.getFruitCategoryId())
+                .orElseThrow(() -> new RestApiException(FruitErrorStatus.FRUIT_CATEGORY_NOT_FOUND));
+
+        WholesaleRetailCategory wholesaleRetailCategory = wholesaleRetailCategoryRepository.findById(fruitAddRequest.getWholesaleRetailCategoryId())
+                .orElseThrow(() -> new RestApiException(FruitErrorStatus.WHOLESALE_RETAIL_CATEGORY_NOT_FOUND));
+
+        fruit.updateFruit(fruitCategory, wholesaleRetailCategory, fruitAddRequest);
+
+        updateImageStatusToUsed(fruitAddRequest.getWidthImage());
+        updateImageStatusToUsed(fruitAddRequest.getSquareImage());
+
+        List<String> imageUrls = UrlExtractor.extractUrlsFromDescription(fruitAddRequest.getDescription());
+        imageUrls.forEach(this::updateImageStatusToUsed);
+    }
+
     private void updateImageStatusToUsed(String imageUrl) {
         if (imageUrl == null || imageUrl.isBlank()) {
             return;
