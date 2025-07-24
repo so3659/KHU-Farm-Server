@@ -29,6 +29,7 @@ public class InquiryConverter {
 
     public static InquiryResponse toInquiryDTO(Inquiry inquiry, InquiryReplyResponse reply) {
         return InquiryResponse.builder()
+                .inquiryId(inquiry.getId())
                 .content(inquiry.getContent())
                 .createdAt(inquiry.getCreatedAt())
                 .isPrivate(inquiry.isPrivate())
