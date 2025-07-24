@@ -106,6 +106,11 @@ public class FruitConverter {
                 .build();
     }
 
+    public static List<FruitResponseWithCount> toFruitDTOListOnlyCount(List<Fruit> fruits, List<Integer> counts) {
+        return IntStream.range(0, fruits.size())
+                .mapToObj(i -> toFruitDTOOnlyCount(fruits.get(i), counts.get(i)))
+                .collect(Collectors.toList());
+    }
 
     public static FruitResponseWithCount toFruitDTOWithCount(Fruit fruit, Cart cart) {
         return FruitResponseWithCount.builder()

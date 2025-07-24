@@ -3,6 +3,7 @@ package com.laicos.khufarm.domain.fruit.service;
 import com.laicos.khufarm.domain.fruit.converter.FruitConverter;
 import com.laicos.khufarm.domain.fruit.dto.FruitReadCondition;
 import com.laicos.khufarm.domain.fruit.dto.response.FruitResponseIsWish;
+import com.laicos.khufarm.domain.fruit.dto.response.FruitResponseWithCount;
 import com.laicos.khufarm.domain.fruit.entity.Fruit;
 import com.laicos.khufarm.domain.fruit.repository.FruitRepository;
 import com.laicos.khufarm.domain.user.entity.User;
@@ -39,5 +40,10 @@ public class FruitQueryServiceImpl implements FruitQueryService{
                 .orElse(null);
 
         return FruitConverter.toFruitIsWishDTO(fruit, wishList);
+    }
+
+    @Override
+    public Slice<FruitResponseWithCount> getFruitBySeller(User user, Long cursorId, Pageable pageable){
+        return  fruitRepository.getFruitBySeller(user, cursorId, pageable);
     }
 }

@@ -5,6 +5,7 @@ import com.laicos.khufarm.domain.fruit.apiSpecification.FruitApiSpecification;
 import com.laicos.khufarm.domain.fruit.dto.FruitReadCondition;
 import com.laicos.khufarm.domain.fruit.dto.request.FruitAddRequest;
 import com.laicos.khufarm.domain.fruit.dto.response.FruitResponseIsWish;
+import com.laicos.khufarm.domain.fruit.dto.response.FruitResponseWithCount;
 import com.laicos.khufarm.domain.fruit.service.FruitCommandService;
 import com.laicos.khufarm.domain.fruit.service.FruitQueryService;
 import com.laicos.khufarm.domain.fruit.validation.annotation.ExistFruitCategory;
@@ -104,5 +105,18 @@ public class FruitController implements FruitApiSpecification {
         fruitCommandService.addFruit(customUserDetails.getUser(), fruitAddRequest);
 
         return BaseResponse.onSuccess(null);
+    }
+
+    @GetMapping("/seller")
+    public BaseResponse<Slice<FruitResponseWithCount>> getSpecificFruit(
+            @AuthenticationPrincipal CustomUserDetails customUserDetails,
+            @RequestParam(required = false) Long cursorId,
+            @RequestParam(defaultValue="5") int size) {
+
+        Pageable pageable = PageRequest.of(0, size);
+
+        Slice<FruitResponseWithCount> fruitResponse = fruitQueryService.getFruitBySeller(customUserDetails.getUser(), cursorId, pageable);
+
+        return BaseResponse.onSuccess(fruitResponse);
     }
 }

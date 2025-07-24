@@ -3,9 +3,14 @@ package com.laicos.khufarm.domain.fruit.repository;
 import com.laicos.khufarm.domain.fruit.converter.FruitConverter;
 import com.laicos.khufarm.domain.fruit.dto.FruitReadCondition;
 import com.laicos.khufarm.domain.fruit.dto.response.FruitResponseIsWish;
+import com.laicos.khufarm.domain.fruit.dto.response.FruitResponseWithCount;
 import com.laicos.khufarm.domain.fruit.entity.Fruit;
+import com.laicos.khufarm.domain.seller.entity.Seller;
+import com.laicos.khufarm.domain.seller.repository.SellerRepository;
 import com.laicos.khufarm.domain.user.entity.User;
 import com.laicos.khufarm.domain.wishList.entity.WishList;
+import com.laicos.khufarm.global.common.exception.RestApiException;
+import com.laicos.khufarm.global.common.exception.code.status.SellerErrorStatus;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
@@ -26,6 +31,7 @@ import static com.laicos.khufarm.domain.wishList.entity.QWishList.wishList;
 public class CustomFruitRepositoryImpl implements CustomFruitRepository {
 
     private final JPAQueryFactory jpaQueryFactory;
+    private final SellerRepository sellerRepository;
 
     @Override
     public Slice<FruitResponseIsWish> getFruitByConditions(User user, Long cursorId, FruitReadCondition fruitReadCondition, Pageable pageable){
@@ -70,6 +76,38 @@ public class CustomFruitRepositoryImpl implements CustomFruitRepository {
         return new SliceImpl<>(content, pageable, hasNext);
     }
 
+    @Override
+    public Slice<FruitResponseWithCount> getFruitBySeller(User user, Long cursorId, Pageable pageable){
+        Seller seller = sellerRepository.findByUser(user)
+                .orElseThrow(() -> new RestApiException(SellerErrorStatus.SELLER_NOT_FOUND));
+
+        List<Fruit> fruitList = jpaQueryFactory.selectFrom(fruit)
+                .leftJoin(fruit.seller).fetchJoin()
+                .leftJoin(fruit.fruitCategory).fetchJoin()
+                .leftJoin(fruit.wholesaleRetailCategory).fetchJoin()
+                .where(
+                        eqSellerId(seller.getId()), // 판매자 ID 조건
+                        gtCursorId(cursorId) // 커서 조건
+                )
+                .orderBy(fruit.id.asc())
+                .limit(pageable.getPageSize() + 1)
+                .fetch();
+
+        List<Integer> stockList = fruitList.stream()
+                .map(Fruit::getStock)
+                .toList();
+
+        List<FruitResponseWithCount> content = FruitConverter.toFruitDTOListOnlyCount(fruitList, stockList);
+
+        boolean hasNext = false;
+        if (content.size() > pageable.getPageSize()) {
+            content.remove(pageable.getPageSize());
+            hasNext = true;
+        }
+
+        return new SliceImpl<>(content, pageable, hasNext);
+    }
+
     private BooleanExpression eqUserId(Long userId) {
         return (userId == null) ? null : wishList.user.id.eq(userId);
     }
@@ -95,6 +133,10 @@ public class CustomFruitRepositoryImpl implements CustomFruitRepository {
         return fruit.title.contains(searchKeyword)
                 .or(fruit.description.contains(searchKeyword))
                 .or(fruit.seller.brandName.contains(searchKeyword));
+    }
+
+    private BooleanExpression eqSellerId(Long sellerId) {
+        return (sellerId == null) ? null : fruit.seller.id.eq(sellerId);
     }
 }
 
