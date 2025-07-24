@@ -6,4 +6,5 @@ import com.laicos.khufarm.domain.user.entity.User;
 public interface FruitCommandService {
 
     void addFruit(User user, FruitAddRequest fruitAddRequest);
+    void deleteFruit(User user, Long fruitId);
 }

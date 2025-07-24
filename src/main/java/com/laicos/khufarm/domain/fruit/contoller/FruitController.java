@@ -119,4 +119,14 @@ public class FruitController implements FruitApiSpecification {
 
         return BaseResponse.onSuccess(fruitResponse);
     }
+
+    @DeleteMapping("/seller/{fruitId}")
+    public BaseResponse<Void> deleteFruit(
+            @AuthenticationPrincipal CustomUserDetails customUserDetails,
+            @PathVariable Long fruitId) {
+
+        fruitCommandService.deleteFruit(customUserDetails.getUser(), fruitId);
+
+        return BaseResponse.onSuccess(null);
+    }
 }

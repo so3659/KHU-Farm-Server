@@ -61,6 +61,23 @@ public class FruitCommandServiceImpl implements FruitCommandService{
         fruitRepository.save(fruit);
     }
 
+    @Override
+    public void deleteFruit(User user, Long fruitId){
+        Seller seller = sellerRepository.findByUser(user)
+                .orElseThrow(() -> new RestApiException(SellerErrorStatus.SELLER_NOT_FOUND));
+
+        Fruit fruit = fruitRepository.findByIdAndSeller(fruitId, seller)
+                .orElseThrow(() -> new RestApiException(FruitErrorStatus.FRUIT_NOT_FOUND));
+
+        updateImageStatusToTemp(fruit.getSquareImageUrl());
+        updateImageStatusToTemp(fruit.getWidthImageUrl());
+
+        List<String> imageUrls = UrlExtractor.extractUrlsFromDescription(fruit.getDescription());
+        imageUrls.forEach(this::updateImageStatusToTemp);
+
+        fruitRepository.delete(fruit);
+    }
+
     private void updateImageStatusToUsed(String imageUrl) {
         if (imageUrl == null || imageUrl.isBlank()) {
             return;
@@ -68,5 +85,14 @@ public class FruitCommandServiceImpl implements FruitCommandService{
         Image image = imageRepository.findByImageUrl(imageUrl)
                 .orElseThrow(() -> new RestApiException(ImageErrorStatus.IMAGE_NOT_FOUND));
         image.updateImageStatus(ImageStatus.USED);
+    }
+
+    private void updateImageStatusToTemp(String imageUrl) {
+        if (imageUrl == null || imageUrl.isBlank()) {
+            return;
+        }
+        Image image = imageRepository.findByImageUrl(imageUrl)
+                .orElseThrow(() -> new RestApiException(ImageErrorStatus.IMAGE_NOT_FOUND));
+        image.updateImageStatus(ImageStatus.TEMP);
     }
 }
