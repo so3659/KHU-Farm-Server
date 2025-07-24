@@ -35,7 +35,7 @@ public class CustomSellerRepositoryImpl implements CustomSellerRepository{
                         gtCursorId(cursorId),
                         searchKeywordCondition(sellerReadCondition.getSearchKeyword())
                 )
-                .orderBy(seller.id.asc())
+                .orderBy(seller.id.desc())
                 .limit(pageable.getPageSize()+1)
                 .fetch();
 
@@ -66,7 +66,7 @@ public class CustomSellerRepositoryImpl implements CustomSellerRepository{
                         eqWholesaleRetailCategory(wholesaleRetailCategoryId), // 도매/소매 카테고리 조건
                         eqSellerId(sellerId) // 판매자 ID 조건
                 )
-                .orderBy(fruit.id.asc())
+                .orderBy(fruit.id.desc())
                 .limit(pageable.getPageSize()+1)
                 .fetch();
 

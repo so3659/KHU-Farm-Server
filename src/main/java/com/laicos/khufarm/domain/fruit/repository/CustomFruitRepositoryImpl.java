@@ -46,7 +46,7 @@ public class CustomFruitRepositoryImpl implements CustomFruitRepository {
                         eqFruitCategory(fruitReadCondition.getFruitCategoryId()), // 과일 카테고리 조건
                         searchKeywordCondition(fruitReadCondition.getSearchKeyword())
                 )
-                .orderBy(fruit.id.asc())
+                .orderBy(fruit.id.desc())
                 .limit(pageable.getPageSize()+1)
                 .fetch();
 
@@ -89,7 +89,7 @@ public class CustomFruitRepositoryImpl implements CustomFruitRepository {
                         eqSellerId(seller.getId()), // 판매자 ID 조건
                         gtCursorId(cursorId) // 커서 조건
                 )
-                .orderBy(fruit.id.asc())
+                .orderBy(fruit.id.desc())
                 .limit(pageable.getPageSize() + 1)
                 .fetch();
 

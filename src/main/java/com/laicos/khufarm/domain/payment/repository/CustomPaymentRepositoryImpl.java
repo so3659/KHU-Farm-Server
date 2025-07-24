@@ -34,7 +34,7 @@ public class CustomPaymentRepositoryImpl implements CustomPaymentRepository {
                         eqUserId(user.getId()), // 사용자 ID 조건
                         gtCursorId(cursorId) // 커서 조건
                 )
-                .orderBy(payment.id.asc())
+                .orderBy(payment.id.desc())
                 .limit(pageable.getPageSize() + 1) // 페이지 크기 + 1로 커서 기반 페이징 처리
                 .fetch();
 

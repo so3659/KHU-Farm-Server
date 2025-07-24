@@ -39,7 +39,7 @@ public class CustomInquiryRepositoryImpl implements CustomInquiryRepository {
                         eqFruitId(inquiryReadCondition.getFruitId()), // 과일 ID 조건
                         eqUserId(inquiryReadCondition.getUser()) // 사용자 ID 조건
                 )
-                .orderBy(inquiry.id.asc())
+                .orderBy(inquiry.id.desc())
                 .limit(pageable.getPageSize() + 1)
                 .fetch();
 

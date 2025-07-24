@@ -41,7 +41,7 @@ public class CustomOrderRepositoryImpl implements CustomOrderRepository{
                         eqSellerId(seller.getId()), // 판매자 ID 조건
                         gtCursorId(cursorId) // 커서 조건
                 )
-                .orderBy(orderDetail.id.asc())
+                .orderBy(orderDetail.id.desc())
                 .limit(pageable.getPageSize() + 1) // 페이지 크기 + 1로 커서 기반 페이징 처리
                 .fetch();
 
