@@ -33,6 +33,7 @@ public class ReviewConverter {
 
     public static ReviewResponse toReviewDTO(Review review, ReviewReplyResponse reply) {
         return ReviewResponse.builder()
+                .reviewId(review.getId())
                 .title(review.getTitle())
                 .userId(review.getUser().getUserId())
                 .content(review.getContent())

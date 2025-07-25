@@ -11,7 +11,11 @@ import com.laicos.khufarm.domain.review.dto.response.ReviewReplyResponse;
 import com.laicos.khufarm.domain.review.dto.response.ReviewResponse;
 import com.laicos.khufarm.domain.review.entitiy.Review;
 import com.laicos.khufarm.domain.review.entitiy.ReviewReply;
+import com.laicos.khufarm.domain.seller.entity.Seller;
+import com.laicos.khufarm.domain.seller.repository.SellerRepository;
 import com.laicos.khufarm.domain.user.entity.User;
+import com.laicos.khufarm.global.common.exception.RestApiException;
+import com.laicos.khufarm.global.common.exception.code.status.SellerErrorStatus;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
@@ -29,6 +33,7 @@ import static com.laicos.khufarm.domain.review.entitiy.QReview.review;
 public class CustomReviewRepositoryImpl implements CustomReviewRepository{
 
     private final JPAQueryFactory jpaQueryFactory;
+    private final SellerRepository sellerRepository;
 
     @Override
     public Slice<ReviewResponse> getAllReviews(Long cursorId, ReviewReadCondition reviewReadCondition, Pageable pageable){
@@ -115,6 +120,45 @@ public class CustomReviewRepositoryImpl implements CustomReviewRepository{
         return new SliceImpl<>(content, pageable, hasNext);
     }
 
+    @Override
+    public Slice<ReviewResponse> getSellerReviews(User user, Long cursorId, Pageable pageable, ReviewReadCondition reviewReadCondition){
+        Seller seller = sellerRepository.findByUser(user)
+                .orElseThrow(() -> new RestApiException(SellerErrorStatus.SELLER_NOT_FOUND));
+
+        List<Review> reviewList = jpaQueryFactory.selectFrom(review)
+                .leftJoin(review.fruit).fetchJoin()
+                .leftJoin(review.seller).fetchJoin()
+                .leftJoin(review.reviewReply).fetchJoin()
+                .leftJoin(review.user).fetchJoin()
+                .leftJoin(review.orderDetail).fetchJoin()
+                .where(
+                        gtCursorId(cursorId), // 커서 조건
+                        eqSellerId(seller.getId()), // 판매자 ID 조건
+                        eqIsAnswered(reviewReadCondition.isAnswered()) // 답변 여부 조건
+                )
+                .orderBy(review.id.asc())
+                .limit(pageable.getPageSize() + 1)
+                .fetch();
+
+        List<ReviewReply> replies = reviewList.stream()
+                .map(Review::getReviewReply)
+                .toList();
+
+        List<ReviewReplyResponse> replyList = replies.stream()
+                .map(reply -> reply != null ? ReviewReplyConverter.toReviewReplyDTO(reply.getContent()) : null)
+                .toList();
+
+        List<ReviewResponse> content = ReviewConverter.toReviewDTOList(reviewList, replyList);
+
+        boolean hasNext = false;
+        if (content.size() > pageable.getPageSize()) {
+            content.remove(pageable.getPageSize());
+            hasNext = true;
+        }
+
+        return new SliceImpl<>(content, pageable, hasNext);
+    }
+
     private BooleanExpression gtCursorId(Long cursorId) {
         return (cursorId == null) ? null : review.id.gt(cursorId);
     }
@@ -129,5 +173,13 @@ public class CustomReviewRepositoryImpl implements CustomReviewRepository{
 
     private BooleanExpression eqUserId(User user) {
         return (user == null) ? null : review.user.id.eq(user.getId());
+    }
+
+    private BooleanExpression eqSellerId(Long sellerId) {
+        return (sellerId == null) ? null : review.seller.id.eq(sellerId);
+    }
+
+    private BooleanExpression eqIsAnswered(Boolean isAnswered) {
+        return (isAnswered == null) ? null : review.isAnswered.eq(isAnswered);
     }
 }

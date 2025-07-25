@@ -47,4 +47,9 @@ public class ReviewQueryServiceImpl implements ReviewQueryService{
 
         return ReviewConverter.toReviewDTO(review, reviewReplyResponse);
     }
+
+    @Override
+    public Slice<ReviewResponse> getSellerReviews(User user, Long cursorId, Pageable pageable, ReviewReadCondition reviewReadCondition){
+        return reviewRepository.getSellerReviews(user, cursorId, pageable, reviewReadCondition);
+    }
 }

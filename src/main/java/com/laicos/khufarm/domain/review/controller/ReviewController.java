@@ -85,4 +85,30 @@ public class ReviewController {
 
         return BaseResponse.onSuccess(reviewResponse);
     }
+
+    @GetMapping("/seller/all")
+    public BaseResponse<Slice<ReviewResponse>> getSellerReviews(
+            @AuthenticationPrincipal CustomUserDetails customUserDetails,
+            @RequestParam(required = false) Long cursorId,
+            @RequestParam(defaultValue="5") int size)
+    {
+        Pageable pageable = PageRequest.of(0, size);
+
+        Slice<ReviewResponse> myReviewResponses = reviewQueryService.getSellerReviews(customUserDetails.getUser(), cursorId, pageable, new ReviewReadCondition());
+
+        return BaseResponse.onSuccess(myReviewResponses);
+    }
+
+    @GetMapping("/seller/notAnswered")
+    public BaseResponse<Slice<ReviewResponse>> getSellerNotAnsweredReviews(
+            @AuthenticationPrincipal CustomUserDetails customUserDetails,
+            @RequestParam(required = false) Long cursorId,
+            @RequestParam(defaultValue="5") int size)
+    {
+        Pageable pageable = PageRequest.of(0, size);
+
+        Slice<ReviewResponse> myReviewResponses = reviewQueryService.getSellerReviews(customUserDetails.getUser(), cursorId, pageable, new ReviewReadCondition(false));
+
+        return BaseResponse.onSuccess(myReviewResponses);
+    }
 }

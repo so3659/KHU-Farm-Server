@@ -52,5 +52,6 @@ public class Inquiry extends BaseEntity {
     public void addInquiryReply(InquiryReply inquiryReply) {
         this.inquiryReply = inquiryReply;
         inquiryReply.setInquiry(this);
+        this.isAnswered= true;
     }
 }

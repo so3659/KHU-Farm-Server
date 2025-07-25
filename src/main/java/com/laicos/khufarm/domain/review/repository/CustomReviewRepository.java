@@ -10,4 +10,5 @@ import org.springframework.data.domain.Slice;
 public interface CustomReviewRepository {
     Slice<ReviewResponse> getAllReviews(Long cursorId, ReviewReadCondition reviewReadCondition, Pageable pageable);
     Slice<MyReviewResponse> getMyReviews(User user, Long cursorId, Pageable pageable);
+    Slice<ReviewResponse> getSellerReviews(User user, Long cursorId, Pageable pageable, ReviewReadCondition reviewReadCondition);
 }
