@@ -10,6 +10,7 @@ import com.laicos.khufarm.domain.inquiry.dto.response.InquiryResponse;
 import com.laicos.khufarm.domain.inquiry.dto.response.MyInquiryResponse;
 import com.laicos.khufarm.domain.inquiry.entity.Inquiry;
 import com.laicos.khufarm.domain.inquiry.repository.InquiryRepository;
+import com.laicos.khufarm.domain.user.entity.User;
 import com.laicos.khufarm.global.common.exception.RestApiException;
 import com.laicos.khufarm.global.common.exception.code.status.InquiryErrorStatus;
 import lombok.RequiredArgsConstructor;
@@ -45,5 +46,10 @@ public class InquiryQueryServiceImpl implements InquiryQueryService {
         FruitResponse fruitResponse = FruitConverter.toFruitDTO(inquiry.getFruit());
 
         return InquiryConverter.toMyInquiryDTO(fruitResponse, inquiryResponse);
+    }
+
+    @Override
+    public Slice<InquiryResponse> getSellerInquiry(Long cursorId, User user, Pageable pageable, InquiryReadCondition inquiryReadCondition){
+        return  inquiryRepository.getSellerInquiry(cursorId, user, pageable, inquiryReadCondition);
     }
 }

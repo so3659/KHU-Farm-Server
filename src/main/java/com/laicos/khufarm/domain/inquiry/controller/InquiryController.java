@@ -80,4 +80,26 @@ public class InquiryController {
 
         return BaseResponse.onSuccess(null);
     }
+
+    @GetMapping("/seller/all")
+    public BaseResponse<Slice<InquiryResponse>> getSellerAllInquiry(
+            @AuthenticationPrincipal CustomUserDetails customUserDetails,
+            @RequestParam(required = false) Long cursorId,
+            @RequestParam(defaultValue="5") int size) {
+
+        Pageable pageable = PageRequest.of(0, size);
+        Slice<InquiryResponse> inquiries = inquiryQueryService.getSellerInquiry(cursorId, customUserDetails.getUser(), pageable, new InquiryReadCondition());
+        return BaseResponse.onSuccess(inquiries);
+    }
+
+    @GetMapping("/seller/notAnswered")
+    public BaseResponse<Slice<InquiryResponse>> getSellerNotAnsweredInquiry(
+            @AuthenticationPrincipal CustomUserDetails customUserDetails,
+            @RequestParam(required = false) Long cursorId,
+            @RequestParam(defaultValue="5") int size) {
+
+        Pageable pageable = PageRequest.of(0, size);
+        Slice<InquiryResponse> inquiries = inquiryQueryService.getSellerInquiry(cursorId, customUserDetails.getUser(), pageable, new InquiryReadCondition(false));
+        return BaseResponse.onSuccess(inquiries);
+    }
 }
