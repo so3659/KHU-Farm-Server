@@ -41,7 +41,7 @@ public class DeliveryQueryServiceImpl implements DeliveryQueryService{
         ObjectMapper objectMapper = new ObjectMapper();
         try {
             // 성공한 경우 mapping
-            return DeliveryConverter.toDeliveryInfoConfirmResponse(orderResponse, objectMapper.readValue(responseBody, DeliveryStatus.class), orderDetail.getDeliveryNumber());
+            return DeliveryConverter.toDeliveryInfoConfirmResponse(orderResponse, objectMapper.readValue(responseBody, DeliveryStatus.class), orderDetail);
         } catch (JsonProcessingException e) {
             // 실패 응답 처리 (ex: { "message": "tracking number not found." })
             try {

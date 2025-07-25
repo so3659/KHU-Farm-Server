@@ -11,5 +11,6 @@ public class DeliveryInfoConfirmResponse {
 
     private OrderResponse orderResponse;
     private DeliveryStatus deliveryStatus;
+    private String deliveryCompany;
     private String deliveryNumber;
 }
