@@ -49,7 +49,7 @@ public class CustomReviewRepositoryImpl implements CustomReviewRepository{
                         eqFruitId(reviewReadCondition.getFruitId()), // 과일 ID 조건
                         eqUserId(reviewReadCondition.getUser()) // 사용자 ID 조건
                 )
-                .orderBy(review.id.asc())
+                .orderBy(review.id.desc())
                 .limit(pageable.getPageSize() + 1)
                 .fetch();
 
@@ -85,7 +85,7 @@ public class CustomReviewRepositoryImpl implements CustomReviewRepository{
                         gtCursorId(cursorId),// 커서 조건
                         eqUserId(user.getId()) // 사용자 ID 조건
                 )
-                .orderBy(review.id.asc())
+                .orderBy(review.id.desc())
                 .limit(pageable.getPageSize() + 1)
                 .fetch();
 
@@ -136,7 +136,7 @@ public class CustomReviewRepositoryImpl implements CustomReviewRepository{
                         eqSellerId(seller.getId()), // 판매자 ID 조건
                         eqIsAnswered(reviewReadCondition.isAnswered()) // 답변 여부 조건
                 )
-                .orderBy(review.id.asc())
+                .orderBy(review.id.desc())
                 .limit(pageable.getPageSize() + 1)
                 .fetch();
 
