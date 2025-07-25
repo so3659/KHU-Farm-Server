@@ -1,6 +1,7 @@
 package com.laicos.khufarm.domain.fruit.converter;
 
 import com.laicos.khufarm.domain.cart.entity.Cart;
+import com.laicos.khufarm.domain.delivery.dto.response.DeliveryStatus;
 import com.laicos.khufarm.domain.delivery.enums.DeliveryCompany;
 import com.laicos.khufarm.domain.fruit.dto.request.FruitAddRequest;
 import com.laicos.khufarm.domain.fruit.dto.response.*;
@@ -169,7 +170,7 @@ public class FruitConverter {
                 .collect(Collectors.toList());
     }
 
-    public static FruitResponseWithOrder toFruitDTOWithOrder(OrderDetail orderDetail) {
+    public static FruitResponseWithOrder toFruitDTOWithOrder(OrderDetail orderDetail, DeliveryStatus deliveryStatus) {
         return FruitResponseWithOrder.builder()
                 .id(orderDetail.getFruit().getId())
                 .title(orderDetail.getFruit().getTitle())
@@ -191,12 +192,13 @@ public class FruitConverter {
                 .createdAt(orderDetail.getOrder().getCreatedAt())
                 .orderId(orderDetail.getOrder().getId())
                 .orderDetailId(orderDetail.getId())
+                .deliveryStatus(deliveryStatus)
                 .build();
     }
 
-    public static List<FruitResponseWithOrder> toFruitDTOListWithOrder(List<OrderDetail> orderDetails) {
-        return orderDetails.stream()
-                .map(FruitConverter::toFruitDTOWithOrder)
+    public static List<FruitResponseWithOrder> toFruitDTOListWithOrder(List<OrderDetail> orderDetails, List<DeliveryStatus> deliveryStatuses) {
+        return IntStream.range(0, orderDetails.size())
+                .mapToObj(i -> toFruitDTOWithOrder(orderDetails.get(i), deliveryStatuses.get(i)))
                 .collect(Collectors.toList());
     }
 
