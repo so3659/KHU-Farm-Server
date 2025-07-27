@@ -41,7 +41,7 @@ public class CustomFruitRepositoryImpl implements CustomFruitRepository {
                 .leftJoin(fruit.fruitCategory).fetchJoin()
                 .leftJoin(fruit.wholesaleRetailCategory).fetchJoin()
                 .where(
-                        gtCursorId(cursorId), // 커서 조건
+                        ltCursorId(cursorId), // 커서 조건
                         eqWholesaleRetailCategory(fruitReadCondition.getWholesaleRetailCategoryId()), // 도매/소매 카테고리 조건
                         eqFruitCategory(fruitReadCondition.getFruitCategoryId()), // 과일 카테고리 조건
                         searchKeywordCondition(fruitReadCondition.getSearchKeyword())
@@ -87,7 +87,7 @@ public class CustomFruitRepositoryImpl implements CustomFruitRepository {
                 .leftJoin(fruit.wholesaleRetailCategory).fetchJoin()
                 .where(
                         eqSellerId(seller.getId()), // 판매자 ID 조건
-                        gtCursorId(cursorId) // 커서 조건
+                        ltCursorId(cursorId) // 커서 조건
                 )
                 .orderBy(fruit.id.desc())
                 .limit(pageable.getPageSize() + 1)
@@ -112,8 +112,8 @@ public class CustomFruitRepositoryImpl implements CustomFruitRepository {
         return (userId == null) ? null : wishList.user.id.eq(userId);
     }
 
-    private BooleanExpression gtCursorId(Long cursorId) {
-        return (cursorId == null) ? null : fruit.id.gt(cursorId);
+    private BooleanExpression ltCursorId(Long cursorId) {
+        return (cursorId == null) ? null : fruit.id.lt(cursorId);
     }
 
 

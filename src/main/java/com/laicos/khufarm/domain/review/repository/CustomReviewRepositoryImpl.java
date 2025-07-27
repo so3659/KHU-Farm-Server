@@ -45,7 +45,7 @@ public class CustomReviewRepositoryImpl implements CustomReviewRepository{
                 .leftJoin(review.user).fetchJoin()
                 .leftJoin(review.orderDetail).fetchJoin()
                 .where(
-                        gtCursorId(cursorId),// 커서 조건
+                        ltCursorId(cursorId),// 커서 조건
                         eqFruitId(reviewReadCondition.getFruitId()), // 과일 ID 조건
                         eqUserId(reviewReadCondition.getUser()) // 사용자 ID 조건
                 )
@@ -82,7 +82,7 @@ public class CustomReviewRepositoryImpl implements CustomReviewRepository{
                 .leftJoin(review.user).fetchJoin()
                 .leftJoin(review.orderDetail).fetchJoin()
                 .where(
-                        gtCursorId(cursorId),// 커서 조건
+                        ltCursorId(cursorId),// 커서 조건
                         eqUserId(user.getId()) // 사용자 ID 조건
                 )
                 .orderBy(review.id.desc())
@@ -132,7 +132,7 @@ public class CustomReviewRepositoryImpl implements CustomReviewRepository{
                 .leftJoin(review.user).fetchJoin()
                 .leftJoin(review.orderDetail).fetchJoin()
                 .where(
-                        gtCursorId(cursorId), // 커서 조건
+                        ltCursorId(cursorId), // 커서 조건
                         eqSellerId(seller.getId()), // 판매자 ID 조건
                         eqIsAnswered(reviewReadCondition.isAnswered()) // 답변 여부 조건
                 )
@@ -159,8 +159,8 @@ public class CustomReviewRepositoryImpl implements CustomReviewRepository{
         return new SliceImpl<>(content, pageable, hasNext);
     }
 
-    private BooleanExpression gtCursorId(Long cursorId) {
-        return (cursorId == null) ? null : review.id.gt(cursorId);
+    private BooleanExpression ltCursorId(Long cursorId) {
+        return (cursorId == null) ? null : review.id.lt(cursorId);
     }
 
     private BooleanExpression eqFruitId(Long fruitId) {

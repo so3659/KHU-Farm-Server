@@ -39,7 +39,7 @@ public class CustomOrderRepositoryImpl implements CustomOrderRepository{
                 .leftJoin(orderDetail.review).fetchJoin()
                 .where(
                         eqSellerId(seller.getId()), // 판매자 ID 조건
-                        gtCursorId(cursorId) // 커서 조건
+                        ltCursorId(cursorId) // 커서 조건
                 )
                 .orderBy(orderDetail.id.desc())
                 .limit(pageable.getPageSize() + 1) // 페이지 크기 + 1로 커서 기반 페이징 처리
@@ -60,8 +60,8 @@ public class CustomOrderRepositoryImpl implements CustomOrderRepository{
         return (sellerId == null) ? null : orderDetail.fruit.seller.id.eq(sellerId);
     }
 
-    private BooleanExpression gtCursorId(Long cursorId) {
-        return (cursorId == null) ? null : orderDetail.id.gt(cursorId);
+    private BooleanExpression ltCursorId(Long cursorId) {
+        return (cursorId == null) ? null : orderDetail.id.lt(cursorId);
     }
 
 }

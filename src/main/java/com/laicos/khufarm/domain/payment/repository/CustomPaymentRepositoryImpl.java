@@ -40,7 +40,7 @@ public class CustomPaymentRepositoryImpl implements CustomPaymentRepository {
                 .leftJoin(payment.user).fetchJoin()
                 .where(
                         eqUserId(user.getId()), // 사용자 ID 조건
-                        gtCursorId(cursorId) // 커서 조건
+                        ltCursorId(cursorId) // 커서 조건
                 )
                 .orderBy(payment.id.desc())
                 .limit(pageable.getPageSize() + 1) // 페이지 크기 + 1로 커서 기반 페이징 처리
@@ -84,8 +84,8 @@ public class CustomPaymentRepositoryImpl implements CustomPaymentRepository {
         return (userId == null) ? null : payment.user.id.eq(userId);
     }
 
-    private BooleanExpression gtCursorId(Long cursorId) {
-        return (cursorId == null) ? null : payment.id.gt(cursorId);
+    private BooleanExpression ltCursorId(Long cursorId) {
+        return (cursorId == null) ? null : payment.id.lt(cursorId);
     }
 
 }

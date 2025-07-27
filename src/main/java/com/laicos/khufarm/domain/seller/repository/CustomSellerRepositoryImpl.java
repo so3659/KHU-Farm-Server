@@ -32,7 +32,7 @@ public class CustomSellerRepositoryImpl implements CustomSellerRepository{
 
         List<Seller> sellerList = jpaQueryFactory.selectFrom(seller)
                 .where(
-                        gtCursorId(cursorId),
+                        ltCursorId(cursorId),
                         searchKeywordCondition(sellerReadCondition.getSearchKeyword())
                 )
                 .orderBy(seller.id.desc())
@@ -62,7 +62,7 @@ public class CustomSellerRepositoryImpl implements CustomSellerRepository{
                 .leftJoin(fruit.seller).fetchJoin()
                 .leftJoin(fruit.wholesaleRetailCategory).fetchJoin()
                 .where(
-                        gtCursorId(cursorId), // 커서 조건
+                        ltCursorId(cursorId), // 커서 조건
                         eqWholesaleRetailCategory(wholesaleRetailCategoryId), // 도매/소매 카테고리 조건
                         eqSellerId(sellerId) // 판매자 ID 조건
                 )
@@ -83,8 +83,8 @@ public class CustomSellerRepositoryImpl implements CustomSellerRepository{
         return SellerConverter.toDTOList(foundSeller, fruits);
     }
 
-    private BooleanExpression gtCursorId(Long cursorId) {
-        return (cursorId == null) ? null : seller.id.gt(cursorId);
+    private BooleanExpression ltCursorId(Long cursorId) {
+        return (cursorId == null) ? null : seller.id.lt(cursorId);
     }
 
 

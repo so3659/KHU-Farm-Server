@@ -40,7 +40,7 @@ public class CustomInquiryRepositoryImpl implements CustomInquiryRepository {
                 .leftJoin(inquiry.inquiryReply).fetchJoin()
                 .leftJoin(inquiry.user).fetchJoin()
                 .where(
-                        gtCursorId(cursorId),// 커서 조건
+                        ltCursorId(cursorId),// 커서 조건
                         eqFruitId(inquiryReadCondition.getFruitId()), // 과일 ID 조건
                         eqUserId(inquiryReadCondition.getUser()) // 사용자 ID 조건
                 )
@@ -78,7 +78,7 @@ public class CustomInquiryRepositoryImpl implements CustomInquiryRepository {
                 .leftJoin(inquiry.inquiryReply).fetchJoin()
                 .leftJoin(inquiry.user).fetchJoin()
                 .where(
-                        gtCursorId(cursorId),// 커서 조건
+                        ltCursorId(cursorId),// 커서 조건
                         eqSellerId(seller.getId()), // 판매자 ID 조건
                         eqIsAnswered(inquiryReadCondition.isAnswered())
                 )
@@ -105,8 +105,8 @@ public class CustomInquiryRepositoryImpl implements CustomInquiryRepository {
         return new SliceImpl<>(content, pageable, hasNext);
     }
 
-    private BooleanExpression gtCursorId(Long cursorId) {
-        return (cursorId == null) ? null : inquiry.id.gt(cursorId);
+    private BooleanExpression ltCursorId(Long cursorId) {
+        return (cursorId == null) ? null : inquiry.id.lt(cursorId);
     }
 
     private BooleanExpression eqFruitId(Long fruitId) {
