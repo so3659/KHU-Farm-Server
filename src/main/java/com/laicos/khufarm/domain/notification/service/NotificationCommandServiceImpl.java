@@ -4,8 +4,10 @@ import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.messaging.FirebaseMessagingException;
 import com.google.firebase.messaging.Message;
 import com.google.firebase.messaging.Notification;
+import com.laicos.khufarm.domain.notification.converter.NotificationConverter;
 import com.laicos.khufarm.domain.notification.dto.request.FCMRequest;
 import com.laicos.khufarm.domain.notification.dto.request.FCMTokenRequest;
+import com.laicos.khufarm.domain.notification.repository.NotificationRepository;
 import com.laicos.khufarm.domain.user.entity.User;
 import com.laicos.khufarm.domain.user.repository.UserRepository;
 import com.laicos.khufarm.global.common.exception.RestApiException;
@@ -24,6 +26,7 @@ import java.io.IOException;
 public class NotificationCommandServiceImpl implements NotificationCommandService{
 
     private final UserRepository userRepository;
+    private final NotificationRepository notificationRepository;
 
     @Override
     public void sendMessage(User user, FCMRequest fcmRequest) throws FirebaseMessagingException {
@@ -42,6 +45,8 @@ public class NotificationCommandServiceImpl implements NotificationCommandServic
             throw new RestApiException(NotificationErrorStatus.NOTIFICATION_SEND_ERROR);
         }
 
+        com.laicos.khufarm.domain.notification.entitiy.Notification notification = NotificationConverter.toNotification(user, fcmRequest);
+        notificationRepository.save(notification);
     }
 
     @Override
