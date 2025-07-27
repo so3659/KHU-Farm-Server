@@ -69,6 +69,8 @@ public class User extends BaseEntity {
     @ColumnDefault("0")
     private Integer discountedPrice;
 
+    private String fcmToken;
+
     public void setEncodedPassword(String password) {
         this.password = password;
     }
@@ -87,5 +89,9 @@ public class User extends BaseEntity {
 
     public void updateTotalPoint(Integer point) {
         this.totalPoint += point;
+    }
+
+    public void updateFcmToken(String fcmToken) {
+        this.fcmToken = fcmToken;
     }
 }

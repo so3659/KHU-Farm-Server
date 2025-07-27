@@ -43,3 +43,5 @@ test.html
 
 *.pem
 *.key
+
+**/firebase
