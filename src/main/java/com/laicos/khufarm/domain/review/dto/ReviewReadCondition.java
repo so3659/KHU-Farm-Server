@@ -10,7 +10,7 @@ public class ReviewReadCondition {
 
     private User user;
     private Long fruitId;
-    private boolean isAnswered;
+    private Boolean isAnswered;
 
     public ReviewReadCondition(User user){
         this.user = user;
@@ -20,7 +20,7 @@ public class ReviewReadCondition {
         this.fruitId = fruitId;
     }
 
-    public ReviewReadCondition(boolean isAnswered) {
+    public ReviewReadCondition(Boolean isAnswered) {
         this.isAnswered = isAnswered;
     }
 }

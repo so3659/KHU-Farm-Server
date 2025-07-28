@@ -45,3 +45,5 @@ test.html
 *.key
 
 **/firebase
+
+clova_api_key.txt
