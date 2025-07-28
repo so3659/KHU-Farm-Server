@@ -65,7 +65,7 @@ public class PointCommandServiceImpl implements PointCommandService{
 
         attendanceRepository.save(attendance);
 
-        user.updateTotalPoint(2);
+        user.updateTotalPoint(10);
         userRepository.save(user);
 
         PointHistory pointHistory = PointHistoryConverter.toPointHistory(2, PointEventType.ATTENDANCE, attendance.getId(), user);
