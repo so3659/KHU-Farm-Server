@@ -42,6 +42,7 @@ public class ReviewConverter {
                 .createdAt(review.getCreatedAt())
                 .reply(reply)
                 .isAnswered(review.isAnswered())
+                .isPointed(review.isPointed())
                 .build();
     }
 
