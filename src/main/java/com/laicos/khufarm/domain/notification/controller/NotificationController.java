@@ -30,11 +30,11 @@ public class NotificationController {
     private final NotificationCommandService notificationCommandService;
     private final NotificationQueryService notificationQueryService;
 
-    @PostMapping("/send")
+    @PostMapping("/send/{userId}")
     public BaseResponse<Void> pushMessage(
-            @AuthenticationPrincipal CustomUserDetails customUserDetails,
+            @PathVariable Long userId,
             @RequestBody @Validated FCMRequest fcmRequest) throws FirebaseMessagingException {
-        notificationCommandService.sendMessage(customUserDetails.getUser(), fcmRequest);
+        notificationCommandService.sendMessage(userId, fcmRequest);
 
         return BaseResponse.onSuccess(null);
     }

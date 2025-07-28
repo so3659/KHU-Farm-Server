@@ -9,6 +9,6 @@ import java.io.IOException;
 
 public interface NotificationCommandService {
 
-    void sendMessage(User user, FCMRequest fcmRequest) throws FirebaseMessagingException;
+    void sendMessage(Long userId, FCMRequest fcmRequest) throws FirebaseMessagingException;
     void saveToken(User user, FCMTokenRequest fcmTokenRequest) throws IOException;
 }

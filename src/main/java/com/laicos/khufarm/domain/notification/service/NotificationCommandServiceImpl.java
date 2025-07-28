@@ -12,6 +12,7 @@ import com.laicos.khufarm.domain.user.entity.User;
 import com.laicos.khufarm.domain.user.repository.UserRepository;
 import com.laicos.khufarm.global.common.exception.RestApiException;
 import com.laicos.khufarm.global.common.exception.code.status.NotificationErrorStatus;
+import com.laicos.khufarm.global.common.exception.code.status.UserErrorStatus;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -29,7 +30,10 @@ public class NotificationCommandServiceImpl implements NotificationCommandServic
     private final NotificationRepository notificationRepository;
 
     @Override
-    public void sendMessage(User user, FCMRequest fcmRequest) throws FirebaseMessagingException {
+    public void sendMessage(Long userId, FCMRequest fcmRequest) throws FirebaseMessagingException {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RestApiException(UserErrorStatus.USER_NOT_FOUND));
+
         String token = user.getFcmToken();
 
         try {
