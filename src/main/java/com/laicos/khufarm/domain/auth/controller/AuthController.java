@@ -1,6 +1,8 @@
 package com.laicos.khufarm.domain.auth.controller;
 
 import com.laicos.khufarm.domain.auth.dto.AccessTokenResponse;
+import com.laicos.khufarm.domain.auth.dto.IDFindRequest;
+import com.laicos.khufarm.domain.auth.dto.PasswordFindRequest;
 import com.laicos.khufarm.domain.auth.service.AuthCommandService;
 import com.laicos.khufarm.domain.user.dto.request.BusinessUserJoinRequest;
 import com.laicos.khufarm.domain.user.dto.request.FarmerUserJoinRequest;
@@ -107,5 +109,17 @@ public class AuthController {
     ) {
         log.info("refreshToken: {}", refreshToken);
         return BaseResponse.onSuccess(authCommandService.reissueToken(refreshToken, response));
+    }
+
+    @PostMapping("/findId")
+    public BaseResponse<String> findId(@RequestBody @Valid IDFindRequest idFindRequest) throws Exception {
+        String userId=authCommandService.findId(idFindRequest);
+        return BaseResponse.onSuccess(userId);
+    }
+
+    @PostMapping("/findPassword")
+    public BaseResponse<Void> sendPasswordEmail(@RequestBody @Valid PasswordFindRequest passwordFindRequest) throws Exception {
+        authCommandService.sendLoginAuthMessage(passwordFindRequest);
+        return BaseResponse.onSuccess(null);
     }
 }
