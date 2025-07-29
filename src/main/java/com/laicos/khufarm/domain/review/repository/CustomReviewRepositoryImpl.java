@@ -134,6 +134,7 @@ public class CustomReviewRepositoryImpl implements CustomReviewRepository{
                 .where(
                         ltCursorId(cursorId), // 커서 조건
                         eqSellerId(seller.getId()), // 판매자 ID 조건
+                        eqFruitId(reviewReadCondition.getFruitId()), // 과일 ID 조건
                         eqIsAnswered(reviewReadCondition.getIsAnswered()) // 답변 여부 조건
                 )
                 .orderBy(review.id.desc())

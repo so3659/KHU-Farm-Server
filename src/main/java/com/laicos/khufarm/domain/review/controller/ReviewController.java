@@ -86,15 +86,30 @@ public class ReviewController {
         return BaseResponse.onSuccess(reviewResponse);
     }
 
-    @GetMapping("/seller/all")
-    public BaseResponse<Slice<ReviewResponse>> getSellerReviews(
+    @GetMapping("/seller/{fruitId}/answered")
+    public BaseResponse<Slice<ReviewResponse>> getAnsweredSellerReviews(
             @AuthenticationPrincipal CustomUserDetails customUserDetails,
+            @PathVariable Long fruitId,
             @RequestParam(required = false) Long cursorId,
             @RequestParam(defaultValue="5") int size)
     {
         Pageable pageable = PageRequest.of(0, size);
 
-        Slice<ReviewResponse> myReviewResponses = reviewQueryService.getSellerReviews(customUserDetails.getUser(), cursorId, pageable, new ReviewReadCondition());
+        Slice<ReviewResponse> myReviewResponses = reviewQueryService.getSellerReviews(customUserDetails.getUser(), cursorId, pageable, new ReviewReadCondition(fruitId, true));
+
+        return BaseResponse.onSuccess(myReviewResponses);
+    }
+
+    @GetMapping("/seller/{fruitId}/notAnswered")
+    public BaseResponse<Slice<ReviewResponse>> getNotAnsweredSellerReviews(
+            @AuthenticationPrincipal CustomUserDetails customUserDetails,
+            @PathVariable Long fruitId,
+            @RequestParam(required = false) Long cursorId,
+            @RequestParam(defaultValue="5") int size)
+    {
+        Pageable pageable = PageRequest.of(0, size);
+
+        Slice<ReviewResponse> myReviewResponses = reviewQueryService.getSellerReviews(customUserDetails.getUser(), cursorId, pageable, new ReviewReadCondition(fruitId, false));
 
         return BaseResponse.onSuccess(myReviewResponses);
     }

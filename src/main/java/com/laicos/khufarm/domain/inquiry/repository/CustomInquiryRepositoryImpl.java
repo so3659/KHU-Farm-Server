@@ -80,6 +80,7 @@ public class CustomInquiryRepositoryImpl implements CustomInquiryRepository {
                 .where(
                         ltCursorId(cursorId),// 커서 조건
                         eqSellerId(seller.getId()), // 판매자 ID 조건
+                        eqFruitId(inquiryReadCondition.getFruitId()), // 과일 ID 조건
                         eqIsAnswered(inquiryReadCondition.isAnswered())
                 )
                 .orderBy(inquiry.id.desc())

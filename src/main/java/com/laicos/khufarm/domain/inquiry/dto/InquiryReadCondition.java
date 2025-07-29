@@ -23,4 +23,9 @@ public class InquiryReadCondition {
     public InquiryReadCondition(boolean isAnswered) {
         this.isAnswered = isAnswered;
     }
+
+    public InquiryReadCondition(Long fruitId, boolean isAnswered) {
+        this.fruitId = fruitId;
+        this.isAnswered = isAnswered;
+    }
 }

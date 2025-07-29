@@ -81,16 +81,30 @@ public class InquiryController {
         return BaseResponse.onSuccess(null);
     }
 
-    @GetMapping("/seller/all")
-    public BaseResponse<Slice<InquiryResponse>> getSellerAllInquiry(
+    @GetMapping("/seller/{fruitId}/answered")
+    public BaseResponse<Slice<InquiryResponse>> getAnsweredSellerInquiry(
             @AuthenticationPrincipal CustomUserDetails customUserDetails,
+            @PathVariable Long fruitId,
             @RequestParam(required = false) Long cursorId,
             @RequestParam(defaultValue="5") int size) {
 
         Pageable pageable = PageRequest.of(0, size);
-        Slice<InquiryResponse> inquiries = inquiryQueryService.getSellerInquiry(cursorId, customUserDetails.getUser(), pageable, new InquiryReadCondition());
+        Slice<InquiryResponse> inquiries = inquiryQueryService.getSellerInquiry(cursorId, customUserDetails.getUser(), pageable, new InquiryReadCondition(fruitId, true));
         return BaseResponse.onSuccess(inquiries);
     }
+
+    @GetMapping("/seller/{fruitId}/notAnswered")
+    public BaseResponse<Slice<InquiryResponse>> getNotAnsweredSellerInquiry(
+            @AuthenticationPrincipal CustomUserDetails customUserDetails,
+            @PathVariable Long fruitId,
+            @RequestParam(required = false) Long cursorId,
+            @RequestParam(defaultValue="5") int size) {
+
+        Pageable pageable = PageRequest.of(0, size);
+        Slice<InquiryResponse> inquiries = inquiryQueryService.getSellerInquiry(cursorId, customUserDetails.getUser(), pageable, new InquiryReadCondition(fruitId, false));
+        return BaseResponse.onSuccess(inquiries);
+    }
+
 
     @GetMapping("/seller/notAnswered")
     public BaseResponse<Slice<InquiryResponse>> getSellerNotAnsweredInquiry(

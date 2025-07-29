@@ -23,4 +23,9 @@ public class ReviewReadCondition {
     public ReviewReadCondition(Boolean isAnswered) {
         this.isAnswered = isAnswered;
     }
+
+    public ReviewReadCondition(Long fruitId,Boolean isAnswered) {
+        this.isAnswered = isAnswered;
+        this.fruitId = fruitId;
+    }
 }
