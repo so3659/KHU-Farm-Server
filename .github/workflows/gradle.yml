@@ -89,5 +89,7 @@ jobs:
             -e cloud.ncp.s3.endpoint=${{ secrets.NCP_OBJECT_END_POINT }} \
             -e cloud.ncp.s3.bucket=${{ secrets.NCP_OBJECT_BUCKET }} \
             -e chatBot.url=${{ secrets.CHAT_BOT_URL }} \
+            -e mail.username=${{ secrets.MAIL_USERNAME }} \
+            -e mail.password=${{ secrets.MAIL_PASSWORD }} \
             ${{ secrets.NCP_CONTAINER_REGISTRY }}/khufarm:latest
 
