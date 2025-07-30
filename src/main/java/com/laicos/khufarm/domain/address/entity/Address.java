@@ -1,5 +1,6 @@
 package com.laicos.khufarm.domain.address.entity;
 
+import com.laicos.khufarm.domain.address.dto.request.AddressCreateRequest;
 import com.laicos.khufarm.domain.user.entity.User;
 import com.laicos.khufarm.global.common.base.BaseEntity;
 import jakarta.persistence.*;
@@ -49,5 +50,15 @@ public class Address extends BaseEntity {
 
     public void setDefault(boolean isDefault) {
         this.isDefault = isDefault;
+    }
+
+    public void updateAddress(AddressCreateRequest addressCreateRequest) {
+        this.addressName = addressCreateRequest.getAddressName();
+        this.portCode = addressCreateRequest.getPortCode();
+        this.address = addressCreateRequest.getAddress();
+        this.detailAddress = addressCreateRequest.getDetailAddress();
+        this.isDefault = addressCreateRequest.isDefaultAddress();
+        this.recipient = addressCreateRequest.getRecipient();
+        this.phoneNumber = addressCreateRequest.getPhoneNumber();
     }
 }

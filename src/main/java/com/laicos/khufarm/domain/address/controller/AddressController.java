@@ -46,4 +46,24 @@ public class AddressController {
 
         return BaseResponse.onSuccess(addressResponses);
     }
+
+    @PatchMapping("/update/{addressId}")
+    public BaseResponse<Void> updateAddress(
+            @AuthenticationPrincipal CustomUserDetails customUserDetails,
+            @PathVariable Long addressId,
+            @Validated @RequestBody AddressCreateRequest addressCreateRequest
+    ) {
+        addressCommandService.updateAddress(customUserDetails.getUser(), addressId, addressCreateRequest);
+
+        return BaseResponse.onSuccess(null);
+    }
+
+    @DeleteMapping("/delete/{addressId}")
+    public BaseResponse<Void> deleteAddress(
+            @AuthenticationPrincipal CustomUserDetails customUserDetails,
+            @PathVariable Long addressId
+    ) {
+        addressCommandService.deleteAddress(customUserDetails.getUser(), addressId);
+        return BaseResponse.onSuccess(null);
+    }
 }
