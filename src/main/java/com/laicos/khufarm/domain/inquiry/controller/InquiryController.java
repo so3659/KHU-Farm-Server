@@ -5,6 +5,7 @@ import com.laicos.khufarm.domain.inquiry.dto.InquiryReadCondition;
 import com.laicos.khufarm.domain.inquiry.dto.request.InquiryReplyRequest;
 import com.laicos.khufarm.domain.inquiry.dto.request.InquiryRequest;
 import com.laicos.khufarm.domain.inquiry.dto.response.InquiryResponse;
+import com.laicos.khufarm.domain.inquiry.dto.response.InquiryResponseWithFruit;
 import com.laicos.khufarm.domain.inquiry.dto.response.MyInquiryResponse;
 import com.laicos.khufarm.domain.inquiry.service.InquiryCommandService;
 import com.laicos.khufarm.domain.inquiry.service.InquiryQueryService;
@@ -82,38 +83,38 @@ public class InquiryController {
     }
 
     @GetMapping("/seller/{fruitId}/answered")
-    public BaseResponse<Slice<InquiryResponse>> getAnsweredSellerInquiry(
+    public BaseResponse<Slice<InquiryResponseWithFruit>> getAnsweredSellerInquiry(
             @AuthenticationPrincipal CustomUserDetails customUserDetails,
             @PathVariable Long fruitId,
             @RequestParam(required = false) Long cursorId,
             @RequestParam(defaultValue="5") int size) {
 
         Pageable pageable = PageRequest.of(0, size);
-        Slice<InquiryResponse> inquiries = inquiryQueryService.getSellerInquiry(cursorId, customUserDetails.getUser(), pageable, new InquiryReadCondition(fruitId, true));
+        Slice<InquiryResponseWithFruit> inquiries = inquiryQueryService.getSellerInquiry(cursorId, customUserDetails.getUser(), pageable, new InquiryReadCondition(fruitId, true));
         return BaseResponse.onSuccess(inquiries);
     }
 
     @GetMapping("/seller/{fruitId}/notAnswered")
-    public BaseResponse<Slice<InquiryResponse>> getNotAnsweredSellerInquiry(
+    public BaseResponse<Slice<InquiryResponseWithFruit>> getNotAnsweredSellerInquiry(
             @AuthenticationPrincipal CustomUserDetails customUserDetails,
             @PathVariable Long fruitId,
             @RequestParam(required = false) Long cursorId,
             @RequestParam(defaultValue="5") int size) {
 
         Pageable pageable = PageRequest.of(0, size);
-        Slice<InquiryResponse> inquiries = inquiryQueryService.getSellerInquiry(cursorId, customUserDetails.getUser(), pageable, new InquiryReadCondition(fruitId, false));
+        Slice<InquiryResponseWithFruit> inquiries = inquiryQueryService.getSellerInquiry(cursorId, customUserDetails.getUser(), pageable, new InquiryReadCondition(fruitId, false));
         return BaseResponse.onSuccess(inquiries);
     }
 
 
     @GetMapping("/seller/notAnswered")
-    public BaseResponse<Slice<InquiryResponse>> getSellerNotAnsweredInquiry(
+    public BaseResponse<Slice<InquiryResponseWithFruit>> getSellerNotAnsweredInquiry(
             @AuthenticationPrincipal CustomUserDetails customUserDetails,
             @RequestParam(required = false) Long cursorId,
             @RequestParam(defaultValue="5") int size) {
 
         Pageable pageable = PageRequest.of(0, size);
-        Slice<InquiryResponse> inquiries = inquiryQueryService.getSellerInquiry(cursorId, customUserDetails.getUser(), pageable, new InquiryReadCondition(false));
+        Slice<InquiryResponseWithFruit> inquiries = inquiryQueryService.getSellerInquiry(cursorId, customUserDetails.getUser(), pageable, new InquiryReadCondition(false));
         return BaseResponse.onSuccess(inquiries);
     }
 }

@@ -30,5 +30,6 @@ public class DeliveryCommandServiceImpl implements DeliveryCommandService{
 
         orderDetail.updateDeliveryInfo(DeliveryCompany.fromName(deliveryInfoRequest.getDeliveryCompany()), deliveryInfoRequest.getDeliveryNumber());
         orderDetail.updateOrderStatus(OrderStatus.SHIPPING);
+        orderDetail.getOrder().updateOrderStatus(OrderStatus.SHIPPING);
     }
 }

@@ -9,6 +9,7 @@ import com.laicos.khufarm.domain.review.dto.ReviewReadCondition;
 import com.laicos.khufarm.domain.review.dto.response.MyReviewResponse;
 import com.laicos.khufarm.domain.review.dto.response.ReviewReplyResponse;
 import com.laicos.khufarm.domain.review.dto.response.ReviewResponse;
+import com.laicos.khufarm.domain.review.dto.response.ReviewResponseWithFruit;
 import com.laicos.khufarm.domain.review.entitiy.Review;
 import com.laicos.khufarm.domain.review.entitiy.ReviewReply;
 import com.laicos.khufarm.domain.seller.entity.Seller;
@@ -121,7 +122,7 @@ public class CustomReviewRepositoryImpl implements CustomReviewRepository{
     }
 
     @Override
-    public Slice<ReviewResponse> getSellerReviews(User user, Long cursorId, Pageable pageable, ReviewReadCondition reviewReadCondition){
+    public Slice<ReviewResponseWithFruit> getSellerReviews(User user, Long cursorId, Pageable pageable, ReviewReadCondition reviewReadCondition){
         Seller seller = sellerRepository.findByUser(user)
                 .orElseThrow(() -> new RestApiException(SellerErrorStatus.SELLER_NOT_FOUND));
 
@@ -145,11 +146,17 @@ public class CustomReviewRepositoryImpl implements CustomReviewRepository{
                 .map(Review::getReviewReply)
                 .toList();
 
+        List<Fruit> fruitList = reviewList.stream()
+                .map(Review::getFruit)
+                .toList();
+
         List<ReviewReplyResponse> replyList = replies.stream()
                 .map(reply -> reply != null ? ReviewReplyConverter.toReviewReplyDTO(reply.getContent()) : null)
                 .toList();
 
-        List<ReviewResponse> content = ReviewConverter.toReviewDTOList(reviewList, replyList);
+        List<FruitResponse> fruitDTOList = FruitConverter.toFruitDTOList(fruitList);
+
+        List<ReviewResponseWithFruit> content = ReviewConverter.toReviewWithFruitDTOList(reviewList, replyList,fruitDTOList);
 
         boolean hasNext = false;
         if (content.size() > pageable.getPageSize()) {

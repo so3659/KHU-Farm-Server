@@ -5,6 +5,7 @@ import com.laicos.khufarm.domain.fruit.entity.Fruit;
 import com.laicos.khufarm.domain.inquiry.dto.request.InquiryRequest;
 import com.laicos.khufarm.domain.inquiry.dto.response.InquiryReplyResponse;
 import com.laicos.khufarm.domain.inquiry.dto.response.InquiryResponse;
+import com.laicos.khufarm.domain.inquiry.dto.response.InquiryResponseWithFruit;
 import com.laicos.khufarm.domain.inquiry.dto.response.MyInquiryResponse;
 import com.laicos.khufarm.domain.inquiry.entity.Inquiry;
 import com.laicos.khufarm.domain.user.entity.User;
@@ -40,6 +41,23 @@ public class InquiryConverter {
     public static List<InquiryResponse> toInquiryDTOList(List<Inquiry> inquiries, List<InquiryReplyResponse> replyList) {
         return IntStream.range(0, inquiries.size())
                 .mapToObj(i -> toInquiryDTO(inquiries.get(i), replyList.get(i)))
+                .toList();
+    }
+
+    public static InquiryResponseWithFruit toInquiryWithFruitDTO(Inquiry inquiry, InquiryReplyResponse reply, FruitResponse fruitResponse) {
+        return InquiryResponseWithFruit.builder()
+                .fruitResponse(fruitResponse)
+                .inquiryId(inquiry.getId())
+                .content(inquiry.getContent())
+                .createdAt(inquiry.getCreatedAt())
+                .isPrivate(inquiry.isPrivate())
+                .reply(reply)
+                .build();
+    }
+
+    public static List<InquiryResponseWithFruit> toInquiryWithFruitDTOList(List<Inquiry> inquiries, List<InquiryReplyResponse> replyList, List<FruitResponse> fruitResponses) {
+        return IntStream.range(0, inquiries.size())
+                .mapToObj(i -> toInquiryWithFruitDTO(inquiries.get(i), replyList.get(i), fruitResponses.get(i)))
                 .toList();
     }
 

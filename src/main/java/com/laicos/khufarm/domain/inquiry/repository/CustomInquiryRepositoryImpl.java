@@ -1,10 +1,14 @@
 package com.laicos.khufarm.domain.inquiry.repository;
 
+import com.laicos.khufarm.domain.fruit.converter.FruitConverter;
+import com.laicos.khufarm.domain.fruit.dto.response.FruitResponse;
+import com.laicos.khufarm.domain.fruit.entity.Fruit;
 import com.laicos.khufarm.domain.inquiry.converter.InquiryConverter;
 import com.laicos.khufarm.domain.inquiry.converter.InquiryReplyConverter;
 import com.laicos.khufarm.domain.inquiry.dto.InquiryReadCondition;
 import com.laicos.khufarm.domain.inquiry.dto.response.InquiryReplyResponse;
 import com.laicos.khufarm.domain.inquiry.dto.response.InquiryResponse;
+import com.laicos.khufarm.domain.inquiry.dto.response.InquiryResponseWithFruit;
 import com.laicos.khufarm.domain.inquiry.entity.Inquiry;
 import com.laicos.khufarm.domain.inquiry.entity.InquiryReply;
 import com.laicos.khufarm.domain.seller.entity.Seller;
@@ -68,7 +72,7 @@ public class CustomInquiryRepositoryImpl implements CustomInquiryRepository {
     }
 
     @Override
-    public Slice<InquiryResponse> getSellerInquiry(Long cursorId, User user, Pageable pageable, InquiryReadCondition inquiryReadCondition){
+    public Slice<InquiryResponseWithFruit> getSellerInquiry(Long cursorId, User user, Pageable pageable, InquiryReadCondition inquiryReadCondition){
         Seller seller = sellerRepository.findByUser(user)
                 .orElseThrow(() -> new RestApiException(SellerErrorStatus.SELLER_NOT_FOUND));
 
@@ -91,11 +95,17 @@ public class CustomInquiryRepositoryImpl implements CustomInquiryRepository {
                 .map(Inquiry::getInquiryReply)
                 .toList();
 
+        List<Fruit> fruits = inquiryList.stream()
+                .map(Inquiry::getFruit)
+                .toList();
+
         List<InquiryReplyResponse> replyList = inquiries.stream()
                 .map(reply -> reply != null ? InquiryReplyConverter.toInquiryReplyDTO(reply) : null)
                 .toList();
 
-        List<InquiryResponse> content = InquiryConverter.toInquiryDTOList(inquiryList, replyList);
+        List<FruitResponse> fruitResponses = FruitConverter.toFruitDTOList(fruits);
+
+        List<InquiryResponseWithFruit> content = InquiryConverter.toInquiryWithFruitDTOList(inquiryList, replyList, fruitResponses);
 
         boolean hasNext = false;
         if (content.size() > pageable.getPageSize()) {

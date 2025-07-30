@@ -6,6 +6,7 @@ import com.laicos.khufarm.domain.review.dto.request.ReviewRequest;
 import com.laicos.khufarm.domain.review.dto.response.MyReviewResponse;
 import com.laicos.khufarm.domain.review.dto.response.ReviewReplyResponse;
 import com.laicos.khufarm.domain.review.dto.response.ReviewResponse;
+import com.laicos.khufarm.domain.review.dto.response.ReviewResponseWithFruit;
 import com.laicos.khufarm.domain.review.entitiy.Review;
 import com.laicos.khufarm.domain.user.entity.User;
 import org.springframework.stereotype.Component;
@@ -49,6 +50,28 @@ public class ReviewConverter {
     public static List<ReviewResponse> toReviewDTOList(List<Review> reviews, List<ReviewReplyResponse> replyList) {
         return IntStream.range(0, reviews.size())
                 .mapToObj(i -> toReviewDTO(reviews.get(i), replyList.get(i)))
+                .toList();
+    }
+
+    public static ReviewResponseWithFruit toReviewWithFruitDTO(Review review, ReviewReplyResponse reply, FruitResponse fruitResponse) {
+        return ReviewResponseWithFruit.builder()
+                .reviewId(review.getId())
+                .title(review.getTitle())
+                .userId(review.getUser().getUserId())
+                .content(review.getContent())
+                .imageUrl(review.getImageUrl())
+                .rating(review.getRating())
+                .createdAt(review.getCreatedAt())
+                .reply(reply)
+                .isAnswered(review.isAnswered())
+                .isPointed(review.isPointed())
+                .fruitResponse(fruitResponse)
+                .build();
+    }
+
+    public static List<ReviewResponseWithFruit> toReviewWithFruitDTOList(List<Review> reviews, List<ReviewReplyResponse> replyList, List<FruitResponse> fruitResponses) {
+        return IntStream.range(0, reviews.size())
+                .mapToObj(i -> toReviewWithFruitDTO(reviews.get(i), replyList.get(i), fruitResponses.get(i)))
                 .toList();
     }
 

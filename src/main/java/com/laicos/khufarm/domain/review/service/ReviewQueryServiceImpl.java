@@ -6,6 +6,7 @@ import com.laicos.khufarm.domain.review.dto.ReviewReadCondition;
 import com.laicos.khufarm.domain.review.dto.response.MyReviewResponse;
 import com.laicos.khufarm.domain.review.dto.response.ReviewReplyResponse;
 import com.laicos.khufarm.domain.review.dto.response.ReviewResponse;
+import com.laicos.khufarm.domain.review.dto.response.ReviewResponseWithFruit;
 import com.laicos.khufarm.domain.review.entitiy.Review;
 import com.laicos.khufarm.domain.review.repository.ReviewRepository;
 import com.laicos.khufarm.domain.user.entity.User;
@@ -49,7 +50,7 @@ public class ReviewQueryServiceImpl implements ReviewQueryService{
     }
 
     @Override
-    public Slice<ReviewResponse> getSellerReviews(User user, Long cursorId, Pageable pageable, ReviewReadCondition reviewReadCondition){
+    public Slice<ReviewResponseWithFruit> getSellerReviews(User user, Long cursorId, Pageable pageable, ReviewReadCondition reviewReadCondition){
         return reviewRepository.getSellerReviews(user, cursorId, pageable, reviewReadCondition);
     }
 }

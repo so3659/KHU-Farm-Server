@@ -7,6 +7,7 @@ import com.laicos.khufarm.domain.inquiry.converter.InquiryReplyConverter;
 import com.laicos.khufarm.domain.inquiry.dto.InquiryReadCondition;
 import com.laicos.khufarm.domain.inquiry.dto.response.InquiryReplyResponse;
 import com.laicos.khufarm.domain.inquiry.dto.response.InquiryResponse;
+import com.laicos.khufarm.domain.inquiry.dto.response.InquiryResponseWithFruit;
 import com.laicos.khufarm.domain.inquiry.dto.response.MyInquiryResponse;
 import com.laicos.khufarm.domain.inquiry.entity.Inquiry;
 import com.laicos.khufarm.domain.inquiry.repository.InquiryRepository;
@@ -49,7 +50,7 @@ public class InquiryQueryServiceImpl implements InquiryQueryService {
     }
 
     @Override
-    public Slice<InquiryResponse> getSellerInquiry(Long cursorId, User user, Pageable pageable, InquiryReadCondition inquiryReadCondition){
+    public Slice<InquiryResponseWithFruit> getSellerInquiry(Long cursorId, User user, Pageable pageable, InquiryReadCondition inquiryReadCondition){
         return  inquiryRepository.getSellerInquiry(cursorId, user, pageable, inquiryReadCondition);
     }
 }

@@ -6,6 +6,7 @@ import com.laicos.khufarm.domain.review.dto.request.ReviewReplyRequest;
 import com.laicos.khufarm.domain.review.dto.request.ReviewRequest;
 import com.laicos.khufarm.domain.review.dto.response.MyReviewResponse;
 import com.laicos.khufarm.domain.review.dto.response.ReviewResponse;
+import com.laicos.khufarm.domain.review.dto.response.ReviewResponseWithFruit;
 import com.laicos.khufarm.domain.review.service.ReviewCommandService;
 import com.laicos.khufarm.domain.review.service.ReviewQueryService;
 import com.laicos.khufarm.global.common.base.BaseResponse;
@@ -87,7 +88,7 @@ public class ReviewController {
     }
 
     @GetMapping("/seller/{fruitId}/answered")
-    public BaseResponse<Slice<ReviewResponse>> getAnsweredSellerReviews(
+    public BaseResponse<Slice<ReviewResponseWithFruit>> getAnsweredSellerReviews(
             @AuthenticationPrincipal CustomUserDetails customUserDetails,
             @PathVariable Long fruitId,
             @RequestParam(required = false) Long cursorId,
@@ -95,13 +96,13 @@ public class ReviewController {
     {
         Pageable pageable = PageRequest.of(0, size);
 
-        Slice<ReviewResponse> myReviewResponses = reviewQueryService.getSellerReviews(customUserDetails.getUser(), cursorId, pageable, new ReviewReadCondition(fruitId, true));
+        Slice<ReviewResponseWithFruit> myReviewResponses = reviewQueryService.getSellerReviews(customUserDetails.getUser(), cursorId, pageable, new ReviewReadCondition(fruitId, true));
 
         return BaseResponse.onSuccess(myReviewResponses);
     }
 
     @GetMapping("/seller/{fruitId}/notAnswered")
-    public BaseResponse<Slice<ReviewResponse>> getNotAnsweredSellerReviews(
+    public BaseResponse<Slice<ReviewResponseWithFruit>> getNotAnsweredSellerReviews(
             @AuthenticationPrincipal CustomUserDetails customUserDetails,
             @PathVariable Long fruitId,
             @RequestParam(required = false) Long cursorId,
@@ -109,20 +110,20 @@ public class ReviewController {
     {
         Pageable pageable = PageRequest.of(0, size);
 
-        Slice<ReviewResponse> myReviewResponses = reviewQueryService.getSellerReviews(customUserDetails.getUser(), cursorId, pageable, new ReviewReadCondition(fruitId, false));
+        Slice<ReviewResponseWithFruit> myReviewResponses = reviewQueryService.getSellerReviews(customUserDetails.getUser(), cursorId, pageable, new ReviewReadCondition(fruitId, false));
 
         return BaseResponse.onSuccess(myReviewResponses);
     }
 
     @GetMapping("/seller/notAnswered")
-    public BaseResponse<Slice<ReviewResponse>> getSellerNotAnsweredReviews(
+    public BaseResponse<Slice<ReviewResponseWithFruit>> getSellerNotAnsweredReviews(
             @AuthenticationPrincipal CustomUserDetails customUserDetails,
             @RequestParam(required = false) Long cursorId,
             @RequestParam(defaultValue="5") int size)
     {
         Pageable pageable = PageRequest.of(0, size);
 
-        Slice<ReviewResponse> myReviewResponses = reviewQueryService.getSellerReviews(customUserDetails.getUser(), cursorId, pageable, new ReviewReadCondition(false));
+        Slice<ReviewResponseWithFruit> myReviewResponses = reviewQueryService.getSellerReviews(customUserDetails.getUser(), cursorId, pageable, new ReviewReadCondition(false));
 
         return BaseResponse.onSuccess(myReviewResponses);
     }
