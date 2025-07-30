@@ -22,13 +22,15 @@ public class WishListCommandServiceImpl implements WishListCommandService{
     private final WishListRepository wishListRepository;
 
     @Override
-    public void addWishList(User user, Long fruitId){
+    public Long addWishList(User user, Long fruitId){
         Fruit fruit = fruitRepository.findById(fruitId)
                 .orElseThrow(() -> new RestApiException(FruitErrorStatus.FRUIT_NOT_FOUND));
 
         WishList wishList = WishListConverter.toWishList(user, fruit);
 
         wishListRepository.save(wishList);
+
+        return wishList.getId();
     }
 
     @Override

@@ -24,13 +24,13 @@ public class WishListController {
     private final WishListQueryService wishListQueryService;
 
     @PostMapping("/{fruitId}/add")
-    public BaseResponse<Void> addWishList(
+    public BaseResponse<Long> addWishList(
             @AuthenticationPrincipal CustomUserDetails customUserDetails,
             @PathVariable("fruitId") Long fruitId)
     {
-        wishListCommandService.addWishList(customUserDetails.getUser(), fruitId);
+        Long wishListId=wishListCommandService.addWishList(customUserDetails.getUser(), fruitId);
 
-        return BaseResponse.onSuccess(null);
+        return BaseResponse.onSuccess(wishListId);
     }
 
     @GetMapping

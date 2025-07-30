@@ -4,6 +4,6 @@ import com.laicos.khufarm.domain.user.entity.User;
 
 public interface WishListCommandService {
 
-    void addWishList(User user, Long fruitId);
+    Long addWishList(User user, Long fruitId);
     void deleteWishList(User user, Long wishListId);
 }
