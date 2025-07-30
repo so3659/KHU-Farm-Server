@@ -2,7 +2,9 @@ package com.laicos.khufarm.domain.auth.controller;
 
 import com.laicos.khufarm.domain.auth.dto.AccessTokenResponse;
 import com.laicos.khufarm.domain.auth.dto.IDFindRequest;
+import com.laicos.khufarm.domain.auth.dto.PasswordChangeRequest;
 import com.laicos.khufarm.domain.auth.dto.PasswordFindRequest;
+import com.laicos.khufarm.domain.auth.security.CustomUserDetails;
 import com.laicos.khufarm.domain.auth.service.AuthCommandService;
 import com.laicos.khufarm.domain.user.dto.request.BusinessUserJoinRequest;
 import com.laicos.khufarm.domain.user.dto.request.FarmerUserJoinRequest;
@@ -20,6 +22,7 @@ import jakarta.validation.constraints.Pattern;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseCookie;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -120,6 +123,15 @@ public class AuthController {
     @PostMapping("/findPassword")
     public BaseResponse<Void> sendPasswordEmail(@RequestBody @Valid PasswordFindRequest passwordFindRequest) throws Exception {
         authCommandService.sendLoginAuthMessage(passwordFindRequest);
+        return BaseResponse.onSuccess(null);
+    }
+
+    @PostMapping("/changePassword")
+    public BaseResponse<Void> changePassword(
+            @AuthenticationPrincipal CustomUserDetails customUserDetails,
+            @RequestBody @Valid PasswordChangeRequest passwordChangeRequest
+    ) throws Exception {
+        authCommandService.changePassword(customUserDetails.getUser(), passwordChangeRequest);
         return BaseResponse.onSuccess(null);
     }
 }

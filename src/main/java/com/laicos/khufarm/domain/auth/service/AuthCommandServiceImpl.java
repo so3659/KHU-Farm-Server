@@ -2,6 +2,7 @@ package com.laicos.khufarm.domain.auth.service;
 
 import com.laicos.khufarm.domain.auth.dto.AccessTokenResponse;
 import com.laicos.khufarm.domain.auth.dto.IDFindRequest;
+import com.laicos.khufarm.domain.auth.dto.PasswordChangeRequest;
 import com.laicos.khufarm.domain.auth.dto.PasswordFindRequest;
 import com.laicos.khufarm.domain.auth.entity.RefreshToken;
 import com.laicos.khufarm.domain.auth.jwt.JwtTokenProvider;
@@ -167,6 +168,25 @@ public class AuthCommandServiceImpl implements AuthCommandService{
                 .orElseThrow(() -> new RestApiException(UserErrorStatus.USER_NOT_FOUND));
 
         return user.getUserId();
+    }
+
+    @Override
+    public void changePassword(User user, PasswordChangeRequest passwordChangeRequest) throws Exception{
+        // 현재 비밀번호 확인
+        if (!passwordEncoder.matches(passwordChangeRequest.getCurrentPassword(), user.getPassword())) {
+            throw new RestApiException(UserErrorStatus.INVALID_PASSWORD);
+        }
+
+        // 새 비밀번호와 새 비밀번호 확인이 일치하는지 확인
+        if (!passwordChangeRequest.getNewPassword().equals(passwordChangeRequest.getConfirmNewPassword())) {
+            throw new RestApiException(UserErrorStatus.INVALID_PASSWORD_CONFIRM);
+        }
+
+        // 새 비밀번호 암호화
+        String newEncodedPassword = passwordEncoder.encode(passwordChangeRequest.getNewPassword());
+        user.setEncodedPassword(newEncodedPassword);
+
+        userRepository.save(user); // 변경된 사용자 정보 저장
     }
 
     private MimeMessage createMessage(String email, String ePw) throws Exception{
