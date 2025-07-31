@@ -7,10 +7,12 @@ import com.laicos.khufarm.domain.fruit.repository.FruitRepository;
 import com.laicos.khufarm.domain.order.converter.OrderConverter;
 import com.laicos.khufarm.domain.order.converter.OrderDetailConverter;
 import com.laicos.khufarm.domain.order.dto.request.OrderRequest;
+import com.laicos.khufarm.domain.order.dto.request.RefundRequest;
 import com.laicos.khufarm.domain.order.dto.response.OrderResponse;
 import com.laicos.khufarm.domain.order.entity.Order;
 import com.laicos.khufarm.domain.order.entity.OrderDetail;
 import com.laicos.khufarm.domain.order.enums.OrderStatus;
+import com.laicos.khufarm.domain.order.repository.OrderDetailRepository;
 import com.laicos.khufarm.domain.order.repository.OrderRepository;
 import com.laicos.khufarm.domain.user.entity.User;
 import com.laicos.khufarm.global.common.exception.RestApiException;
@@ -33,6 +35,7 @@ public class OrderCommandServiceImpl implements OrderCommandService{
     private final CartRepository cartRepository;
     private final OrderRepository orderRepository;
     private final FruitRepository fruitRepository;
+    private final OrderDetailRepository orderDetailRepository;
 
     @Override
     public OrderResponse orderByCart(User user, OrderRequest.CartOrderRequest request){
@@ -111,6 +114,15 @@ public class OrderCommandServiceImpl implements OrderCommandService{
         orderRepository.save(order);
 
         return OrderConverter.toOrderResponse(order);
+    }
+
+    @Override
+    public void refundOrder(User user, Long orderDetailId, RefundRequest request) {
+        OrderDetail orderDetail = orderDetailRepository.findOrderDetailById(orderDetailId)
+                .orElseThrow(() -> new RestApiException(OrderErrorStatus.ORDER_DETAIL_NOT_FOUND));
+
+        orderDetail.updateOrderStatus(OrderStatus.REFUND_REQUESTED);
+        orderDetail.setRefundReason(request.getRefundReason());
     }
 
     // 주문번호 생성 메서드

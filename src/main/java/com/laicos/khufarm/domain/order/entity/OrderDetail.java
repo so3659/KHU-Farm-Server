@@ -44,6 +44,8 @@ public class OrderDetail {
 
     private String deliveryNumber;
 
+    private String refundReason;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="order_id", nullable = false)
     private Order order;
@@ -76,5 +78,9 @@ public class OrderDetail {
 
     public void updateOrderStatus(OrderStatus orderStatus) {
         this.orderStatus = orderStatus;
+    }
+
+    public void setRefundReason(String refundReason) {
+        this.refundReason = refundReason;
     }
 }

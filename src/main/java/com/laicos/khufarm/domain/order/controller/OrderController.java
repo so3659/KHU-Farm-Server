@@ -2,6 +2,7 @@ package com.laicos.khufarm.domain.order.controller;
 
 import com.laicos.khufarm.domain.auth.security.CustomUserDetails;
 import com.laicos.khufarm.domain.order.dto.request.OrderRequest;
+import com.laicos.khufarm.domain.order.dto.request.RefundRequest;
 import com.laicos.khufarm.domain.order.dto.response.OrderResponse;
 import com.laicos.khufarm.domain.order.dto.response.OrderResponseWithDetail;
 import com.laicos.khufarm.domain.order.dto.response.PrePareOrderResponse;
@@ -86,5 +87,17 @@ public class OrderController {
         Slice<OrderResponseWithDetail> orderResponses = orderQueryService.getOrderBySeller(customUserDetails.getUser(), cursorId, pageable);
 
         return BaseResponse.onSuccess(orderResponses);
+    }
+
+    @PatchMapping("/refund/{orderDetailId}")
+    public BaseResponse<Void> refundOrder(
+            @AuthenticationPrincipal CustomUserDetails customUserDetails,
+            @RequestBody RefundRequest refundRequest,
+            @PathVariable Long orderDetailId)
+    {
+
+        orderCommandService.refundOrder(customUserDetails.getUser(), orderDetailId, refundRequest);
+
+        return BaseResponse.onSuccess(null);
     }
 }
