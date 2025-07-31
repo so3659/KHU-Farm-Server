@@ -184,7 +184,7 @@ public class PaymentCommandServiceImpl implements PaymentCommandService{
         Order order = orderDetail.getOrder();
 
         if(order.getPayment() == null) {
-            throw new RestApiException(PaymentErrorStatus.PAYMENT_FAILED, HttpStatus.OK);
+            throw new RestApiException(PaymentErrorStatus.PAYMENT_FAILED);
         }
         com.laicos.khufarm.domain.payment.entity.Payment payment = order.getPayment();
 
@@ -228,6 +228,28 @@ public class PaymentCommandServiceImpl implements PaymentCommandService{
 
             cartRepository.deleteAll(cartList);
         }
+    }
+
+    @Override
+    public void refundPaymentDeny(User user, Long orderDetailId){
+        OrderDetail orderDetail = orderDetailRepository.findOrderDetailById(orderDetailId)
+                .orElseThrow(() -> new RestApiException(OrderErrorStatus.ORDER_DETAIL_NOT_FOUND));
+
+        Order order = orderDetail.getOrder();
+
+        if(order.getPayment() == null) {
+            throw new RestApiException(PaymentErrorStatus.PAYMENT_FAILED);
+        }
+
+        Seller seller = sellerRepository.findByUser(user)
+                .orElseThrow(() -> new RestApiException(SellerErrorStatus.SELLER_NOT_FOUND));
+
+        if(orderDetail.getFruit().getSeller()!=seller){
+            throw new RestApiException(SellerErrorStatus.SELLER_NOT_MATCH);
+        }
+
+        orderDetail.updateOrderStatus(OrderStatus.REFUND_DENIED);
+        order.updateOrderStatus(OrderStatus.REFUND_DENIED);
     }
 
     private CancelData cancelPayment(IamportResponse<Payment> response) {

@@ -14,4 +14,5 @@ public interface PaymentCommandService {
     void webhookPayment(PortoneWebhookDto webhookDto) throws IamportResponseException, IOException;
     void deleteCartList(User user, List<Long> cartIdList);
     void refundPayment(User user, Long orderDetailId) throws IamportResponseException, IOException;
+    void refundPaymentDeny(User user, Long orderDetailId);
 }

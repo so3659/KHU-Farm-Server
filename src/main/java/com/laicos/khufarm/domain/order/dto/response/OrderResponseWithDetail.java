@@ -26,6 +26,7 @@ public class OrderResponseWithDetail {
     private String deliveryNumber;
     private String orderRequest;
     private String deliveryStatus;
+    private String refundReason;
     private LocalDateTime createdAt;
 
 }

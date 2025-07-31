@@ -86,4 +86,14 @@ public class PaymentController {
 
         return BaseResponse.onSuccess(null);
     }
+
+    @PostMapping("/refund/{orderDetailId}/deny")
+    public BaseResponse<Void> refundPaymentDeny(
+            @AuthenticationPrincipal CustomUserDetails customUserDetails,
+            @RequestParam Long orderDetailId){
+
+        paymentCommandService.refundPaymentDeny(customUserDetails.getUser(), orderDetailId);
+
+        return BaseResponse.onSuccess(null);
+    }
 }
