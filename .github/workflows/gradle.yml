@@ -90,6 +90,7 @@ jobs:
             -e cloud.ncp.s3.bucket=${{ secrets.NCP_OBJECT_BUCKET }} \
             -e chatBot.url=${{ secrets.CHAT_BOT_URL }} \
             -e mail.username=${{ secrets.MAIL_USERNAME }} \
+            -e mail.password=${{ secrets.MAIL_PASSWORD }} \
             -e tracker.callBackUrl=${{ secrets.TRACKER_CALLBACK }} \
             -e tracker.id=${{ secrets.TRACKER_ID }} \
             -e tracker.secret=${{ secrets.TRACKER_SECRET }} \
