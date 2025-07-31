@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 @Component
 public class OrderDetailConverter {
@@ -36,7 +37,7 @@ public class OrderDetailConverter {
                 .build();
     }
 
-    public static OrderResponseWithDetail toOrderResponseWithDetail(OrderDetail orderDetail) {
+    public static OrderResponseWithDetail toOrderResponseWithDetail(OrderDetail orderDetail, String deliveryState) {
         return OrderResponseWithDetail.builder()
                 .orderId(orderDetail.getOrder().getId())
                 .orderDetailId(orderDetail.getId())
@@ -53,14 +54,18 @@ public class OrderDetailConverter {
                 .deliveryCompany(orderDetail.getDeliveryCompany() != null ? orderDetail.getDeliveryCompany().getName() : null)
                 .deliveryNumber(orderDetail.getDeliveryNumber())
                 .orderRequest(orderDetail.getOrder().getOrderRequest())
-                .deliveryStatus(orderDetail.getOrderStatus().getDescription())
+                .deliveryStatus(deliveryState)
                 .createdAt(orderDetail.getOrder().getCreatedAt())
                 .build();
     }
 
-    public static List<OrderResponseWithDetail> toOrderResponseWithDetailList(List<OrderDetail> orderDetails) {
-        return orderDetails.stream()
-                .map(OrderDetailConverter::toOrderResponseWithDetail)
+    public static List<OrderResponseWithDetail> toOrderResponseWithDetailList(List<OrderDetail> orderDetails, List<String> deliveryStates) {
+        return IntStream.range(0, orderDetails.size())
+                .mapToObj(i -> {
+                    OrderDetail orderDetail = orderDetails.get(i);
+                    String deliveryState = deliveryStates.get(i);
+                    return toOrderResponseWithDetail(orderDetail, deliveryState);
+                })
                 .collect(Collectors.toList());
     }
 

@@ -14,6 +14,7 @@ public enum OrderErrorStatus implements BaseCodeInterface {
     OUT_OF_STOCK(HttpStatus.SERVICE_UNAVAILABLE, "ORDER401", "재고가 부족합니다"),
     ORDER_NOT_FOUND(HttpStatus.NOT_FOUND, "ORDER404", "주문을 찾을 수 없습니다"),
     ORDER_DETAIL_NOT_FOUND(HttpStatus.NOT_FOUND, "ORDER_DETAIL404", "해당 주문 상세을 찾을 수 없습니다"),
+    DELIVERY_INFO_NOT_FOUND(HttpStatus.NOT_FOUND, "DELIVERY404", "배송 정보를 찾을 수 없습니다"),
     ;
 
     private final HttpStatus httpStatus;

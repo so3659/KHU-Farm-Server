@@ -1,6 +1,7 @@
 package com.laicos.khufarm.domain.delivery.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.laicos.khufarm.domain.delivery.converter.DeliveryConverter;
 import com.laicos.khufarm.domain.delivery.dto.response.DeliveryErrorResponse;
@@ -32,6 +33,10 @@ public class DeliveryQueryServiceImpl implements DeliveryQueryService{
         OrderDetail orderDetail = orderDetailRepository.findById(orderDetailId)
                 .orElseThrow(() -> new RestApiException(OrderErrorStatus.ORDER_DETAIL_NOT_FOUND));
 
+        if(orderDetail.getDeliveryCompany() == null || orderDetail.getDeliveryNumber() == null) {
+            throw new RestApiException(OrderErrorStatus.DELIVERY_INFO_NOT_FOUND);
+        }
+
         OrderResponse orderResponse = OrderDetailConverter.toOrderResponse(orderDetail);
 
         ResponseEntity<String> response = deliveryInfoConfirm.confirmDeliveryInfo(orderDetail.getDeliveryCompany().getId(), orderDetail.getDeliveryNumber());
@@ -51,7 +56,30 @@ public class DeliveryQueryServiceImpl implements DeliveryQueryService{
                 throw new RuntimeException("알 수 없는 응답 형태: " + responseBody);
             }
         }
+    }
 
+    @Override
+    public String getDeliveryStateInfo(User user, Long orderDetailId){
+        OrderDetail orderDetail = orderDetailRepository.findById(orderDetailId)
+                .orElseThrow(() -> new RestApiException(OrderErrorStatus.ORDER_DETAIL_NOT_FOUND));
+
+        if(orderDetail.getDeliveryCompany() == null || orderDetail.getDeliveryNumber() == null) {
+            return null;
+        }
+
+
+        ResponseEntity<String> response = deliveryInfoConfirm.confirmDeliveryInfo(orderDetail.getDeliveryCompany().getId(), orderDetail.getDeliveryNumber());
+
+        String responseBody = response.getBody();
+
+        ObjectMapper objectMapper = new ObjectMapper();
+
+        try {
+            JsonNode rootNode = objectMapper.readTree(responseBody);
+            return rootNode.path("state").path("text").asText();
+        } catch (Exception e) {
+            return null;
+        }
 
     }
 }

@@ -1,5 +1,6 @@
 package com.laicos.khufarm.domain.order.repository;
 
+import com.laicos.khufarm.domain.delivery.service.DeliveryQueryService;
 import com.laicos.khufarm.domain.order.converter.OrderDetailConverter;
 import com.laicos.khufarm.domain.order.dto.response.OrderResponseWithDetail;
 import com.laicos.khufarm.domain.order.entity.OrderDetail;
@@ -26,6 +27,7 @@ public class CustomOrderRepositoryImpl implements CustomOrderRepository{
 
     private final JPAQueryFactory jpaQueryFactory;
     private final SellerRepository sellerRepository;
+    private final DeliveryQueryService deliveryQueryService;
 
     @Override
     public Slice<OrderResponseWithDetail> getOrderBySeller(User user, Long cursorId, Pageable pageable){
@@ -45,7 +47,11 @@ public class CustomOrderRepositoryImpl implements CustomOrderRepository{
                 .limit(pageable.getPageSize() + 1) // 페이지 크기 + 1로 커서 기반 페이징 처리
                 .fetch();
 
-        List<OrderResponseWithDetail> content = OrderDetailConverter.toOrderResponseWithDetailList(orderDetailList);
+        List<String> deliveryStateList = orderDetailList.stream()
+                .map(orderDetail -> deliveryQueryService.getDeliveryStateInfo(user, orderDetail.getId()))
+                .toList();
+
+        List<OrderResponseWithDetail> content = OrderDetailConverter.toOrderResponseWithDetailList(orderDetailList, deliveryStateList);
 
         boolean hasNext = false;
         if (content.size() > pageable.getPageSize()) {
