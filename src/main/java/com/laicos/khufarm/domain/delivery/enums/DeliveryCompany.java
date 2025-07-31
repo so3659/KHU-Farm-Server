@@ -39,4 +39,11 @@ public enum DeliveryCompany {
                 .findFirst()
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 택배사 이름입니다: " + name));
     }
+
+    public static DeliveryCompany ofId(String id) {
+        return Arrays.stream(DeliveryCompany.values())
+                .filter(c -> c.getId().equals(id))
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 택배사 ID입니다: " + id));
+    }
 }

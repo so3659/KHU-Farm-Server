@@ -47,11 +47,7 @@ public class CustomOrderRepositoryImpl implements CustomOrderRepository{
                 .limit(pageable.getPageSize() + 1) // 페이지 크기 + 1로 커서 기반 페이징 처리
                 .fetch();
 
-        List<String> deliveryStateList = orderDetailList.stream()
-                .map(orderDetail -> deliveryQueryService.getDeliveryStateInfo(user, orderDetail.getId()))
-                .toList();
-
-        List<OrderResponseWithDetail> content = OrderDetailConverter.toOrderResponseWithDetailList(orderDetailList, deliveryStateList);
+        List<OrderResponseWithDetail> content = OrderDetailConverter.toOrderResponseWithDetailList(orderDetailList);
 
         boolean hasNext = false;
         if (content.size() > pageable.getPageSize()) {
