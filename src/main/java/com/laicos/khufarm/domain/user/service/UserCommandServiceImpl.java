@@ -60,7 +60,6 @@ public class UserCommandServiceImpl implements UserCommandService{
         return UserResponse.builder()
                 .userId(user.getUserId())
                 .email(user.getEmail())
-                .phoneNumber(user.getPhoneNumber())
                 .userType(user.getUserType().toString())
                 .accessToken(newAccessToken)
                 .build();
@@ -102,7 +101,6 @@ public class UserCommandServiceImpl implements UserCommandService{
         return UserResponse.builder()
                 .userId(user.getUserId())
                 .email(user.getEmail())
-                .phoneNumber(user.getPhoneNumber())
                 .userType(user.getUserType().toString())
                 .accessToken(newAccessToken)
                 .build();
@@ -141,7 +139,6 @@ public class UserCommandServiceImpl implements UserCommandService{
         return UserResponse.builder()
                 .userId(user.getUserId())
                 .email(user.getEmail())
-                .phoneNumber(user.getPhoneNumber())
                 .userType(user.getUserType().toString())
                 .accessToken(null)
                 .build();
@@ -171,7 +168,6 @@ public class UserCommandServiceImpl implements UserCommandService{
         return UserResponse.builder()
                 .userId(user.getUserId())
                 .email(user.getEmail())
-                .phoneNumber(user.getPhoneNumber())
                 .userType(user.getUserType().toString())
                 .accessToken(newAccessToken)
                 .build();

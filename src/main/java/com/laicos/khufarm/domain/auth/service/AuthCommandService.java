@@ -22,4 +22,6 @@ public interface AuthCommandService {
     String findId(IDFindRequest idFindRequest) throws Exception;
 
     void changePassword(User user, PasswordChangeRequest passwordChangeRequest) throws Exception;
+
+    void deleteUser(User user);
 }

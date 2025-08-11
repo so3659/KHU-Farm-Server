@@ -134,4 +134,12 @@ public class AuthController {
         authCommandService.changePassword(customUserDetails.getUser(), passwordChangeRequest);
         return BaseResponse.onSuccess(null);
     }
+
+    @DeleteMapping("/deleteUser")
+    public BaseResponse<Void> deleteUser(
+            @AuthenticationPrincipal CustomUserDetails customUserDetails
+    ) {
+        authCommandService.deleteUser(customUserDetails.getUser());
+        return BaseResponse.onSuccess(null);
+    }
 }

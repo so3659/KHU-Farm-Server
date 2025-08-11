@@ -189,6 +189,12 @@ public class AuthCommandServiceImpl implements AuthCommandService{
         userRepository.save(user); // 변경된 사용자 정보 저장
     }
 
+    @Override
+    public void deleteUser(User user) {
+        // 사용자 삭제
+        userRepository.delete(user);
+    }
+
     private MimeMessage createMessage(String email, String ePw) throws Exception{
         MimeMessage message = mailSender.createMimeMessage();
 

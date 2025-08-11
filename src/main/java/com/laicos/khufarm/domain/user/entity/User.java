@@ -30,9 +30,6 @@ public class User extends BaseEntity {
     private String email;
 
     @Column(nullable = false)
-    private String phoneNumber;
-
-    @Column(nullable = false)
     private String userId;
 
     @Column(nullable = false)
