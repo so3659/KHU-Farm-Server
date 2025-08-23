@@ -1,5 +1,6 @@
 package com.laicos.khufarm.domain.inquiry.service;
 
+import com.google.firebase.messaging.FirebaseMessagingException;
 import com.laicos.khufarm.domain.fruit.entity.Fruit;
 import com.laicos.khufarm.domain.fruit.repository.FruitRepository;
 import com.laicos.khufarm.domain.inquiry.converter.InquiryConverter;
@@ -8,6 +9,8 @@ import com.laicos.khufarm.domain.inquiry.dto.request.InquiryReplyRequest;
 import com.laicos.khufarm.domain.inquiry.dto.request.InquiryRequest;
 import com.laicos.khufarm.domain.inquiry.entity.Inquiry;
 import com.laicos.khufarm.domain.inquiry.repository.InquiryRepository;
+import com.laicos.khufarm.domain.notification.dto.request.FCMRequest;
+import com.laicos.khufarm.domain.notification.service.NotificationCommandService;
 import com.laicos.khufarm.domain.user.entity.User;
 import com.laicos.khufarm.global.common.exception.RestApiException;
 import com.laicos.khufarm.global.common.exception.code.status.FruitErrorStatus;
@@ -23,6 +26,7 @@ public class InquiryCommandServiceImpl implements InquiryCommandService{
 
     private final InquiryRepository inquiryRepository;
     private final FruitRepository fruitRepository;
+    private final NotificationCommandService notificationCommandService;
 
     @Override
     public void addInquiry(User user, InquiryRequest inquiryRequest, Long fruitId){
@@ -35,11 +39,21 @@ public class InquiryCommandServiceImpl implements InquiryCommandService{
         inquiryRepository.save(inquiry);
     }
 
-    public void addInquiryReply(User user, InquiryReplyRequest inquiryReplyRequest, Long inquiryId){
+    public void addInquiryReply(User user, InquiryReplyRequest inquiryReplyRequest, Long inquiryId) throws FirebaseMessagingException {
         Inquiry inquiry = inquiryRepository.findById(inquiryId)
                 .orElseThrow(() -> new RestApiException(InquiryErrorStatus.INQUIRY_NOT_FOUND));
 
         inquiry.addInquiryReply(InquiryReplyConverter.toInquiryReply(inquiryReplyRequest.getContent(), inquiry));
         inquiryRepository.save(inquiry);
+
+        // 문의 답변 알림
+        FCMRequest fcmRequest = FCMRequest.builder()
+                .title("문의 답변 알림")
+                .body("문의 답변이 등록되었습니다.")
+                .build();
+
+        Long userId = inquiry.getUser().getId();
+
+        notificationCommandService.sendMessage(userId, fcmRequest);
     }
 }

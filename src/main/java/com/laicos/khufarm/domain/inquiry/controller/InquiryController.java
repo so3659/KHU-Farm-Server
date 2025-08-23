@@ -1,5 +1,6 @@
 package com.laicos.khufarm.domain.inquiry.controller;
 
+import com.google.firebase.messaging.FirebaseMessagingException;
 import com.laicos.khufarm.domain.auth.security.CustomUserDetails;
 import com.laicos.khufarm.domain.inquiry.dto.InquiryReadCondition;
 import com.laicos.khufarm.domain.inquiry.dto.request.InquiryReplyRequest;
@@ -75,8 +76,7 @@ public class InquiryController {
     public BaseResponse<Void> addReviewReply(
             @AuthenticationPrincipal CustomUserDetails customUserDetails,
             @RequestBody @Valid InquiryReplyRequest inquiryReplyRequest,
-            @PathVariable Long inquiryId)
-    {
+            @PathVariable Long inquiryId) throws FirebaseMessagingException {
         inquiryCommandService.addInquiryReply(customUserDetails.getUser(), inquiryReplyRequest, inquiryId);
 
         return BaseResponse.onSuccess(null);

@@ -1,7 +1,10 @@
 package com.laicos.khufarm.domain.delivery.service;
 
+import com.google.firebase.messaging.FirebaseMessagingException;
 import com.laicos.khufarm.domain.delivery.dto.request.DeliveryInfoRequest;
 import com.laicos.khufarm.domain.delivery.enums.DeliveryCompany;
+import com.laicos.khufarm.domain.notification.dto.request.FCMRequest;
+import com.laicos.khufarm.domain.notification.service.NotificationCommandService;
 import com.laicos.khufarm.domain.order.entity.OrderDetail;
 import com.laicos.khufarm.domain.order.enums.OrderStatus;
 import com.laicos.khufarm.domain.order.repository.OrderDetailRepository;
@@ -29,12 +32,13 @@ public class DeliveryCommandServiceImpl implements DeliveryCommandService{
     private final OrderDetailRepository orderDetailRepository;
     private final DeliveryTrackerApiClient deliveryTrackerApiClient; // API 호출 클라이언트 or 서비스
     private final DeliveryQueryService deliveryQueryService;
+    private final NotificationCommandService notificationCommandService;
 
     @Value("${tracker.callBackUrl}")
     private String callbackUrl;
 
     @Override
-    public void updateDeliveryStatus(User user, Long orderDetailId, DeliveryInfoRequest deliveryInfoRequest) {
+    public void updateDeliveryStatus(User user, Long orderDetailId, DeliveryInfoRequest deliveryInfoRequest) throws FirebaseMessagingException {
 
         OrderDetail orderDetail = orderDetailRepository.findById(orderDetailId)
                 .orElseThrow(() -> new RestApiException(OrderErrorStatus.ORDER_DETAIL_NOT_FOUND));
@@ -45,6 +49,16 @@ public class DeliveryCommandServiceImpl implements DeliveryCommandService{
         orderDetail.updateDeliveryInfo(deliveryCompany, deliveryNumber);
         orderDetail.updateOrderStatus(OrderStatus.SHIPPING);
         orderDetail.getOrder().updateOrderStatus(OrderStatus.SHIPPING);
+
+        // 배송 시작 알림 푸시 전송
+        FCMRequest fcmRequest = FCMRequest.builder()
+                .title("배송 시작 알림")
+                .body(String.format("주문하신 상품의 배송이 시작되었습니다. (%s - %s - %s)", orderDetail.getFruit().getTitle(), deliveryCompany.getName(), deliveryNumber))
+                .build();
+
+        Long userId = orderDetail.getOrder().getUser().getId();
+
+        notificationCommandService.sendMessage(userId, fcmRequest);
 
         // Webhook 등록을 위해 딜리버리트래커 API 호출
         try {
@@ -66,7 +80,7 @@ public class DeliveryCommandServiceImpl implements DeliveryCommandService{
     }
 
     @Override
-    public void handleDeliveryStatusCallback(String carrierId, String trackingNumber) {
+    public void handleDeliveryStatusCallback(String carrierId, String trackingNumber) throws FirebaseMessagingException {
 
         // 운송장 번호로 OrderDetail 조회
         OrderDetail orderDetail = orderDetailRepository.findByDeliveryCompanyAndDeliveryNumber(
@@ -78,5 +92,17 @@ public class DeliveryCommandServiceImpl implements DeliveryCommandService{
         if(deliveryState.contains("완료")) {
             orderDetail.updateOrderStatus(OrderStatus.SHIPMENT_COMPLETED);
         }
+
+        // 배송 상태 변경 알림 푸시 전송
+        DeliveryCompany deliveryCompany = orderDetail.getDeliveryCompany();
+        String deliveryNumber = orderDetail.getDeliveryNumber();
+        FCMRequest fcmRequest = FCMRequest.builder()
+                .title("배송 완료 알림")
+                .body(String.format("주문하신 상품의 배송이 완료되었습니다. (%s - %s - %s)", orderDetail.getFruit().getTitle(), deliveryCompany.getName(), deliveryNumber))
+                .build();
+
+        Long userId = orderDetail.getOrder().getUser().getId();
+
+        notificationCommandService.sendMessage(userId, fcmRequest);
     }
 }

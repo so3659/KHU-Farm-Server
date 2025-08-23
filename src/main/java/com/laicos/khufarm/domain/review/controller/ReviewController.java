@@ -1,5 +1,6 @@
 package com.laicos.khufarm.domain.review.controller;
 
+import com.google.firebase.messaging.FirebaseMessagingException;
 import com.laicos.khufarm.domain.auth.security.CustomUserDetails;
 import com.laicos.khufarm.domain.review.dto.ReviewReadCondition;
 import com.laicos.khufarm.domain.review.dto.request.ReviewReplyRequest;
@@ -45,8 +46,7 @@ public class ReviewController {
     public BaseResponse<Void> addReviewReply(
             @AuthenticationPrincipal CustomUserDetails customUserDetails,
             @RequestBody @Valid ReviewReplyRequest reviewReplyRequest,
-            @PathVariable Long reviewId)
-    {
+            @PathVariable Long reviewId) throws FirebaseMessagingException {
         reviewCommandService.addReviewReply(customUserDetails.getUser(), reviewReplyRequest, reviewId);
 
         return BaseResponse.onSuccess(null);

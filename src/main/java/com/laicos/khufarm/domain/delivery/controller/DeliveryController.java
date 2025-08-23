@@ -1,5 +1,6 @@
 package com.laicos.khufarm.domain.delivery.controller;
 
+import com.google.firebase.messaging.FirebaseMessagingException;
 import com.laicos.khufarm.domain.auth.security.CustomUserDetails;
 import com.laicos.khufarm.domain.delivery.dto.request.DeliveryInfoRequest;
 import com.laicos.khufarm.domain.delivery.dto.request.DeliveryTrackerWebhookRequest;
@@ -33,7 +34,7 @@ public class DeliveryController {
     public BaseResponse<Void> updateDeliveryStatus(
             @AuthenticationPrincipal CustomUserDetails customUserDetails,
             @Valid @RequestBody DeliveryInfoRequest deliveryInfoRequest,
-            @PathVariable Long orderDetailId) {
+            @PathVariable Long orderDetailId) throws FirebaseMessagingException {
 
         deliveryCommandService.updateDeliveryStatus(
                 customUserDetails.getUser(),
@@ -57,7 +58,7 @@ public class DeliveryController {
 
     @PostMapping("/tracker/webhook")
     public ResponseEntity<Void> trackerWebhook(
-            @RequestBody DeliveryTrackerWebhookRequest request) {
+            @RequestBody DeliveryTrackerWebhookRequest request) throws FirebaseMessagingException {
 
         deliveryCommandService.handleDeliveryStatusCallback(request.getCarrierId(), request.getTrackingNumber());
 

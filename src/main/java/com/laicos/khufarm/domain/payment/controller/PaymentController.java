@@ -1,5 +1,6 @@
 package com.laicos.khufarm.domain.payment.controller;
 
+import com.google.firebase.messaging.FirebaseMessagingException;
 import com.laicos.khufarm.domain.auth.security.CustomUserDetails;
 import com.laicos.khufarm.domain.fruit.dto.response.FruitResponseWithOrder;
 import com.laicos.khufarm.domain.payment.dto.PortoneConfirmDto;
@@ -45,7 +46,7 @@ public class PaymentController {
     }
 
     @PostMapping("/webhook")
-    public ResponseEntity<BaseResponse<String>> webhook(@RequestBody PortoneWebhookDto webhookDto) throws IamportResponseException, IOException {
+    public ResponseEntity<BaseResponse<String>> webhook(@RequestBody PortoneWebhookDto webhookDto) throws IamportResponseException, IOException, FirebaseMessagingException {
 
         paymentCommandService.webhookPayment(webhookDto);
 
@@ -80,7 +81,7 @@ public class PaymentController {
     @PostMapping("/refund/{orderDetailId}")
     public BaseResponse<Void> refundPayment(
             @AuthenticationPrincipal CustomUserDetails customUserDetails,
-            @RequestParam Long orderDetailId) throws IamportResponseException, IOException {
+            @RequestParam Long orderDetailId) throws IamportResponseException, IOException, FirebaseMessagingException {
 
         paymentCommandService.refundPayment(customUserDetails.getUser(), orderDetailId);
 
@@ -90,7 +91,7 @@ public class PaymentController {
     @PostMapping("/refund/{orderDetailId}/deny")
     public BaseResponse<Void> refundPaymentDeny(
             @AuthenticationPrincipal CustomUserDetails customUserDetails,
-            @RequestParam Long orderDetailId){
+            @RequestParam Long orderDetailId) throws FirebaseMessagingException {
 
         paymentCommandService.refundPaymentDeny(customUserDetails.getUser(), orderDetailId);
 

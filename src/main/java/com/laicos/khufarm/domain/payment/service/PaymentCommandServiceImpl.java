@@ -1,11 +1,14 @@
 package com.laicos.khufarm.domain.payment.service;
 
+import com.google.firebase.messaging.FirebaseMessagingException;
 import com.laicos.khufarm.domain.cart.entity.Cart;
 import com.laicos.khufarm.domain.cart.repository.CartRepository;
 import com.laicos.khufarm.domain.fruit.entity.Fruit;
 import com.laicos.khufarm.domain.fruit.entity.FruitRegularPrice;
 import com.laicos.khufarm.domain.fruit.repository.FruitRegularPriceRepository;
 import com.laicos.khufarm.domain.fruit.repository.FruitRepository;
+import com.laicos.khufarm.domain.notification.dto.request.FCMRequest;
+import com.laicos.khufarm.domain.notification.service.NotificationCommandService;
 import com.laicos.khufarm.domain.order.entity.Order;
 import com.laicos.khufarm.domain.order.entity.OrderDetail;
 import com.laicos.khufarm.domain.order.enums.OrderStatus;
@@ -52,6 +55,7 @@ public class PaymentCommandServiceImpl implements PaymentCommandService{
     private final PaymentFailureHandler paymentFailureHandler;
     private final IamportClient iamportClient;
     private final SellerRepository sellerRepository;
+    private final NotificationCommandService notificationCommandService;
 
     @Override
     public void confirmPayment(PortoneConfirmDto portoneConfirmDto){
@@ -88,7 +92,7 @@ public class PaymentCommandServiceImpl implements PaymentCommandService{
     }
 
     @Override
-    public void webhookPayment(PortoneWebhookDto webhookDto) throws IamportResponseException, IOException {
+    public void webhookPayment(PortoneWebhookDto webhookDto) throws IamportResponseException, IOException, FirebaseMessagingException {
 
         IamportResponse<Payment> iamportResponse = iamportClient.paymentByImpUid(webhookDto.getImpUid());
 
@@ -135,7 +139,7 @@ public class PaymentCommandServiceImpl implements PaymentCommandService{
             }
 
             // 재고 감소
-            for(OrderDetail orderDetail : order.getOrderDetails()){
+            for(OrderDetail orderDetail : order.getOrderDetails()) {
                 Fruit fruit = fruitRepository.findById(orderDetail.getFruit().getId())
                         .orElseThrow(() -> {
                             paymentFailureHandler.handlePaymentFailure(order, payment, FruitErrorStatus.FRUIT_NOT_FOUND.getMessage(), PaymentStatus.PAYMENT_CANCELLED);
@@ -153,6 +157,26 @@ public class PaymentCommandServiceImpl implements PaymentCommandService{
 
 
                 fruit.decreaseFruitStock(orderDetail.getCount());
+
+                // 재고에 따라 알림 전송
+                if (fruit.getStock() == 0) {
+                    FCMRequest fcmRequest = FCMRequest.builder()
+                            .title("재고 알림")
+                            .body(fruit.getTitle() + " 상품의 재고가 모두 소진되었습니다. \n 빠른 시일 내에 재고를 보충해 주세요.")
+                            .build();
+                    Long sellerId = fruit.getSeller().getUser().getId();
+
+                    notificationCommandService.sendMessage(sellerId, fcmRequest);
+                }
+                else if (fruit.getStock() <= 5) {
+                    FCMRequest fcmRequest = FCMRequest.builder()
+                            .title("재고 알림")
+                            .body(fruit.getTitle() + " 상품의 재고가 " + fruit.getStock() + "개 남았습니다. \n 빠른 시일 내에 재고를 보충해 주세요.")
+                            .build();
+                    Long sellerId = fruit.getSeller().getUser().getId();
+
+                    notificationCommandService.sendMessage(sellerId, fcmRequest);
+                }
             }
 
             order.addPayment(payment);
@@ -177,7 +201,7 @@ public class PaymentCommandServiceImpl implements PaymentCommandService{
     }
 
     @Override
-    public void refundPayment(User user, Long orderDetailId) throws IamportResponseException, IOException{
+    public void refundPayment(User user, Long orderDetailId) throws IamportResponseException, IOException, FirebaseMessagingException {
         OrderDetail orderDetail = orderDetailRepository.findOrderDetailById(orderDetailId)
                 .orElseThrow(() -> new RestApiException(OrderErrorStatus.ORDER_DETAIL_NOT_FOUND));
 
@@ -215,6 +239,15 @@ public class PaymentCommandServiceImpl implements PaymentCommandService{
             throw new RestApiException(PaymentErrorStatus.PAYMENT_CANCEL_FAILED);
         }
 
+        // 환불 알림 전송
+        FCMRequest fcmRequest = FCMRequest.builder()
+                .title("환불이 완료되었습니다.")
+                .body(orderDetail.getFruit().getTitle() + " 상품의 환불이 완료되었습니다.")
+                .build();
+
+        Long userId = orderDetail.getOrder().getUser().getId();
+
+        notificationCommandService.sendMessage(userId, fcmRequest);
 
     }
 
@@ -231,7 +264,7 @@ public class PaymentCommandServiceImpl implements PaymentCommandService{
     }
 
     @Override
-    public void refundPaymentDeny(User user, Long orderDetailId){
+    public void refundPaymentDeny(User user, Long orderDetailId) throws FirebaseMessagingException {
         OrderDetail orderDetail = orderDetailRepository.findOrderDetailById(orderDetailId)
                 .orElseThrow(() -> new RestApiException(OrderErrorStatus.ORDER_DETAIL_NOT_FOUND));
 
@@ -250,6 +283,16 @@ public class PaymentCommandServiceImpl implements PaymentCommandService{
 
         orderDetail.updateOrderStatus(OrderStatus.REFUND_DENIED);
         order.updateOrderStatus(OrderStatus.REFUND_DENIED);
+
+        // 환불 거절 알림 전송
+        FCMRequest fcmRequest = FCMRequest.builder()
+                .title("환불이 취소되었습니다.")
+                .body(orderDetail.getFruit().getTitle() + " 상품의 환불이 취소되었습니다. \n 궁금한 점은 상품 문의란에 문의를 추가해 주세요.\n" +
+                        " 빠른 시일 내에 확인 후 도와드리겠습니다. 감사합니다.")
+                .build();
+
+        Long userId = orderDetail.getOrder().getUser().getId();
+        notificationCommandService.sendMessage(userId, fcmRequest);
     }
 
     private CancelData cancelPayment(IamportResponse<Payment> response) {
