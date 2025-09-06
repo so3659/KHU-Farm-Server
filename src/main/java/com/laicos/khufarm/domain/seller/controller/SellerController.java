@@ -1,18 +1,23 @@
 package com.laicos.khufarm.domain.seller.controller;
 
+import com.laicos.khufarm.domain.auth.security.CustomUserDetails;
 import com.laicos.khufarm.domain.fruit.validation.annotation.ExistWholesaleRetailCategory;
 import com.laicos.khufarm.domain.seller.apiSpecification.SellerApiSpecification;
 import com.laicos.khufarm.domain.seller.dto.SellerReadCondition;
+import com.laicos.khufarm.domain.seller.dto.request.SellerAddRequest;
 import com.laicos.khufarm.domain.seller.dto.response.SellerResponse;
 import com.laicos.khufarm.domain.seller.dto.response.SellerResponseWithFruit;
+import com.laicos.khufarm.domain.seller.service.SellerCommandService;
 import com.laicos.khufarm.domain.seller.service.SellerQueryService;
 import com.laicos.khufarm.domain.seller.validation.annotation.ExistSeller;
 import com.laicos.khufarm.global.common.base.BaseResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,6 +29,7 @@ import org.springframework.web.bind.annotation.*;
 public class SellerController implements SellerApiSpecification {
 
     private final SellerQueryService sellerQueryService;
+    private final SellerCommandService sellerCommandService;
 
     @GetMapping
     public BaseResponse<Slice<SellerResponse>> getSellers(
@@ -59,5 +65,14 @@ public class SellerController implements SellerApiSpecification {
         SellerResponseWithFruit SellerResponses = sellerQueryService.getFruitBySellerId(cursorId, wholesaleRetailCategoryId, sellerId, pageable);
 
         return BaseResponse.onSuccess(SellerResponses);
+    }
+
+    @PostMapping("/add")
+    public BaseResponse<Void> addSeller(
+            @AuthenticationPrincipal CustomUserDetails customUserDetails,
+            @RequestBody @Valid SellerAddRequest sellerAddRequest
+    ){
+        sellerCommandService.addSeller(customUserDetails.getUser(), sellerAddRequest);
+        return BaseResponse.onSuccess(null);
     }
 }

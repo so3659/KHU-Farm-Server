@@ -1,9 +1,11 @@
 package com.laicos.khufarm.domain.seller.converter;
 
 import com.laicos.khufarm.domain.fruit.dto.response.FruitResponse;
+import com.laicos.khufarm.domain.seller.dto.request.SellerAddRequest;
 import com.laicos.khufarm.domain.seller.dto.response.SellerResponse;
 import com.laicos.khufarm.domain.seller.dto.response.SellerResponseWithFruit;
 import com.laicos.khufarm.domain.seller.entity.Seller;
+import com.laicos.khufarm.domain.user.entity.User;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Component;
 
@@ -45,5 +47,15 @@ public class SellerConverter {
                 .fruits(fruitList)
                 .build();
 
+    }
+
+    public static Seller toSeller(User user, SellerAddRequest sellerAddRequest) {
+        return Seller.builder()
+                .user(user)
+                .brandName(sellerAddRequest.getBrandName())
+                .title(sellerAddRequest.getTitle())
+                .imageUrl(sellerAddRequest.getImageUrl())
+                .description(sellerAddRequest.getDescription())
+                .build();
     }
 }
