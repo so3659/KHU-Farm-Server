@@ -45,6 +45,7 @@ public class SecurityConfig {
                         .requestMatchers("/payment/confirm", "/payment/webhook", "/delivery/tracker/webhook").permitAll()
                         .requestMatchers("/auth/individual/signup", "/auth/business/signup", "/auth/farmer/signup").permitAll()
                         .requestMatchers("/swagger-ui/**", "/v3/api-docs/**", "/swagger-ui.html").permitAll()
+                        .requestMatchers("/image/upload").permitAll()
                         .requestMatchers("/review/{reviewId}/reply").hasRole("FARMER")
                         .anyRequest().authenticated())
                 .exceptionHandling(exceptions -> exceptions
