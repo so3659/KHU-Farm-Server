@@ -1,176 +1,71 @@
 # 🍎KHU:FARM Project
 <img width="2064" height="2752" alt="Image" src="https://github.com/user-attachments/assets/368f0367-4fff-48a0-ac71-7bb14c7692a3" />
 
+<br/>
+
 > 모났지만 달콤한 과일, 쿠팜이 직접 연결합니다. 착한 가격, 수수료 0원. 농가와 지구를 함께 지켜요🍎
 
 ----------
 
 
-## 🔎 개발환경
-- Springboot 2.7.2
-- gradle 7.5
-- Security / JWT
-- AWS MySQL
-- AWS S3
-- Tika
+## 🔎 프로젝트 개요
+
+>KHU:FARM은 생산자의 정성은 그대로, 겉모습만 조금 다른 '못난이 과일'을 소비자와 직접 연결하는 직거래 플랫폼입니다.
+
+### 🌱 왜 못난이 과일인가요?  
+>외형 기준을 충족하지 못했다는 이유로,  
+전 세계에서는 연간 “약 13억 톤”의 농산물이 폐기됩니다. 이는 전체 식량 생산량의 약 1/3에 달하는 규모입니다 (FAO, 2019).  
+국내에서도 과일류의 약 “22%”가 등급 외로 폐기되며, 이로 인한 손실은 “연간 최대 5조 원”에 달하는 것으로 추산됩니다 (농림축산식품부, 2024).  
+하지만 못난이 과일은 맛도, 영양도, 품질도 일반 과일과 다르지 않습니다.
+
+### 👨‍🌾 당신의 소비가 세상을 바꿉니다  
+>이 앱을 통해 과일을 구매하시면,
+>- 버려질 뻔한 농산물을 구출하고
+>- 농가의 실질 소득 증대와 상생을 도모하며
+>- 지구의 탄소 발자국을 줄이는 데 기여할 수 있어요.  
+  *(음식물 폐기물 1kg당 “약 2.5kg의 CO₂”가 발생합니다 (UNEP, 2021).)
+
+### 🍎 지금 설치하고, 착한 소비에 동참해 보세요.
 
 <br/>
 
-## 🔎 주요기능
-### 회원관리
-1. 소셜 로그인(네이버, 카카오) / 회원가입 / 로그인 / 로그아웃 / 회원탈퇴
-
-### 조회 기능
-1. 여행 관심사 선택 및 관심사 기반의 게시글로 추천페이지 구성
-2. 지역, 관심사, 비용별 게시글 조회
-3. 조회순/최신순/추천순 정렬 게시글 조회(+ 무한 스크롤)
-4. 제목, 내용 기반의 게시글 검색 기능
-
-### 상세조회 기능
-1. 게시글 신고 및 좋아요 기능
-2. 게시글 댓글 작성, 수정, 삭제
-
-### 작성 기능
-1. 여행 후기 작성, 수정, 삭제
-2. 여행 영상 스토리 기능 (모든 회원의 스토리 조회 가능, 12시간 후 삭제됨)
-
-### 마이페이지
-1. 프로필, 닉네임 / 관심 여행 키워드 수정
-2. 작성 게시글 / 좋아요 한 게시글 모아보기
-3. 개인 일정 작성, 수정, 삭제(일정완료 <-> 일정취소 기능)
-4. 작성한 게시글에 대한 댓글/좋아요 알림 기능
-
+## 🔎 기술스택
+- Java: 21
+- Spring Boot: 3.5.3
+- Gradle: 7.5
+- Database: MySQL
+- Cloud: Naver Cloud Platform (NCP)
+- ORM: Spring Data JPA, QueryDSL
+- Security: Spring Security, JWT
+- External API: PortOne, Feign Client
+- Messaging: FCM (Firebase Cloud Messaging), SMTP
+- API Documentation: Swagger (springdoc-openapi)
+- Serialization: Jackson
+- ETC: Lombok, JAXB
 
 <br/>
 
 --------------
 
 ## 💡ERD
-![igo1](https://user-images.githubusercontent.com/44489399/197399324-f39dbc87-a6b9-476d-b44b-ac4876cbd2a4.png)
+<img width="4421" height="2142" alt="Image" src="https://github.com/user-attachments/assets/c0d0a928-08ec-486b-baec-cf9926746ef4" />
 
 <br/><br/>
 ## 💡서비스 아키텍처
-![그림01](https://user-images.githubusercontent.com/110470208/198345269-83cc478e-428d-4361-9262-689c274a15e5.jpg)
+![Image](https://github.com/user-attachments/assets/df7c4996-812a-4ba9-8850-4f983305a0a7)
 
 
-<br/><br/>
-## 💡API 설계
-|기능|메서드|Url|
-|-----------------|------|------------------|
-|카카오 oauth2 로그인 |GET|/kakao/callback|
-|네이버 oauth2 로그인 |GET|/naver/callback<br>|
-|JWT 재발급 |GET| /refresh |
-|회원가입 |POST| /api/member/signup |
-|로그인 |POST| /api/member/login |
-|회원가입 |POST| /api/member/signup |
-|로그아웃	|POST|/api/member/logout|<br>
-|회원탈퇴 |DELETE| /api/member/withdrawal/{id} |
-|회원가입 |POST| /api/member/signup |
-|로그인 후 태그 설정 |PUT|/api/member/tag|<br>
-|로그인 후 추천페이지 |GET|/api/member/posts|<br>
-|전체 게시글 조회|GET|/api/posts|<br>
-|그룹별 게시글 조회(무한스크롤) |GET|/api/posts/group?type={type}&page=0|<br>
-|관심사별 게시글 조회 |GET|/api/posts/interest?type=interest|<br>
-|지역별 게시글 조회 |GET|/api/posts/region?type=region|<br>
-|비용별 게시글 조회 |GET|/api/posts/cost?type=cost|<br>
-|게시글 상세조회 |GET|/api/detail/{postId}|<br>
-|게시글 작성	|POST|	/api/post|<br>
-|게시글 수정	|PUT|/api/post/{id}|<br>
-|게시글 삭제	|DELETE|	/api/post/{id}|<br>
-|좋아요 기능	|POST|	/api/heart/{id}|<br>
-|신고 기능	|POST|	/api/report|/{id}<br>
-|스토리 조회	|GET|	/api/storys|<br>
-|스토리 작성	|POST|	/api/story|<br>
-|스토리 삭제 |DELETE| /api/story/{id} |
-|댓글 작성	|POST|	/api/comment|<br>
-|댓글 조회	|GET|	/api/comments/{id}|<br>
-|댓글 수정	|PUT|	/api/comment/{id}|<br>
-|댓글 삭제	|DELETE|	/api/comment/{id}|<br>
-|나의 페이지 조회(태그, 닉네임, 이미지)	|GET|	/api/mypage|<br>
-|나의 페이지/내가 쓴 글 불러오기	|GET|	/api/mypage/post|<br>
-|나의 페이지/나의 일정 불러오기	|GET|	/api/mypost|<br>
-|나의 페이지/좋아요 포스트 불러오기	|GET|	api/mypage/likepost|<br>
-|프로필 수정	|PUT|	/api/mypage/profile|<br>
-|나의 페이지 카테고리 수정 	|PUT|	/api/member/tag|<br>
-|나의 일정 조회	|GET|	/api/mypost|<br>
-|나의 일정 작성	|POST|	/api/mypost|<br>
-|나의 일정 수정	|PATCH|	/api/mypost|<br>
-|나의 일정 삭제	|DELETE|	/api/mypost/{id}|<br>
-|나의 일정 완료	|POST|	/api/mypost/done/{id}|<br>
-|나의 일정 완료취소	|POST|	/api/mypost/cancel/{id}|<br>
-|게시글 검색	|GET|	/api/search/{keyword}|<br><br>
-|알림 구독 |GET| /api/member/subscribe |
-|전체 알림 조회 |GET| /api/member/notifications|
-|알림 읽음 설정 |PATCH| /api/member/notifications/{id}|
-|알림 삭제 |DELETE| /api/member/notifications/{id}|
-|로딩 이미지|GET| /loading-image|
+--------------
 
-<br/><br/>
-## 💡트러블슈팅
-#### 1. Entity 컬럼 글자 수 설정
+## ❤️ 앱 다운로드
 
-      문제
-      글과 이미지url를 컬럼 하나에 묶어 보낼 때 컬럼의 글자수 제한
+### [플레이스토어](https://play.google.com/store/apps/details?id=com.laicos.khufarm&hl=ko)
+### [앱스토어](https://apps.apple.com/us/app/khu-farm/id6749537864)
 
-      원인
-      프론트에서 한 개의 Column에 text와 imgurl을 함께 담아 JSON형식으로 변환해 백엔드에 보내는 방법을 사용하기로 결정했다.
-      사진 1개와 글은 문제없이 들어왔으나, 사진2개 이상과 글을 담아 보내는 과정에서 에러가 발생했다.
-      에러 내용은 컬럼안에 내용들을 다 담지 못한다는 오류다.
+<br />
 
-      해결
-      Column 에 추가적으로 @Column(columnDefinition = "TEXT") 입력
-      columnDefinition으로 기본 엔티티 속성 값을 설정할 수 있기에 단순 TEXT형식으로 오고 가도록 설정
-      Content 엔티티 안에 글 내용과 이미지를 함께 불러오는 블로그 형식의 방식이었기에 지금의 TEXT 설정을 유용하게 사용하였고,
-      JSON 타입으로 RDB저장에 사용할 때는 TEXT대신 JSON을 입력하여 JPA의 의존성 기능을 더 활용할 수 있겠다.
+--------------
 
-#### 2. 깃액션
-      문제
-      깃 액션을 이용한 자동 배포시 8081과 8082포트가 동시에 nohup으로 시작되는 순간
-      ec2에 있는 인스턴스가 cpu 100%를 사용하면서 멈추는 현상
-      
-      원인
-      ec2를 가동시키는 하드웨어 자체에 이슈가 있는 경우도 있다고하여
-      기존 인스턴스를 종료 후 새로운 인스턴스를 만들어 사용해봤지만 이슈는 같았다.
-      인스턴스를 실행시키는 ubuntu 자체의 문제라고 생각이 되어
-      찾아본 결과 프리티어의 메모리는 1GB정도로 지급된다고 한다.
-      1GB의 메모리로 8081,8082를 동시에 연다는 것이 힘들다고 생각이 됐고
-      이 과정에서 인스턴스의 메모리 부족이라고 생각이 됐다.
-      
-      해결
-      swap파일을 하나 생성해주어 hdd의 일정공간을 ram처럼 사용하게 하였다. 
-      
-      1. 2GB의 빈 디스크를 만들어주었다.
-      $ sudo dd if=/dev/zero of=/swapfile bs=128M count=32
-      2. 만든 swap파일의 권한을 생성해주었다
-      $ sudo chmod 600 /swapfile
-      3. 스왑파일로 설정
-      $ sudo mkswap /swapfile
-      4. 스왑파일을 실행
-      $ sudo swapon /swapfile
-      5. 인스턴스 재시작시 swap파일을 다시 기동시켜줘야하는데 이 작업을 건너뛰기 위해서
-      fstab파일에 값을 추가해 인스턴스를 재시작할때 자동으로 해당 swap을 실행시켜주게 설정.
-      vi /etc/fstab
-      /root/swapfile swap swap auto 0 0
-      
-      후 처리 예정
-      1.ubuntu에서 생성한 swap으로도 서버개설이 힘들다고 생각되면 t2.micro대신 t2.meduim으로 변경 예정
-      2.swap 메모리 추가
-      사실 이 방법은 좋지 않은 방법 같다. 메모리를 대체할수는 있지만 100%는 힘들다
-      30배 정도의 차이가 나는 방법이기 때문에 최대한 1번의 방법으로 생각중. 
+## 📞 Contact
 
-#### 3. DB 형상관리
-      도입이유
-      서비스 배포 후 데이터베이스의 수정, 삭제, 입력 등 SQL 이력을 관리하기 위함
-
-      요구사항
-      테스트 데이터가 쌓여있는 상태에서 스키마 구조를 바꿔야 하는 상황.
-
-      해결방안
-      1. 기존에 있는 테이블의 정보만 TRUNCATE를 사용하여 모두 삭제한다.
-      2. flyway툴을 사용하여 해당 테이블에 컬럼을 추가하는 migration을 진행한다.
-
-      의견 조율
-      테스트 배포 상태라 table을 삭제하고 다시 생성하는게 가장 단순한 방법이지만, 실제 배포 후 DB를 변경할 수 없는 상황에서 다른 수정 사항이 생길 수 있다는 의견이 일치했다.
-
-      의견 결정
-      실제 배포시에 DB구조를 변경해야 하는 상황이 생길 수 있다고 판단하여 flyway툴을 사용하여 mygration을 하는 방법으로 결정했다.
+* 김성욱 : so3659@naver.com
