@@ -40,14 +40,13 @@
 - External API: PortOne, Feign Client
 - Messaging: FCM (Firebase Cloud Messaging), SMTP
 - API Documentation: Swagger (springdoc-openapi)
-- Serialization: Jackson
-- ETC: Lombok, JAXB
+
 
 <br/>
 
 --------------
 
-## 💡ERD
+## [💡ERD](https://www.erdcloud.com/d/aeByf3Yk4ihBy34Te)
 <img width="4421" height="2142" alt="Image" src="https://github.com/user-attachments/assets/c0d0a928-08ec-486b-baec-cf9926746ef4" />
 
 <br/><br/>
