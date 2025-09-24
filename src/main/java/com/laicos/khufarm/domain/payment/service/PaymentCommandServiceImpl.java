@@ -212,7 +212,7 @@ public class PaymentCommandServiceImpl implements PaymentCommandService{
         }
         com.laicos.khufarm.domain.payment.entity.Payment payment = order.getPayment();
 
-        Seller seller = sellerRepository.findByUser(user)
+        Seller seller = sellerRepository.findByUser(orderDetail.getFruit().getSeller().getUser())
                 .orElseThrow(() -> new RestApiException(SellerErrorStatus.SELLER_NOT_FOUND));
 
         if(orderDetail.getFruit().getSeller()!=seller){
