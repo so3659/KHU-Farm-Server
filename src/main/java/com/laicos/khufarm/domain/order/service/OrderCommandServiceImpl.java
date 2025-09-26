@@ -1,9 +1,12 @@
 package com.laicos.khufarm.domain.order.service;
 
+import com.google.firebase.messaging.FirebaseMessagingException;
 import com.laicos.khufarm.domain.cart.entity.Cart;
 import com.laicos.khufarm.domain.cart.repository.CartRepository;
 import com.laicos.khufarm.domain.fruit.entity.Fruit;
 import com.laicos.khufarm.domain.fruit.repository.FruitRepository;
+import com.laicos.khufarm.domain.notification.dto.request.FCMRequest;
+import com.laicos.khufarm.domain.notification.service.NotificationCommandService;
 import com.laicos.khufarm.domain.order.converter.OrderConverter;
 import com.laicos.khufarm.domain.order.converter.OrderDetailConverter;
 import com.laicos.khufarm.domain.order.dto.request.OrderRequest;
@@ -36,6 +39,7 @@ public class OrderCommandServiceImpl implements OrderCommandService{
     private final OrderRepository orderRepository;
     private final FruitRepository fruitRepository;
     private final OrderDetailRepository orderDetailRepository;
+    private final NotificationCommandService notificationCommandService;
 
     @Override
     public OrderResponse orderByCart(User user, OrderRequest.CartOrderRequest request){
@@ -117,12 +121,21 @@ public class OrderCommandServiceImpl implements OrderCommandService{
     }
 
     @Override
-    public void refundOrder(User user, Long orderDetailId, RefundRequest request) {
+    public void refundOrder(User user, Long orderDetailId, RefundRequest request) throws FirebaseMessagingException {
         OrderDetail orderDetail = orderDetailRepository.findOrderDetailById(orderDetailId)
                 .orElseThrow(() -> new RestApiException(OrderErrorStatus.ORDER_DETAIL_NOT_FOUND));
 
         orderDetail.updateOrderStatus(OrderStatus.REFUND_REQUESTED);
         orderDetail.setRefundReason(request.getRefundReason());
+
+        // 환불 거절 알림 전송
+        FCMRequest fcmRequest = FCMRequest.builder()
+                .title("환불이 접수되었습니다.")
+                .body(orderDetail.getFruit().getTitle() + " 상품의 환불이 접수되었습니다.")
+                .build();
+
+        Long sellerId = orderDetail.getFruit().getSeller().getUser().getId();
+        notificationCommandService.sendMessage(sellerId, fcmRequest);
     }
 
     // 주문번호 생성 메서드

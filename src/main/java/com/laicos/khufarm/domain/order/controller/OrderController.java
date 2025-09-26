@@ -1,5 +1,6 @@
 package com.laicos.khufarm.domain.order.controller;
 
+import com.google.firebase.messaging.FirebaseMessagingException;
 import com.laicos.khufarm.domain.auth.security.CustomUserDetails;
 import com.laicos.khufarm.domain.order.dto.request.OrderRequest;
 import com.laicos.khufarm.domain.order.dto.request.RefundRequest;
@@ -93,8 +94,7 @@ public class OrderController {
     public BaseResponse<Void> refundOrder(
             @AuthenticationPrincipal CustomUserDetails customUserDetails,
             @RequestBody RefundRequest refundRequest,
-            @PathVariable Long orderDetailId)
-    {
+            @PathVariable Long orderDetailId) throws FirebaseMessagingException {
 
         orderCommandService.refundOrder(customUserDetails.getUser(), orderDetailId, refundRequest);
 
