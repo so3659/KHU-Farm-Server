@@ -54,6 +54,7 @@ public class OrderDetailConverter {
                 .deliveryNumber(orderDetail.getDeliveryNumber())
                 .orderRequest(orderDetail.getOrder().getOrderRequest())
                 .deliveryStatus(orderDetail.getOrderStatus().getDescription())
+                .orderStatus(orderDetail.getOrderStatus().getDescription())
                 .refundReason(orderDetail.getRefundReason() != null ? orderDetail.getRefundReason() : null)
                 .createdAt(orderDetail.getOrder().getCreatedAt())
                 .build();
