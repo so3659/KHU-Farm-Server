@@ -3,6 +3,7 @@ package com.laicos.khufarm.domain.fruit.dto.response;
 
 import com.laicos.khufarm.domain.delivery.dto.response.DeliveryStatus;
 import com.laicos.khufarm.domain.delivery.enums.DeliveryCompany;
+import com.laicos.khufarm.domain.order.enums.OrderStatus;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -33,5 +34,6 @@ public class FruitResponseWithOrder {
     private LocalDateTime createdAt;
     private Long orderId;
     private Long orderDetailId;
+    private OrderStatus orderStatus;
     private DeliveryStatus deliveryStatus;
 }

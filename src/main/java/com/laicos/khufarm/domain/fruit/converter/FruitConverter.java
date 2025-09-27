@@ -192,6 +192,7 @@ public class FruitConverter {
                 .createdAt(orderDetail.getOrder().getCreatedAt())
                 .orderId(orderDetail.getOrder().getId())
                 .orderDetailId(orderDetail.getId())
+                .orderStatus(orderDetail.getOrderStatus())
                 .deliveryStatus(deliveryStatus)
                 .build();
     }
