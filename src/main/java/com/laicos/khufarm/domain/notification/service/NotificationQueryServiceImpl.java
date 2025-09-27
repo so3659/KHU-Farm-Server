@@ -32,6 +32,8 @@ public class NotificationQueryServiceImpl implements NotificationQueryService{
 
         notification.markAsRead();
 
+        notificationRepository.save(notification);
+
         return NotificationConverter.toNotificationDto(notification);
     }
 }
