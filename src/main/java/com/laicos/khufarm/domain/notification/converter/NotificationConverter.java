@@ -7,6 +7,7 @@ import com.laicos.khufarm.domain.user.entity.User;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Component
 public class NotificationConverter {
@@ -31,6 +32,6 @@ public class NotificationConverter {
     public static List<NotificationResponse> toNotificationDtoList(List<Notification> notifications) {
         return notifications.stream()
                 .map(NotificationConverter::toNotificationDto)
-                .toList();
+                .collect(Collectors.toList());
     }
 }
