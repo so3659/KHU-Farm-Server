@@ -177,6 +177,16 @@ public class PaymentCommandServiceImpl implements PaymentCommandService{
 
                     notificationCommandService.sendMessage(sellerId, fcmRequest);
                 }
+
+                // 구매 알림 판매자에게 전송
+                FCMRequest fcmRequest = FCMRequest.builder()
+                        .title("상품이 판매되었습니다.")
+                        .body("고객님이 " + orderDetail.getFruit().getTitle() + "상품을 구매하였습니다. \n 빠른 시일 내에 상품을 준비해 주세요.")
+                        .build();
+
+                Long sellerId = fruit.getSeller().getUser().getId();
+
+                notificationCommandService.sendMessage(sellerId, fcmRequest);
             }
 
             order.addPayment(payment);
