@@ -12,5 +12,5 @@ public interface OrderQueryService {
 
     PrePareOrderResponse getPrepareCartOrder(User user, List<Long> cartIds);
     PrePareOrderResponse getPrepareDirectOrder(User user, Long fruitId, Integer orderCount);
-    Slice<OrderResponseWithDetail> getOrderBySeller(User user, Long cursorId, Pageable pageable);
+    Slice<OrderResponseWithDetail> getOrderBySeller(User user, Long cursorId, Pageable pageable, Long orderStatusId);
 }

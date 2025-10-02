@@ -6,5 +6,5 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 
 public interface CustomOrderRepository {
-    Slice<OrderResponseWithDetail> getOrderBySeller(User user, Long cursorId, Pageable pageable);
+    Slice<OrderResponseWithDetail> getOrderBySeller(User user, Long cursorId, Pageable pageable, Long orderStatusId);
 }

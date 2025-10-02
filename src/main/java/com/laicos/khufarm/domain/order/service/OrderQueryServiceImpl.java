@@ -83,7 +83,7 @@ public class OrderQueryServiceImpl implements OrderQueryService {
     }
 
     @Override
-    public Slice<OrderResponseWithDetail> getOrderBySeller(User user, Long cursorId, Pageable pageable){
-        return orderRepository.getOrderBySeller(user, cursorId, pageable);
+    public Slice<OrderResponseWithDetail> getOrderBySeller(User user, Long cursorId, Pageable pageable, Long orderStatusId){
+        return orderRepository.getOrderBySeller(user, cursorId, pageable, orderStatusId);
     }
 }

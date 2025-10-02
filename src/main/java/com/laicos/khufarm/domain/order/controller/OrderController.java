@@ -77,15 +77,16 @@ public class OrderController {
         return BaseResponse.onSuccess(orderResponse);
     }
 
-    @GetMapping("/seller/orders")
+    @GetMapping("/seller/orders/{orderStatusId}")
     public BaseResponse<Slice<OrderResponseWithDetail>> getOrdersBySeller(
             @AuthenticationPrincipal CustomUserDetails customUserDetails,
+            @PathVariable Long orderStatusId,
             @RequestParam(required = false) Long cursorId,
             @RequestParam(defaultValue="5") int size) {
 
         Pageable pageable = PageRequest.of(0, size);
 
-        Slice<OrderResponseWithDetail> orderResponses = orderQueryService.getOrderBySeller(customUserDetails.getUser(), cursorId, pageable);
+        Slice<OrderResponseWithDetail> orderResponses = orderQueryService.getOrderBySeller(customUserDetails.getUser(), cursorId, pageable, orderStatusId);
 
         return BaseResponse.onSuccess(orderResponses);
     }
