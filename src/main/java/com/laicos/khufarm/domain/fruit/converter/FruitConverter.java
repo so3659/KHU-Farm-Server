@@ -178,7 +178,7 @@ public class FruitConverter {
                 .squareImageUrl(orderDetail.getFruit().getSquareImageUrl())
                 .price(orderDetail.getFruit().getPrice())
                 .weight(orderDetail.getFruit().getWeight())
-                .deliveryCompany(orderDetail.getFruit().getDeliveryCompany())
+                .deliveryCompany(orderDetail.getDeliveryCompany())
                 .deliveryDay(orderDetail.getFruit().getDeliveryDay())
                 .ratingSum(orderDetail.getFruit().getRatingSum())
                 .ratingCount(orderDetail.getFruit().getRatingCount())
