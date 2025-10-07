@@ -36,11 +36,6 @@ public class CustomOrderRepositoryImpl implements CustomOrderRepository{
         Seller seller = sellerRepository.findByUser(user)
                 .orElseThrow(() -> new RestApiException(SellerErrorStatus.SELLER_NOT_FOUND));
 
-        // 주문 상태 필터링 로직
-        if (orderStatusId==1L){
-
-        }
-
         List<OrderDetail> orderDetailList = jpaQueryFactory.selectFrom(orderDetail)
                 .leftJoin(orderDetail.order).fetchJoin()
                 .leftJoin(orderDetail.fruit).fetchJoin()
