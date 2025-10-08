@@ -249,6 +249,8 @@ public class PaymentCommandServiceImpl implements PaymentCommandService{
             throw new RestApiException(PaymentErrorStatus.PAYMENT_CANCEL_FAILED);
         }
 
+        refundUserMetrics(orderDetail);
+
         // 환불 알림 전송
         FCMRequest fcmRequest = FCMRequest.builder()
                 .title("환불이 완료되었습니다.")
@@ -343,5 +345,21 @@ public class PaymentCommandServiceImpl implements PaymentCommandService{
 
             user.updateDiscountedPrice((fruitRegularPrice.getPrice()-orderDetail.getPrice())* orderDetail.getCount());
         }
+    }
+
+    private void refundUserMetrics(OrderDetail orderDetail) {
+        User user = userRepository.getUserById(orderDetail.getOrder().getUser().getId());
+
+        // 총 무게 차감
+        user.updateTotalWeight(-(orderDetail.getWeight() * orderDetail.getCount()));
+
+        // 총 가격 차감
+        user.updateTotalPrice(-(orderDetail.getPrice() * orderDetail.getCount()));
+
+        // 총 할인 금액 차감
+        FruitRegularPrice fruitRegularPrice = fruitRegularPriceRepository.findByFruitCategoryId(orderDetail.getFruit().getFruitCategory().getId());
+        user.updateDiscountedPrice(-((fruitRegularPrice.getPrice() - orderDetail.getPrice()) * orderDetail.getCount()));
+
+        userRepository.save(user);
     }
 }
