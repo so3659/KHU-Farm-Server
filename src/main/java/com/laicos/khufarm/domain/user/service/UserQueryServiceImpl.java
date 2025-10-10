@@ -1,5 +1,6 @@
 package com.laicos.khufarm.domain.user.service;
 
+import com.laicos.khufarm.domain.notification.repository.NotificationRepository;
 import com.laicos.khufarm.domain.user.converter.UserConverter;
 import com.laicos.khufarm.domain.user.dto.response.UserValueResponse;
 import com.laicos.khufarm.domain.user.entity.User;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Service;
 public class UserQueryServiceImpl implements UserQueryService{
 
     private final UserRepository userRepository;
+    private final NotificationRepository notificationRepository;
 
     @Override
     public User findUserById(Long memberId) {
@@ -36,6 +38,8 @@ public class UserQueryServiceImpl implements UserQueryService{
     @Override
     public UserValueResponse getUserValue(User user){
 
-        return UserConverter.toUserValueResponse(user);
+        Integer unreadNotification = notificationRepository.countNotificationByUserAndIsReadFalse(user);
+
+        return UserConverter.toUserValueResponse(user, unreadNotification);
     }
 }

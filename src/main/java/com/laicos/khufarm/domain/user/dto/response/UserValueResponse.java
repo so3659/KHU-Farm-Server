@@ -15,4 +15,5 @@ public class UserValueResponse {
     private Integer totalPurchasePrice;
     private Integer totalPurchaseWeight;
     private Integer totalDiscountPrice;
+    private Integer unreadNotification;
 }

@@ -10,4 +10,5 @@ import java.util.Optional;
 @Repository
 public interface NotificationRepository extends JpaRepository<Notification, Long>, CustomNotificationRepository{
     Optional<Notification> findByUserAndId(User user, Long id);
+    Integer countNotificationByUserAndIsReadFalse(User user);
 }

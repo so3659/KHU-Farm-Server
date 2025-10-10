@@ -49,7 +49,7 @@ public class UserConverter {
                     .build();
     }
 
-    public static UserValueResponse toUserValueResponse(User user) {
+    public static UserValueResponse toUserValueResponse(User user, Integer unreadNotification) {
         return UserValueResponse.builder()
                 .userId(user.getId())
                 .userName(user.getName())
@@ -58,6 +58,7 @@ public class UserConverter {
                 .totalPurchasePrice(user.getTotalPrice())
                 .totalPurchaseWeight(user.getTotalWeight())
                 .totalDiscountPrice(user.getDiscountedPrice())
+                .unreadNotification(unreadNotification)
                 .build();
     }
 }
