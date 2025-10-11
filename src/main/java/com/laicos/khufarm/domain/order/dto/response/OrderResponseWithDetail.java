@@ -1,5 +1,7 @@
 package com.laicos.khufarm.domain.order.dto.response;
 
+import com.laicos.khufarm.domain.delivery.dto.response.DeliveryStatus;
+import com.laicos.khufarm.domain.order.enums.OrderStatus;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -25,8 +27,8 @@ public class OrderResponseWithDetail {
     private String deliveryCompany;
     private String deliveryNumber;
     private String orderRequest;
-    private String deliveryStatus;
-    private String orderStatus;
+    private DeliveryStatus deliveryStatus;
+    private OrderStatus orderStatus;
     private String refundReason;
     private LocalDateTime createdAt;
 

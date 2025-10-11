@@ -1,6 +1,10 @@
 package com.laicos.khufarm.domain.order.repository;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.laicos.khufarm.domain.delivery.dto.response.DeliveryStatus;
 import com.laicos.khufarm.domain.delivery.service.DeliveryQueryService;
+import com.laicos.khufarm.domain.openfeign.client.DeliveryInfoConfirm;
 import com.laicos.khufarm.domain.order.converter.OrderDetailConverter;
 import com.laicos.khufarm.domain.order.dto.response.OrderResponseWithDetail;
 import com.laicos.khufarm.domain.order.entity.OrderDetail;
@@ -16,6 +20,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.SliceImpl;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -29,9 +34,12 @@ public class CustomOrderRepositoryImpl implements CustomOrderRepository{
     private final JPAQueryFactory jpaQueryFactory;
     private final SellerRepository sellerRepository;
     private final DeliveryQueryService deliveryQueryService;
+    private final DeliveryInfoConfirm deliveryInfoConfirm;
 
     @Override
     public Slice<OrderResponseWithDetail> getOrderBySeller(User user, Long cursorId, Pageable pageable, Long orderStatusId){
+
+        ObjectMapper objectMapper = new ObjectMapper();
 
         Seller seller = sellerRepository.findByUser(user)
                 .orElseThrow(() -> new RestApiException(SellerErrorStatus.SELLER_NOT_FOUND));
@@ -49,7 +57,22 @@ public class CustomOrderRepositoryImpl implements CustomOrderRepository{
                 .limit(pageable.getPageSize() + 1) // 페이지 크기 + 1로 커서 기반 페이징 처리
                 .fetch();
 
-        List<OrderResponseWithDetail> content = OrderDetailConverter.toOrderResponseWithDetailList(orderDetailList);
+        List<DeliveryStatus> deliveryStatusList = orderDetailList.stream()
+                .map(orderDetail -> {
+                    if (orderDetail.getDeliveryCompany() == null || orderDetail.getDeliveryNumber() == null) {
+                        return null; // 배송 정보가 없는 경우는 null로 처리
+                    }
+                    // 배송 정보 확인 요청
+                    ResponseEntity<String> response = deliveryInfoConfirm.confirmDeliveryInfo(orderDetail.getDeliveryCompany().getId(), orderDetail.getDeliveryNumber());
+                    try {
+                        return objectMapper.readValue(response.getBody(), DeliveryStatus.class);
+                    } catch (JsonProcessingException e) {
+                        throw new RuntimeException(e);
+                    }
+                })
+                .toList();
+
+        List<OrderResponseWithDetail> content = OrderDetailConverter.toOrderResponseWithDetailList(orderDetailList, deliveryStatusList);
 
         boolean hasNext = false;
         if (content.size() > pageable.getPageSize()) {
