@@ -5,6 +5,10 @@ import com.laicos.khufarm.domain.cart.entity.Cart;
 import com.laicos.khufarm.domain.cart.repository.CartRepository;
 import com.laicos.khufarm.domain.fruit.entity.Fruit;
 import com.laicos.khufarm.domain.fruit.repository.FruitRepository;
+import com.laicos.khufarm.domain.image.entity.Image;
+import com.laicos.khufarm.domain.image.enums.ImageStatus;
+import com.laicos.khufarm.domain.image.extractor.UrlExtractor;
+import com.laicos.khufarm.domain.image.repository.ImageRepository;
 import com.laicos.khufarm.domain.notification.dto.request.FCMRequest;
 import com.laicos.khufarm.domain.notification.service.NotificationCommandService;
 import com.laicos.khufarm.domain.order.converter.OrderConverter;
@@ -21,6 +25,7 @@ import com.laicos.khufarm.domain.user.entity.User;
 import com.laicos.khufarm.global.common.exception.RestApiException;
 import com.laicos.khufarm.global.common.exception.code.status.CartListErrorStatus;
 import com.laicos.khufarm.global.common.exception.code.status.FruitErrorStatus;
+import com.laicos.khufarm.global.common.exception.code.status.ImageErrorStatus;
 import com.laicos.khufarm.global.common.exception.code.status.OrderErrorStatus;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -40,6 +45,7 @@ public class OrderCommandServiceImpl implements OrderCommandService{
     private final FruitRepository fruitRepository;
     private final OrderDetailRepository orderDetailRepository;
     private final NotificationCommandService notificationCommandService;
+    private final ImageRepository imageRepository;
 
     @Override
     public OrderResponse orderByCart(User user, OrderRequest.CartOrderRequest request){
@@ -128,6 +134,9 @@ public class OrderCommandServiceImpl implements OrderCommandService{
         orderDetail.updateOrderStatus(OrderStatus.REFUND_REQUESTED);
         orderDetail.setRefundReason(request.getRefundReason());
 
+        List<String> imageUrls = UrlExtractor.extractUrlsFromDescription(request.getRefundReason());
+        imageUrls.forEach(this::updateImageStatusToUsed);
+
         // 환불 거절 알림 전송
         FCMRequest fcmRequest = FCMRequest.builder()
                 .title("환불이 접수되었습니다.")
@@ -161,5 +170,14 @@ public class OrderCommandServiceImpl implements OrderCommandService{
         if(calculateTotalPrice != totalPrice) {
             throw new RestApiException(OrderErrorStatus.PRICE_NOT_MATCH);
         }
+    }
+
+    private void updateImageStatusToUsed(String imageUrl) {
+        if (imageUrl == null || imageUrl.isBlank()) {
+            return;
+        }
+        Image image = imageRepository.findByImageUrl(imageUrl)
+                .orElseThrow(() -> new RestApiException(ImageErrorStatus.IMAGE_NOT_FOUND));
+        image.updateImageStatus(ImageStatus.USED);
     }
 }
