@@ -11,7 +11,6 @@ import com.laicos.khufarm.domain.notification.repository.NotificationRepository;
 import com.laicos.khufarm.domain.user.entity.User;
 import com.laicos.khufarm.domain.user.repository.UserRepository;
 import com.laicos.khufarm.global.common.exception.RestApiException;
-import com.laicos.khufarm.global.common.exception.code.status.NotificationErrorStatus;
 import com.laicos.khufarm.global.common.exception.code.status.UserErrorStatus;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -36,21 +35,32 @@ public class NotificationCommandServiceImpl implements NotificationCommandServic
 
         String token = user.getFcmToken();
 
-        try {
-            String message = FirebaseMessaging.getInstance().send(Message.builder()
-                    .setNotification(Notification.builder()
-                            .setTitle(fcmRequest.getTitle())
-                            .setBody(fcmRequest.getBody())
-                            .build())
-                    .setToken(token)
-                    .build());
-        } catch (FirebaseMessagingException e) {
-            log.error("Firebase 메시지 전송 실패! Error Code: {}, Message: {}", e.getErrorCode(), e.getMessage(), e);
-            throw new RestApiException(NotificationErrorStatus.NOTIFICATION_SEND_ERROR);
-        }
+        // 1. FCM 푸시 알림 전송 (토큰이 있을 때만 시도)
+        if (token != null && !token.isBlank()) {
+            try {
+                Message message = Message.builder()
+                        .setNotification(Notification.builder()
+                                .setTitle(fcmRequest.getTitle())
+                                .setBody(fcmRequest.getBody())
+                                .build())
+                        .setToken(token)
+                        .build();
 
-        com.laicos.khufarm.domain.notification.entitiy.Notification notification = NotificationConverter.toNotification(user, fcmRequest);
-        notificationRepository.save(notification);
+                FirebaseMessaging.getInstance().send(message);
+
+                com.laicos.khufarm.domain.notification.entitiy.Notification notification = NotificationConverter.toNotification(user, fcmRequest);
+                notificationRepository.save(notification);
+
+            } catch (FirebaseMessagingException e) {
+                log.error("Firebase 메시지 전송 실패! (UserId: {}) Error Code: {}, Message: {}",
+                        userId, e.getErrorCode(), e.getMessage(), e);
+            } catch (IllegalArgumentException e) {
+                log.error("FCM Message 빌드 실패! (UserId: {}) Message: {}", userId, e.getMessage(), e);
+            }
+        } else {
+            // 토큰이 없는 사용자인 경우
+            log.warn("FCM 토큰이 없는 사용자입니다. 푸시 알림을 생략합니다. (UserId: {})", userId);
+        }
     }
 
     @Override
