@@ -225,8 +225,7 @@ public class AuthCommandServiceImpl implements AuthCommandService{
         String CHAR_LOWER = "abcdefghijklmnopqrstuvwxyz";
         String CHAR_UPPER = CHAR_LOWER.toUpperCase();
         String DIGIT = "0123456789";
-        String SPECIAL_CHAR = "!@#$%^&*()_+-=[]{}|;':,.<>/?";
-        String PASSWORD_ALLOW_BASE = CHAR_LOWER + CHAR_UPPER + DIGIT + SPECIAL_CHAR;
+        String PASSWORD_ALLOW_BASE = CHAR_LOWER + CHAR_UPPER + DIGIT;
         SecureRandom random = new SecureRandom();
 
         StringBuilder password = new StringBuilder(12);
